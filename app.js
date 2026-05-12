@@ -334,53 +334,58 @@
     },
   ];
 
-  // ----- Impact (effectiveness) -----
-  const IMPACT_KPIS = [
-    { label: "実施中の施策", value: 4, denom: "件", decision: "進捗確認の対象数", icon: "i-target", iconColor: "t-navy", delta: { dir: "flat", text: "横ばい" }, spark: [4,4,4,4,4,4,4] },
-    { label: "改善傾向の施策", value: 3, denom: "件", decision: "効果を確認できている件数", icon: "i-arrow-up", iconColor: "t-green", delta: { dir: "up", text: "+1" }, spark: [1,2,2,2,3,3,3] },
-    { label: "要確認の施策", value: 1, denom: "件", decision: "追加検証が必要な件数", icon: "i-alert", iconColor: "t-gold", delta: { dir: "flat", text: "横ばい" }, spark: [1,1,1,1,1,1,1] },
-  ];
-
-  const IMPACT_ROWS = [
+  // ----- Impact — Gantt + KPI Management -----
+  // status: "running" | "review" | "consider" | "done"
+  // startCol / endCol: 0-indexed column in the 6-month timeline (0 = Jan)
+  const GANTT_MONTHS = ["1月", "2月", "3月", "4月", "5月", "6月"];
+  const GANTT_INITIATIVES = [
     {
+      id: "g01",
       title: "雨天時の屋内回遊ルート案内",
       area: "箱根湯本・強羅",
-      metric: "ルート閲覧率",
-      before: 12, after: 24,
-      delta: "+12 pt",
-      direction: "up",
-      status: "改善傾向",
-      statusCls: "init-status running",
+      status: "running", statusLabel: "実施中",
+      startCol: 1, endCol: 4,
+      owner: "観光戦略部",
     },
     {
-      title: "食べ歩きパスと荷物預かり拡充",
+      id: "g02",
+      title: "食べ歩きパス＋荷物預かり拡充",
       area: "箱根湯本",
-      metric: "湯本周辺購買指数",
-      before: 34, after: 41,
-      delta: "+7 pt",
-      direction: "up",
-      status: "改善傾向",
-      statusCls: "init-status running",
+      status: "running", statusLabel: "実施中",
+      startCol: 2, endCol: 5,
+      owner: "沿線事業部",
     },
     {
+      id: "g03",
       title: "多言語モデルコース最適化",
       area: "沿線全域",
-      metric: "外国語クーポン利用率",
-      before: 18, after: 26,
-      delta: "+8 pt",
-      direction: "up",
-      status: "改善傾向",
-      statusCls: "init-status running",
+      status: "review", statusLabel: "要確認",
+      startCol: 0, endCol: 3,
+      owner: "訪日対応TF",
     },
     {
+      id: "g04",
       title: "強羅 体験予約クーポン比較検証",
       area: "強羅",
-      metric: "クーポン利用率",
-      before: 14, after: 14,
-      delta: "±0",
-      direction: "flat",
-      status: "要確認",
-      statusCls: "init-status review",
+      status: "review", statusLabel: "要確認",
+      startCol: 3, endCol: 5,
+      owner: "箱根担当",
+    },
+    {
+      id: "g05",
+      title: "仙石原 分散誘導 SNS連携",
+      area: "仙石原",
+      status: "consider", statusLabel: "検討中",
+      startCol: 4, endCol: 5,
+      owner: "マーケ部",
+    },
+    {
+      id: "g06",
+      title: "免税ピーク時間帯 店舗案内",
+      area: "箱根全域",
+      status: "done", statusLabel: "完了",
+      startCol: 0, endCol: 2,
+      owner: "インバウンドTF",
     },
   ];
 
@@ -1031,65 +1036,294 @@
   }
 
   // ========================================================
-  // IMPACT
   // ========================================================
-  function renderImpactKpis() {
-    const wrap = el("div", { class: "kpi-grid kpi-grid-3" });
-    IMPACT_KPIS.forEach((k) => wrap.appendChild(renderKpiCard(k)));
-    mount("impact-kpis", Array.from(wrap.children));
+  // IMPACT — Gantt + KPI Management
+  // ========================================================
+
+  // localStorage key prefix
+  const LS_KPI   = "oti_kpi_";   // LS_KPI + initiativeId -> JSON array of KPI records
+  const LS_JUDGE = "oti_judge_"; // LS_JUDGE + initiativeId -> "continue"|"improve"|"stop"|null
+
+  function lsGetKpis(id) {
+    try { return JSON.parse(localStorage.getItem(LS_KPI + id) || "[]"); } catch { return []; }
+  }
+  function lsSaveKpis(id, arr) {
+    localStorage.setItem(LS_KPI + id, JSON.stringify(arr));
+  }
+  function lsGetJudge(id) {
+    return localStorage.getItem(LS_JUDGE + id) || "";
+  }
+  function lsSaveJudge(id, val) {
+    localStorage.setItem(LS_JUDGE + id, val);
   }
 
-  function renderImpactTable() {
-    const table = el("table", { class: "data-table" });
-    table.appendChild(el("thead", null, el("tr", null, [
-      el("th", null, "施策"),
-      el("th", null, "対象"),
-      el("th", null, "指標"),
-      el("th", null, "前後比較"),
-      el("th", null, "変化"),
-      el("th", null, "状態"),
-      el("th", { style: "text-align:right" }, "アクション"),
-    ])));
-    const tbody = el("tbody");
-    IMPACT_ROWS.forEach((r) => {
-      tbody.appendChild(el("tr", null, [
-        el("td", null, el("span", { class: "td-strong" }, r.title)),
-        el("td", null, r.area),
-        el("td", null, r.metric),
-        el("td", null, renderCompareBar(r)),
-        el("td", null, el("span", {
-          class: "tag " + (r.direction === "up" ? "t-green" : r.direction === "down" ? "t-red" : ""),
-        }, r.delta)),
-        el("td", null, el("span", { class: r.statusCls }, r.status)),
-        el("td", { style: "text-align:right" }, renderImpactActions(r)),
-      ]));
+  // ---- state ----
+  let selectedGanttId = null;
+
+  function renderImpact() {
+    renderGanttChart();
+  }
+
+  function renderGanttChart(filter) {
+    const rows = filter && filter !== "all"
+      ? GANTT_INITIATIVES.filter(r => r.status === filter)
+      : GANTT_INITIATIVES;
+
+    const wrap = el("div", { class: "gantt-wrap" });
+
+    // Month labels
+    const labelRow = el("div", { class: "gantt-month-labels" });
+    GANTT_MONTHS.forEach(m => {
+      labelRow.appendChild(el("div", { class: "gantt-month-label" }, m));
     });
-    table.appendChild(tbody);
-    mount("impact-table", table);
+    wrap.appendChild(labelRow);
+
+    // Rows
+    rows.forEach(r => {
+      const total = GANTT_MONTHS.length;
+      const barLeft   = (r.startCol / total * 100).toFixed(1) + "%";
+      const barWidth  = ((r.endCol - r.startCol + 1) / total * 100).toFixed(1) + "%";
+
+      const row = el("div", {
+        class: "gantt-row" + (r.id === selectedGanttId ? " selected" : ""),
+        "data-id": r.id,
+        role: "button",
+        tabindex: "0",
+        "aria-label": r.title + " を選択",
+      });
+
+      // Label
+      const label = el("div", { class: "gantt-label" });
+      label.appendChild(el("div", { class: "gantt-label-name", title: r.title }, r.title));
+      label.appendChild(el("div", { class: "gantt-label-area" }, r.area));
+      row.appendChild(label);
+
+      // Timeline
+      const tl = el("div", { class: "gantt-timeline" });
+
+      // BG grid
+      const bgGrid = el("div", { class: "gantt-bg-grid" });
+      GANTT_MONTHS.forEach(() => bgGrid.appendChild(el("div", { class: "gantt-bg-col" })));
+      tl.appendChild(bgGrid);
+
+      // Bar
+      const bar = el("div", {
+        class: "gantt-bar-wrap s-" + r.status,
+        style: "left:" + barLeft + ";width:" + barWidth,
+      }, r.statusLabel);
+      tl.appendChild(bar);
+
+      row.appendChild(tl);
+
+      // Click / keyboard
+      function selectRow() {
+        selectedGanttId = r.id;
+        renderGanttChart(filter);
+        renderKpiPanel(r.id);
+      }
+      row.addEventListener("click", selectRow);
+      row.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectRow(); } });
+
+      wrap.appendChild(row);
+    });
+
+    mount("gantt-chart", wrap);
+
+    // Filter tabs
+    renderGanttFilterTabs(filter || "all");
   }
 
-  function renderCompareBar(r) {
-    const wrap = el("div", { class: "compare-bar", style: "width:180px" });
-    const beforePct = Math.min(100, r.before);
-    const afterPct = Math.min(100, r.after);
-    wrap.appendChild(el("div", {
-      class: "compare-bar-before",
-      style: "width:" + beforePct + "%",
-    }));
-    wrap.appendChild(el("div", {
-      class: "compare-bar-after" + (r.direction === "down" ? " down" : ""),
-      style: "width:" + Math.max(0, afterPct - beforePct) + "%",
-    }));
-    wrap.appendChild(el("div", { class: "cb-text" }, r.before + "% → " + r.after + "%"));
-    return wrap;
+  function renderGanttFilterTabs(active) {
+    const tabs = [
+      { key: "all",      label: "すべて" },
+      { key: "running",  label: "実施中" },
+      { key: "review",   label: "要確認" },
+      { key: "consider", label: "検討中" },
+      { key: "done",     label: "完了" },
+    ];
+    const wrap = el("div", { class: "seg-tabs sm", id: "gantt-filter-tabs" });
+    tabs.forEach(t => {
+      const btn = el("button", {
+        class: "seg-tab" + (t.key === active ? " active" : ""),
+      }, t.label);
+      btn.addEventListener("click", () => {
+        selectedGanttId = null;
+        renderGanttChart(t.key);
+        clearKpiPanel();
+      });
+      wrap.appendChild(btn);
+    });
+    const existing = document.getElementById("gantt-filter-tabs");
+    if (existing) existing.replaceWith(wrap);
   }
 
-  function renderImpactActions(r) {
-    const wrap = el("div", { class: "action-cluster" });
-    wrap.appendChild(el("button", { class: "btn-ghost btn-sm" }, "継続"));
-    wrap.appendChild(el("button", { class: "btn-ghost btn-sm" }, "改善"));
-    wrap.appendChild(el("button", { class: "btn-ghost btn-sm" }, "停止"));
-    return wrap;
+  function clearKpiPanel() {
+    document.getElementById("kpi-panel-title").textContent = "施策を選択してください";
+    document.getElementById("kpi-panel-area").textContent  = "";
+    document.getElementById("kpi-panel-actions").innerHTML = "";
+    const body = document.getElementById("kpi-panel-body");
+    body.innerHTML = "";
+    body.appendChild(buildEmptyPanelState());
+  }
+
+  function buildEmptyPanelState() {
+    const d = el("div", { class: "kpi-panel-empty" });
+    d.innerHTML = `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="color:var(--ink-5)"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg><p>左のガントチャートから施策を選ぶと<br>KPI記録パネルが表示されます</p>`;
+    return d;
+  }
+
+  function renderKpiPanel(id) {
+    const init = GANTT_INITIATIVES.find(r => r.id === id);
+    if (!init) return;
+
+    document.getElementById("kpi-panel-title").textContent = init.title;
+    document.getElementById("kpi-panel-area").textContent  = init.area + "　担当: " + init.owner;
+
+    // status badge in header
+    const statusMap = { running: "t-blue", review: "t-gold", consider: "t-navy", done: "t-green" };
+    const actionsEl = document.getElementById("kpi-panel-actions");
+    actionsEl.innerHTML = "";
+    actionsEl.appendChild(tag(init.statusLabel, statusMap[init.status] || "t-navy"));
+
+    const body = document.getElementById("kpi-panel-body");
+    body.innerHTML = "";
+
+    // -- Judgment bar --
+    body.appendChild(buildJudgmentBar(id));
+
+    // -- KPI record list --
+    body.appendChild(buildKpiRecordList(id));
+
+    // -- Add form --
+    body.appendChild(buildKpiAddForm(id));
+  }
+
+  function buildJudgmentBar(id) {
+    const current = lsGetJudge(id);
+    const bar = el("div", { class: "judgment-bar" });
+    bar.appendChild(el("span", { class: "judgment-label" }, "担当者判断"));
+
+    const choices = [
+      { key: "continue", label: "継続",   cls: "active-continue" },
+      { key: "improve",  label: "改善検討", cls: "active-improve" },
+      { key: "stop",     label: "停止",   cls: "active-stop" },
+    ];
+    choices.forEach(c => {
+      const btn = el("button", {
+        class: "judgment-btn" + (current === c.key ? " " + c.cls : ""),
+      }, c.label);
+      btn.addEventListener("click", () => {
+        const next = current === c.key ? "" : c.key;
+        lsSaveJudge(id, next);
+        buildJudgmentBar(id); // just re-render
+        const newBar = buildJudgmentBar(id);
+        bar.replaceWith(newBar);
+      });
+      bar.appendChild(btn);
+    });
+    return bar;
+  }
+
+  function buildKpiRecordList(id) {
+    const records = lsGetKpis(id);
+
+    if (records.length === 0) {
+      return el("div", { class: "kpi-list-empty" }, "KPI記録はまだありません。下のフォームから追加してください。");
+    }
+
+    const listWrap = el("div", { class: "kpi-record-list" });
+
+    // header
+    const head = el("div", { class: "kpi-record-head" });
+    ["指標・メモ", "数値", "更新日", ""].forEach(t => head.appendChild(el("div", null, t)));
+    listWrap.appendChild(head);
+
+    records.forEach((rec, idx) => {
+      const row = el("div", { class: "kpi-record-row" });
+
+      const nameCell = el("div", { class: "kr-name" }, rec.name);
+      if (rec.memo) nameCell.appendChild(el("div", { class: "kr-memo" }, rec.memo));
+      row.appendChild(nameCell);
+
+      const valCell = el("div", { class: "kr-value-cell" });
+      valCell.appendChild(el("span", { class: "kr-value" }, rec.value));
+      if (rec.unit) valCell.appendChild(el("span", { class: "kr-unit" }, rec.unit));
+      row.appendChild(valCell);
+
+      row.appendChild(el("div", { class: "kr-updated" }, rec.date));
+
+      const delBtn = el("button", { class: "kr-del-btn", "aria-label": "削除", title: "削除" }, "×");
+      delBtn.addEventListener("click", () => {
+        const arr = lsGetKpis(id);
+        arr.splice(idx, 1);
+        lsSaveKpis(id, arr);
+        renderKpiPanel(id);
+      });
+      row.appendChild(delBtn);
+
+      listWrap.appendChild(row);
+    });
+
+    return listWrap;
+  }
+
+  function buildKpiAddForm(id) {
+    const form = el("div", { class: "kpi-add-form" });
+    form.appendChild(el("div", { class: "kpi-add-title" }, "KPI を記録する"));
+
+    // Row 1: name / value / unit
+    const row1 = el("div", { class: "kpi-add-row" });
+    const nameInput  = el("input", { class: "kpi-input", placeholder: "指標名（例: クーポン利用率）", "aria-label": "指標名" });
+    const valueInput = el("input", { class: "kpi-input", placeholder: "数値",  "aria-label": "数値", type: "text", inputmode: "decimal" });
+    const unitInput  = el("input", { class: "kpi-input", placeholder: "単位",  "aria-label": "単位" });
+    [nameInput, valueInput, unitInput].forEach(i => row1.appendChild(i));
+    form.appendChild(row1);
+
+    // Row 2: memo
+    const memo = el("textarea", { class: "kpi-textarea", placeholder: "メモ（任意）: 測定方法・コメント・仮説など", "aria-label": "メモ", rows: "2" });
+    form.appendChild(memo);
+
+    // Buttons
+    const btns = el("div", { class: "kpi-add-btns" });
+    const cancelBtn = el("button", { class: "btn-ghost btn-sm" }, "クリア");
+    const addBtn    = el("button", { class: "btn-primary btn-sm" }, "+ 記録を追加");
+
+    cancelBtn.addEventListener("click", () => {
+      nameInput.value = ""; valueInput.value = ""; unitInput.value = ""; memo.value = "";
+    });
+
+    addBtn.addEventListener("click", () => {
+      const name = nameInput.value.trim();
+      const value = valueInput.value.trim();
+      if (!name) { nameInput.focus(); return; }
+      const records = lsGetKpis(id);
+      const today = new Date();
+      const dateStr = today.getFullYear() + "/" +
+        String(today.getMonth() + 1).padStart(2, "0") + "/" +
+        String(today.getDate()).padStart(2, "0");
+      records.push({
+        name,
+        value: value || "—",
+        unit:  unitInput.value.trim(),
+        memo:  memo.value.trim(),
+        date:  dateStr,
+      });
+      lsSaveKpis(id, records);
+      nameInput.value = ""; valueInput.value = ""; unitInput.value = ""; memo.value = "";
+      renderKpiPanel(id);
+    });
+
+    // Allow Enter in name field to jump to value
+    nameInput.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); valueInput.focus(); } });
+    // Allow Enter in value/unit to submit
+    [valueInput, unitInput].forEach(inp => {
+      inp.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); addBtn.click(); } });
+    });
+
+    btns.appendChild(cancelBtn);
+    btns.appendChild(addBtn);
+    form.appendChild(btns);
+    return form;
   }
 
   // ========================================================
@@ -1214,8 +1448,7 @@
     renderInitiatives();
 
     // Impact
-    renderImpactKpis();
-    renderImpactTable();
+    renderImpact();
 
     // Report
     renderReportList();

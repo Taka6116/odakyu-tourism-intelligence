@@ -455,26 +455,43 @@
         <!-- ====================================================== -->
         <section id="impact" class="view hidden">
           <div class="page-intro">
-            <p>実施中の施策が、対象エリアでどのような変化を生んでいるかを確認します。</p>
+            <p>施策ごとに期間・KPI・担当者の記録を管理します。数値・メモは担当者が直接入力・更新できます。</p>
           </div>
 
-          <div class="kpi-grid kpi-grid-3" id="impact-kpis"></div>
+          <!-- Gantt + KPI summary row -->
+          <div class="impact-layout">
 
-          <div class="card">
-            <header class="card-header">
-              <div>
-                <h2 class="card-title">実施中施策の前後比較</h2>
-                <p class="card-sub">施策実施前後14日の変化を確認</p>
-              </div>
-              <div class="header-tools">
-                <div class="seg-tabs sm">
-                  <button class="seg-tab active">全施策</button>
-                  <button class="seg-tab">改善傾向</button>
-                  <button class="seg-tab">要確認</button>
+            <!-- LEFT: Gantt chart -->
+            <div class="card impact-gantt-card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">施策 ガントチャート</h2>
+                  <p class="card-sub">期間・ステータス一覧</p>
+                </div>
+                <div class="header-tools">
+                  <div class="seg-tabs sm" id="gantt-filter-tabs"></div>
+                </div>
+              </header>
+              <div id="gantt-chart"></div>
+            </div>
+
+            <!-- RIGHT: selected initiative KPI panel -->
+            <div class="card impact-kpi-card" id="kpi-panel">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title" id="kpi-panel-title">施策を選択してください</h2>
+                  <p class="card-sub" id="kpi-panel-area"></p>
+                </div>
+                <div class="header-tools" id="kpi-panel-actions"></div>
+              </header>
+              <div id="kpi-panel-body">
+                <div class="kpi-panel-empty">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="color:var(--ink-5)"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg>
+                  <p>左のガントチャートから施策を選ぶと<br>KPI記録パネルが表示されます</p>
                 </div>
               </div>
-            </header>
-            <div id="impact-table"></div>
+            </div>
+
           </div>
         </section>
 
