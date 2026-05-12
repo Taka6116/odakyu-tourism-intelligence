@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>小田急 沿線観光インテリジェンス PoC モック</title>
+  <meta name="description" content="小田急が既に保有する交通・チケット・購買・Web/アプリのデータを横断し、回遊・分散・消費の打ち手まで生成するPoCモック。" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+
+    <!-- ===================== Sidebar ===================== -->
+    <aside>
+      <div class="brand">
+        <div class="mark">O</div>
+        <h1>
+          Odakyu Tourism Intelligence
+          <span>PoC Mock / 2026-Q2</span>
+        </h1>
+      </div>
+      <div class="aside-meta">
+        小田急保有データを横断し、回遊・分散・消費・施策化までを一画面に。<br />
+        匿名・集計データ前提のPoC再設計版。
+      </div>
+
+      <div class="aside-section">画面</div>
+      <button class="nav-btn active" data-view="overview"><span class="nav-num">1</span>全体像</button>
+      <button class="nav-btn" data-view="integrate"><span class="nav-num">2</span>データ統合ハブ</button>
+      <button class="nav-btn" data-view="funnel"><span class="nav-num">3</span>箱根回遊ファネル</button>
+      <button class="nav-btn" data-view="routes"><span class="nav-num">4</span>非王道ルート発見</button>
+      <button class="nav-btn" data-view="spend"><span class="nav-num">5</span>消費ギャップ分析</button>
+      <button class="nav-btn" data-view="actions"><span class="nav-num">6</span>AI施策生成</button>
+      <button class="nav-btn" data-view="tech"><span class="nav-num">7</span>技術構成</button>
+
+      <div class="aside-note">
+        本モックはデモデータです。個人単位の追跡は行わず、駅・時間帯・エリア・セグメント別の<b>集計値</b>のみ扱う前提です。
+      </div>
+    </aside>
+
+    <!-- ===================== Main ===================== -->
+    <main>
+
+      <!-- ============ 1. Overview ============ -->
+      <section id="overview" class="view">
+        <div class="page-header">
+          <div>
+            <div class="eyebrow">PoC Re-design / Data-first</div>
+            <h2>小田急の保有データを、沿線観光の打ち手に変える</h2>
+            <p class="lead">
+              鉄道・バス乗降、箱根フリーパス、ロマンスカー、商業施設購買、Web/アプリ閲覧、キャンペーン利用を同じ時間軸・エリア軸で重ね、
+              <b>王道集中・非王道行動・消費ギャップ・施策反応</b> を可視化します。AIは事実の上に <b>仮説とKPI雛形</b> を出します。
+            </p>
+          </div>
+          <div class="toolbar">
+            <select class="chip" data-filter="month" aria-label="対象月">
+              <option value="2026-04">対象月 2026-04</option>
+              <option value="2026-03">対象月 2026-03</option>
+              <option value="2026-02">対象月 2026-02</option>
+            </select>
+            <select class="chip" data-filter="area" aria-label="エリア">
+              <option value="hakone">エリア 箱根</option>
+              <option value="enoshima">エリア 江ノ島・湘南</option>
+              <option value="line">エリア 沿線全体</option>
+            </select>
+            <span class="chip note">匿名・集計データ前提</span>
+          </div>
+        </div>
+
+        <div id="kpi-strip"></div>
+
+        <div class="grid" style="margin-top:14px">
+          <div class="panel span-12">
+            <h3>三方良し: 小田急 × Tradfit × Cellmuller<span class="hint">役割を明確にし、現場入力に依存しないPoCにする</span></h3>
+            <div id="stakeholder-loop"></div>
+          </div>
+
+          <div class="panel span-7">
+            <h3>今回の再設計ポイント</h3>
+            <div id="reframe-table"></div>
+            <div class="notice">
+              <b>表現の指針:</b> 「原因が分かる」「効果を証明する」ではなく、
+              <b>集中・未消費・回遊不足を可視化し、施策仮説を生成する</b> プロダクトとして説明します。
+            </div>
+          </div>
+
+          <div class="panel span-5">
+            <h3>30秒で伝える価値</h3>
+            <div class="action-card success">
+              <strong>既に持っているデータで、まだ見えていない回遊と消費機会を見つける</strong>
+              <div class="caption">
+                AIを使う/使わないの議論ではなく、部門ごとに分断されたデータを横断して<b>施策・KPI・実行管理まで</b>落とせているかが論点です。
+              </div>
+              <div class="pill-row">
+                <span class="pill green">新規入力不要</span>
+                <span class="pill blue">部門横断</span>
+                <span class="pill gold">施策まで出す</span>
+                <span class="pill purple">社内説明しやすい</span>
+              </div>
+            </div>
+            <div class="action-card tinted">
+              <strong>初期に必要なデータは3〜5種</strong>
+              <div class="caption">
+                乗降・チケット・Web/アプリ・購買・キャンペーンのうち、まず<b>取得しやすいものから</b>。完全データを待たずに開始できます。
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 2. Data Integration Hub ============ -->
+      <section id="integrate" class="view hidden">
+        <div class="page-header">
+          <div>
+            <div class="eyebrow">Data Integration Hub</div>
+            <h2>分断されたデータを、同じ時間軸・エリア軸でつなぐ</h2>
+            <p class="lead">
+              鉄道・バス・チケット・予約・購買・Web/アプリは別部門・別システムに点在しています。PoCでは個人特定を避け、共通キーを
+              「<b>月/週・時間帯・エリア・券種/言語・施策ID</b>」に寄せて統合します。
+            </p>
+          </div>
+          <div class="toolbar">
+            <select class="chip" data-filter="month" aria-label="対象月">
+              <option value="2026-04">対象月 2026-04</option>
+              <option value="2026-03">対象月 2026-03</option>
+            </select>
+            <span class="chip">S3 / Glue / Athena</span>
+            <span class="chip note">匿名・集計</span>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="panel span-12">
+            <h3>PoCで取り込むデータ候補<span class="hint">「活用可 / 要相談 / 後追い」の3段で受領難度を整理</span></h3>
+            <div id="source-grid"></div>
+          </div>
+
+          <div class="panel span-7">
+            <h3>横断分析のための共通データモデル</h3>
+            <div id="common-keys"></div>
+          </div>
+          <div class="panel span-5">
+            <h3>AIに渡す前の処理</h3>
+            <div id="process-row"></div>
+            <div class="notice">
+              個人IDで結合せず <b>time × area × segment</b> の集計に畳むため、ガバナンス・社内説明・他社データ連携で扱いやすい構成です。
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 3. Funnel ============ -->
+      <section id="funnel" class="view hidden">
+        <div class="page-header">
+          <div>
+            <div class="eyebrow">Hakone Journey Funnel</div>
+            <h2>箱根に来た人が、どこで分岐し、どこで消費せず離脱しているか</h2>
+            <p class="lead">
+              乗降・チケット・Web閲覧・購買を同じ時間軸で重ね、流入から回遊・消費までの<b>漏れポイント</b>を可視化します。
+              既に混雑把握をされている前提で、ここでは<b>打ち手につなぐ</b>ことを価値にします。
+            </p>
+          </div>
+          <div class="toolbar">
+            <select class="chip" data-filter="month">
+              <option value="2026-04">2026-04 週次</option>
+              <option value="2026-03">2026-03 週次</option>
+            </select>
+            <select class="chip" data-filter="area">
+              <option value="hakone">箱根エリア</option>
+              <option value="enoshima">江ノ島・湘南</option>
+            </select>
+            <span class="chip">集計値のみ</span>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="panel span-12">
+            <h3>回遊ファネル<span class="ai-badge" style="margin-left:auto">DATA</span></h3>
+            <div id="funnel"></div>
+            <div class="notice" style="margin-top:14px">
+              事実(集計): 流入と王道集中の比率、消費転換の絶対値。
+              <b>AIは数値の優劣ではなく、「どの摩擦が消費を遮っているか」の仮説を出す</b>役割を担います。
+            </div>
+          </div>
+
+          <div class="panel span-7">
+            <h3>どこに打ち手が必要か<span class="hint">流入×回遊×購買のヒートマップ</span></h3>
+            <div id="heatmap"></div>
+          </div>
+          <div class="panel span-5">
+            <h3>AI示唆<span class="ai-badge" style="margin-left:auto">AI</span></h3>
+            <div id="funnel-insights"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 4. Non-standard route ============ -->
+      <section id="routes" class="view hidden">
+        <div class="page-header">
+          <div>
+            <div class="eyebrow">Non-standard Route Discovery</div>
+            <h2>王道に行かなかった人の行動から、次の観光商品を見つける</h2>
+            <p class="lead">
+              大涌谷・芦ノ湖へ向かわなかった集計行動を抽出し、伸びている場所・時間帯・消費カテゴリを見ます。理由は断定せず、
+              <b>仮説として提示</b>します。
+            </p>
+          </div>
+          <div class="toolbar">
+            <select class="chip" data-filter="month">
+              <option value="2026-04">2026-04</option>
+              <option value="2026-03">2026-03</option>
+            </select>
+            <span class="chip">王道外行動クラスタ</span>
+            <span class="chip">N1思想を集計で再現</span>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="panel span-8">
+            <h3>非王道ルート候補マップ<span class="hint">仙石原・強羅・温泉街などの相対的な動線</span></h3>
+            <div id="route-map"></div>
+          </div>
+          <div class="panel span-4">
+            <h3>抽出されたクラスタ</h3>
+            <div id="clusters"></div>
+            <div class="action-card tinted" style="margin-top:6px">
+              <strong>解釈の注意</strong>
+              <div class="caption">
+                「なぜ行ったか」は断定せず、Web閲覧・券種・天気・イベントと重ねて<b>仮説の精度</b>を上げます。
+              </div>
+            </div>
+          </div>
+
+          <div class="panel span-12">
+            <h3>AIが出す施策仮説<span class="ai-badge" style="margin-left:auto">AI</span></h3>
+            <div id="route-hypotheses"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 5. Spend gap ============ -->
+      <section id="spend" class="view hidden">
+        <div class="page-header">
+          <div>
+            <div class="eyebrow">Consumption Gap Analysis</div>
+            <h2>人は来ているのに、お金が落ちていない場所を見つける</h2>
+            <p class="lead">
+              交通・チケットだけでは見えない<b>沿線経済への転換</b>を、商業施設購買・クーポン・施設利用と重ねて可視化します。
+              回遊施策を売上や滞在価値へ接続することを狙います。
+            </p>
+          </div>
+          <div class="toolbar">
+            <select class="chip" data-filter="month">
+              <option value="2026-04">2026-04</option>
+              <option value="2026-03">2026-03</option>
+            </select>
+            <span class="chip">乗降 × 購買 × クーポン</span>
+            <span class="chip">施策前後比較</span>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="panel span-7">
+            <h3>流入と消費のギャップ<span class="hint">指数は集計値を0-100で正規化</span></h3>
+            <div id="spend-table"></div>
+          </div>
+          <div class="panel span-5">
+            <h3>優先施策候補<span class="ai-badge" style="margin-left:auto">AI</span></h3>
+            <div id="spend-actions"></div>
+          </div>
+          <div class="panel span-12">
+            <h3>施策効果の測り方<span class="hint">施策IDで前後比較し、KPI接続まで一気通貫</span></h3>
+            <div id="spend-pipeline"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 6. AI Actions ============ -->
+      <section id="actions" class="view hidden">
+        <div class="page-header">
+          <div>
+            <div class="eyebrow">AI Action Generator</div>
+            <h2>分析で終わらせず、施策カード・KPI・実行計画まで出す</h2>
+            <p class="lead">
+              差別化は、データの掛け合わせから <b>「何を、どこで、誰に、どう検証するか」</b> まで落とすこと。
+              AIは“答え”ではなく、<b>検証すべき仮説</b>として提示します。
+            </p>
+          </div>
+          <div class="toolbar">
+            <select class="chip" data-filter="month">
+              <option value="2026-04">2026-04</option>
+              <option value="2026-03">2026-03</option>
+            </select>
+            <span class="chip">Bedrock / Claude</span>
+            <span class="chip">KPI・ガント雛形</span>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-bottom:14px">
+          <div id="action-filter"></div>
+          <div id="action-grid"></div>
+        </div>
+
+        <div class="grid">
+          <div class="panel span-12">
+            <h3>施策カードに含める出力</h3>
+            <div id="action-output"></div>
+            <div class="notice">
+              すべての施策カードは <b>事実</b>(根拠データ) と <b>AI仮説</b>(実行案・KPI候補) を明示的に分けています。
+              実行管理は Tradfit ダッシュボード上のガント/KPIで継続します。
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 7. Tech ============ -->
+      <section id="tech" class="view hidden">
+        <div class="page-header">
+          <div>
+            <div class="eyebrow">AWS / AI / Implementation</div>
+            <h2>既存ダッシュボードを活かし、データレイク+AI施策生成を追加する</h2>
+            <p class="lead">
+              小田急から受領するCSV/Parquet/APIをS3に集約、Glue/AthenaでSQL横断分析、Bedrockで仮説生成、Next.jsの観光ダッシュボードで表示。
+              既存資産を壊さず、PoCを段階的に立ち上げます。
+            </p>
+          </div>
+          <div class="toolbar">
+            <span class="chip">S3 Data Lake</span>
+            <span class="chip">Glue + Athena</span>
+            <span class="chip">Bedrock</span>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="panel span-12">
+            <h3>技術パイプライン</h3>
+            <div id="pipeline"></div>
+          </div>
+
+          <div class="panel span-6">
+            <h3>AWSサービスの役割</h3>
+            <div id="aws-table"></div>
+          </div>
+          <div class="panel span-6">
+            <h3>PoCの進め方（4週間目安）</h3>
+            <div id="weekplan"></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
