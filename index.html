@@ -3,284 +3,517 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>小田急 沿線観光アクションコックピット — PoC</title>
-  <meta name="description" content="交通・チケット・予約・Web・購買データを横断し、観光施策の優先順位を決める意思決定コックピット" />
+  <title>小田急 観光インテリジェンス</title>
+  <meta name="description" content="沿線観光データの分析と施策判断を支援する業務ダッシュボード" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
+  <!-- ============ SVG ICON SPRITE ============ -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-dashboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>
+      </symbol>
+      <symbol id="i-map" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2V6z"/><path d="M9 4v16M15 6v16"/>
+      </symbol>
+      <symbol id="i-flow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 6h10M5 8v8M19 8v8M7 18h10"/>
+      </symbol>
+      <symbol id="i-yen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 4l6 8 6-8M6 12h12M6 16h12M12 12v8"/>
+      </symbol>
+      <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+      </symbol>
+      <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 21h18M6 17V10M11 17V6M16 17v-8M21 17v-4"/>
+      </symbol>
+      <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M8 13h8M8 17h6"/>
+      </symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/>
+      </symbol>
+      <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+      </symbol>
+      <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 9l6 6 6-6"/>
+      </symbol>
+      <symbol id="i-arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 19V5M5 12l7-7 7 7"/>
+      </symbol>
+      <symbol id="i-arrow-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14M13 5l7 7-7 7"/>
+      </symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3l10 18H2L12 3z"/><path d="M12 10v5M12 18.5v.01"/>
+      </symbol>
+      <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12l5 5L20 6"/>
+      </symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>
+      </symbol>
+      <symbol id="i-tune" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>
+      </symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>
+      </symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-7 8-13a8 8 0 1 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="2.5"/>
+      </symbol>
+      <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>
+      </symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M5 12h14"/>
+      </symbol>
+      <symbol id="i-more" viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>
+      </symbol>
+      <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/>
+      </symbol>
+      <symbol id="i-cloud-rain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 14a4 4 0 0 0 0-8 6 6 0 0 0-11.7 1.5A4 4 0 0 0 6 14"/><path d="M8 18l-1 3M12 18l-1 3M16 18l-1 3"/>
+      </symbol>
+    </defs>
+  </svg>
+
   <div class="app">
 
-    <!-- ====== Sidebar ====== -->
-    <aside id="sidebar">
-      <div class="brand">
-        <div class="brand-mark">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <rect width="8" height="8" rx="2" fill="white" opacity="0.9"/>
-            <rect x="10" width="10" height="10" rx="2" fill="white" opacity="0.6"/>
-            <rect y="10" width="10" height="10" rx="2" fill="white" opacity="0.6"/>
-            <rect x="11" y="11" width="9" height="9" rx="2" fill="white" opacity="0.4"/>
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <rect x="0.5" y="0.5" width="21" height="21" rx="5" fill="#fff"/>
+            <path d="M5 7.5L11 4l6 3.5v7L11 18l-6-3.5v-7z" stroke="#0b1c2e" stroke-width="1.4"/>
+            <circle cx="11" cy="11" r="2.2" fill="#0a8e6b"/>
           </svg>
         </div>
         <div class="brand-text">
-          <div class="brand-name">Tourism Cockpit</div>
-          <div class="brand-sub">Odakyu PoC / 2026-Q2</div>
+          <div class="brand-name">小田急 観光インテリジェンス</div>
+          <div class="brand-sub">Odakyu Tourism Intelligence</div>
         </div>
       </div>
 
-      <div class="nav-section-label">SCREENS</div>
-      <nav>
-        <button class="nav-btn active" data-view="cockpit">
-          <span class="nav-icon">◈</span>
-          <span class="nav-label">Executive Cockpit</span>
-          <span class="nav-num">1</span>
+      <nav class="sidebar-nav" aria-label="主要メニュー">
+        <div class="nav-group-label">分析</div>
+        <button class="nav-item active" data-view="dashboard">
+          <svg class="nav-icon"><use href="#i-dashboard"/></svg>
+          <span>ダッシュボード</span>
         </button>
-        <button class="nav-btn" data-view="fusion">
-          <span class="nav-icon">⬡</span>
-          <span class="nav-label">Data Fusion Map</span>
-          <span class="nav-num">2</span>
+        <button class="nav-item" data-view="area">
+          <svg class="nav-icon"><use href="#i-pin"/></svg>
+          <span>エリア分析</span>
         </button>
-        <button class="nav-btn" data-view="opportunity">
-          <span class="nav-icon">◎</span>
-          <span class="nav-label">Opportunity Map</span>
-          <span class="nav-num">3</span>
+        <button class="nav-item" data-view="flow">
+          <svg class="nav-icon"><use href="#i-flow"/></svg>
+          <span>回遊分析</span>
         </button>
-        <button class="nav-btn" data-view="actions">
-          <span class="nav-icon">✦</span>
-          <span class="nav-label">AI Action Cards</span>
-          <span class="nav-num">4</span>
+        <button class="nav-item" data-view="spend">
+          <svg class="nav-icon"><use href="#i-yen"/></svg>
+          <span>消費分析</span>
         </button>
-        <button class="nav-btn" data-view="poc">
-          <span class="nav-icon">▶</span>
-          <span class="nav-label">PoC Plan</span>
-          <span class="nav-num">5</span>
+
+        <div class="nav-group-label">施策</div>
+        <button class="nav-item" data-view="initiatives">
+          <svg class="nav-icon"><use href="#i-target"/></svg>
+          <span>施策管理</span>
+          <span class="nav-badge">12</span>
+        </button>
+        <button class="nav-item" data-view="impact">
+          <svg class="nav-icon"><use href="#i-chart"/></svg>
+          <span>効果測定</span>
+        </button>
+
+        <div class="nav-group-label">出力</div>
+        <button class="nav-item" data-view="report">
+          <svg class="nav-icon"><use href="#i-doc"/></svg>
+          <span>レポート</span>
         </button>
       </nav>
 
-      <div class="sidebar-footer">
-        <div class="sidebar-demo-badge">DEMO DATA</div>
-        <div class="sidebar-note">集計・匿名データのみ使用。個人特定なし。AI出力は検証仮説として提示。</div>
+      <div class="sidebar-user">
+        <div class="user-avatar">小田</div>
+        <div class="user-meta">
+          <div class="user-name">小田原 真理</div>
+          <div class="user-role">沿線事業本部 / 観光戦略</div>
+        </div>
       </div>
     </aside>
 
-    <!-- ====== Main ====== -->
-    <div class="main-wrapper">
+    <!-- ============ MAIN ============ -->
+    <div class="main">
 
-      <!-- Global top bar -->
-      <div class="topbar">
+      <!-- ============ TOPBAR ============ -->
+      <header class="topbar">
         <div class="topbar-left">
-          <div class="topbar-breadcrumb" id="topbar-breadcrumb">Executive Cockpit</div>
-          <div class="topbar-demo-badge">Synthetic / 仮データ</div>
+          <h1 class="topbar-title" id="topbar-title">ダッシュボード</h1>
+          <span class="topbar-divider" aria-hidden="true"></span>
+          <div class="topbar-updated">
+            <svg class="tb-ic"><use href="#i-calendar"/></svg>
+            <span>2026年4月 / 第4週時点</span>
+          </div>
         </div>
         <div class="topbar-right">
-          <select class="topbar-select" data-filter="month" aria-label="対象月">
-            <option value="2026-04">2026年4月</option>
-            <option value="2026-03">2026年3月</option>
-            <option value="2026-02">2026年2月</option>
-          </select>
-          <select class="topbar-select" data-filter="area" aria-label="エリア">
-            <option value="hakone">箱根エリア</option>
-            <option value="enoshima">江ノ島・湘南</option>
-            <option value="line">沿線全体</option>
-          </select>
-          <div class="topbar-anon-badge">匿名・集計データ前提</div>
+          <div class="searchbox">
+            <svg class="sb-ic"><use href="#i-search"/></svg>
+            <input type="text" placeholder="エリア、施策、指標を検索…" />
+            <kbd>⌘K</kbd>
+          </div>
+          <button class="icon-btn" aria-label="通知">
+            <svg><use href="#i-bell"/></svg>
+            <span class="dot"></span>
+          </button>
+        </div>
+      </header>
+
+      <!-- ============ FILTER STRIP ============ -->
+      <div class="filter-strip">
+        <div class="filter-strip-left">
+          <div class="seg-tabs" role="tablist" aria-label="表示単位">
+            <button class="seg-tab active" data-period="week">週次</button>
+            <button class="seg-tab" data-period="month">月次</button>
+            <button class="seg-tab" data-period="quarter">四半期</button>
+          </div>
+          <div class="select-wrap">
+            <svg class="sw-ic-left"><use href="#i-calendar"/></svg>
+            <select class="select" data-filter="month" aria-label="対象月">
+              <option value="2026-04">2026年4月</option>
+              <option value="2026-03">2026年3月</option>
+              <option value="2026-02">2026年2月</option>
+            </select>
+            <svg class="sw-ic-right"><use href="#i-chevron-down"/></svg>
+          </div>
+          <div class="select-wrap">
+            <svg class="sw-ic-left"><use href="#i-pin"/></svg>
+            <select class="select" data-filter="area" aria-label="エリア">
+              <option value="hakone">箱根エリア</option>
+              <option value="enoshima">江ノ島・湘南</option>
+              <option value="line">沿線全域</option>
+            </select>
+            <svg class="sw-ic-right"><use href="#i-chevron-down"/></svg>
+          </div>
+          <button class="btn-ghost">
+            <svg><use href="#i-tune"/></svg>
+            <span>詳細フィルタ</span>
+          </button>
+        </div>
+        <div class="filter-strip-right">
+          <button class="btn-ghost">
+            <svg><use href="#i-download"/></svg>
+            <span>エクスポート</span>
+          </button>
         </div>
       </div>
 
-      <main>
+      <main class="content">
 
-        <!-- ============ 1. Executive Cockpit ============ -->
-        <section id="cockpit" class="view">
-          <div class="view-header">
-            <div class="view-header-left">
-              <div class="eyebrow">小田急 沿線観光アクションコックピット PoC</div>
-              <h1>交通・チケット・予約・Web・購買データを横断し<br>観光施策の優先順位を決める</h1>
-              <p class="view-lead">既存BIの「可視化」で終わらせず、<strong>意思決定と施策実行まで落とす</strong>レイヤーとして設計。単なるデータ集計ではなく、分断された部門データを横断し「どこに機会があるか・何を検証すべきか」を判断する。</p>
-            </div>
+        <!-- ====================================================== -->
+        <!-- 1. DASHBOARD -->
+        <!-- ====================================================== -->
+        <section id="dashboard" class="view">
+
+          <!-- Alert bar -->
+          <div class="alert-bar" id="alert-bar"></div>
+
+          <!-- KPI row (4) -->
+          <div class="kpi-grid" id="kpi-grid"></div>
+
+          <!-- 2 column: 優先対応エリア + 推奨アクション -->
+          <div class="row row-7-5">
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">優先対応エリア</h2>
+                  <p class="card-sub">来訪・消費・回遊スコアから自動的に優先度を算出</p>
+                </div>
+                <button class="link-btn">すべて見る<svg><use href="#i-arrow-right"/></svg></button>
+              </header>
+              <div id="priority-areas"></div>
+            </section>
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">推奨アクション</h2>
+                  <p class="card-sub">優先度の高い施策候補</p>
+                </div>
+                <button class="link-btn">施策管理へ<svg><use href="#i-arrow-right"/></svg></button>
+              </header>
+              <div id="recommended-actions"></div>
+            </section>
           </div>
 
-          <!-- KPI 3 cards -->
-          <div class="kpi-row" id="kpi-row"></div>
-
-          <!-- Two columns: Insights + Today's Focus -->
-          <div class="two-col" style="margin-top:20px">
-            <div class="col-main">
-              <div class="panel">
-                <div class="panel-header">
-                  <span class="panel-title">データ横断で見えること</span>
-                  <span class="data-label">事実 × 推定</span>
+          <!-- Trend + Composition -->
+          <div class="row row-7-5">
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">来訪推移</h2>
+                  <p class="card-sub">主要エリア別 / 週次指数</p>
                 </div>
-                <div id="data-insights"></div>
-              </div>
-              <div class="panel" style="margin-top:14px">
-                <div class="panel-header">
-                  <span class="panel-title">既存BIとの違い</span>
-                  <span class="hint-label">このPoCの差別化ポイント</span>
+                <div class="legend" id="trend-legend"></div>
+              </header>
+              <div id="trend-chart"></div>
+            </section>
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">エリア構成比</h2>
+                  <p class="card-sub">来訪指数シェア（DEMO）</p>
                 </div>
-                <div id="bi-diff"></div>
-              </div>
-            </div>
-            <div class="col-side">
-              <div class="panel priority-panel">
-                <div class="panel-header">
-                  <span class="panel-title">今週の重点判断</span>
-                  <span class="ai-badge-sm">AI 示唆</span>
-                </div>
-                <div id="weekly-focus"></div>
-              </div>
-              <div class="panel" style="margin-top:14px">
-                <div class="panel-header">
-                  <span class="panel-title">データ受領状況</span>
-                </div>
-                <div id="data-status"></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ============ 2. Data Fusion Map ============ -->
-        <section id="fusion" class="view hidden">
-          <div class="view-header">
-            <div class="view-header-left">
-              <div class="eyebrow">Data Fusion Map</div>
-              <h1>分断されたデータを、同じ時間軸・エリア軸でつなぐ</h1>
-              <p class="view-lead">各部門・システムに点在するデータを、個人特定なしで横断分析できる形に統合。共通キーとして <strong>area_id / time_bucket / segment / campaign_id</strong> を使い、意思決定に必要な粒度で揃える。</p>
-            </div>
-          </div>
-
-          <!-- Connection diagram -->
-          <div class="panel" style="margin-bottom:14px">
-            <div class="panel-header">
-              <span class="panel-title">データソース接続図</span>
-              <span class="hint-label">ステータス: 取得可能 / 要確認 / PoC対象外</span>
-            </div>
-            <div id="fusion-diagram"></div>
-          </div>
-
-          <div class="two-col">
-            <div class="col-main">
-              <div class="panel">
-                <div class="panel-header">
-                  <span class="panel-title">共通データモデル — 統合キー</span>
-                  <span class="data-label">設計方針</span>
-                </div>
-                <div id="common-keys"></div>
-              </div>
-            </div>
-            <div class="col-side">
-              <div class="panel">
-                <div class="panel-header">
-                  <span class="panel-title">どの意思決定に使うか</span>
-                </div>
-                <div id="data-decisions"></div>
-              </div>
-            </div>
+              </header>
+              <div id="area-composition"></div>
+            </section>
           </div>
         </section>
 
-        <!-- ============ 3. Opportunity Map ============ -->
-        <section id="opportunity" class="view hidden">
-          <div class="view-header">
-            <div class="view-header-left">
-              <div class="eyebrow">Opportunity Map</div>
-              <h1>エリア別に、打ち手の優先順位を判断する</h1>
-              <p class="view-lead">流入指数 × 消費転換指数の4象限マトリクスで、各エリアの施策優先度を可視化。「混雑しているから問題」ではなく、<strong>「流入はあるが消費されていない場所」を最優先</strong>に改善する。</p>
-            </div>
+        <!-- ====================================================== -->
+        <!-- 2. AREA ANALYSIS -->
+        <!-- ====================================================== -->
+        <section id="area" class="view hidden">
+          <div class="page-intro">
+            <p>エリア別に来訪・回遊・消費のスコアを比較し、次に取るべき判断を確認します。</p>
           </div>
 
-          <div class="opp-layout">
-            <!-- Matrix -->
-            <div class="panel opp-matrix-panel">
-              <div class="panel-header">
-                <span class="panel-title">流入 × 消費転換 マトリクス</span>
-                <span class="hint-label">各軸は0-100の相対指数 / Synthetic Data</span>
+          <div class="card">
+            <header class="card-header">
+              <div>
+                <h2 class="card-title">エリア別スコア</h2>
+                <p class="card-sub">各指標は0〜100の相対スコア（DEMO）</p>
               </div>
-              <div id="opp-matrix"></div>
-            </div>
-
-            <!-- Area cards -->
-            <div class="opp-cards-col">
-              <div class="panel">
-                <div class="panel-header">
-                  <span class="panel-title">エリア別 推奨判断</span>
-                  <span class="ai-badge-sm">推定 + AI仮説</span>
+              <div class="header-tools">
+                <div class="seg-tabs sm" role="tablist">
+                  <button class="seg-tab active">全エリア</button>
+                  <button class="seg-tab">優先度 高</button>
+                  <button class="seg-tab">分散候補</button>
                 </div>
-                <div id="area-cards"></div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ============ 4. AI Action Cards ============ -->
-        <section id="actions" class="view hidden">
-          <div class="view-header">
-            <div class="view-header-left">
-              <div class="eyebrow">AI Action Cards</div>
-              <h1>施策案は「答え」ではなく「検証すべき仮説」として提示</h1>
-              <p class="view-lead">AIは事実データのギャップから施策候補を生成しますが、すべては<strong>仮説 / 要検証</strong>です。根拠・対象・検証方法・成功KPIをセットで表示し、小田急担当者が社内判断しやすい形にします。</p>
-            </div>
+            </header>
+            <div id="area-table"></div>
           </div>
 
-          <div class="action-filter-bar" id="action-filter-bar"></div>
-
-          <div class="action-cards-grid" id="action-cards-grid"></div>
-
-          <div class="panel" style="margin-top:16px">
-            <div class="panel-header">
-              <span class="panel-title">施策カードの構成 — 事実とAI仮説を明示的に分離</span>
-              <span class="data-label">設計方針</span>
-            </div>
-            <div id="card-structure"></div>
+          <div class="row row-1-1">
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">エリア別 判断サマリー</h2>
+                  <p class="card-sub">次に取るべき判断を要約</p>
+                </div>
+              </header>
+              <div id="area-judgment"></div>
+            </section>
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">セグメント別の傾向</h2>
+                  <p class="card-sub">券種・言語・旅行者タイプ別</p>
+                </div>
+              </header>
+              <div id="segment-table"></div>
+            </section>
           </div>
         </section>
 
-        <!-- ============ 5. PoC Plan ============ -->
-        <section id="poc" class="view hidden">
-          <div class="view-header">
-            <div class="view-header-left">
-              <div class="eyebrow">PoC Plan</div>
-              <h1>小田急側が社内説明しやすいPoC設計</h1>
-              <p class="view-lead">4〜8週間のPoC期間で、既存データを使って<strong>意思決定ダッシュボード・施策優先度リスト・AI施策カード・検証KPI</strong>を揃えます。完全データを待たず、取得しやすいものから段階的に開始できます。</p>
-            </div>
+        <!-- ====================================================== -->
+        <!-- 3. FLOW ANALYSIS -->
+        <!-- ====================================================== -->
+        <section id="flow" class="view hidden">
+          <div class="page-intro">
+            <p>来訪者がどこに集中し、どこに流れていないかを確認します。</p>
           </div>
 
-          <div class="poc-layout">
-            <div class="poc-steps-col">
-              <div class="panel">
-                <div class="panel-header">
-                  <span class="panel-title">PoCステップ（4〜8週間）</span>
-                  <span class="hint-label">段階的アプローチ</span>
+          <div class="kpi-grid kpi-grid-3" id="flow-kpis"></div>
+
+          <div class="row row-7-5">
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">主要ルートと分散候補</h2>
+                  <p class="card-sub">現在の集中ルートと、混雑時に誘導すべき候補エリア</p>
                 </div>
-                <div id="poc-steps"></div>
+              </header>
+              <div id="route-flow"></div>
+            </section>
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">時間帯別の偏り</h2>
+                  <p class="card-sub">エリア × 時間帯 / 混雑度</p>
+                </div>
+              </header>
+              <div id="time-heatmap"></div>
+            </section>
+          </div>
+
+          <div class="row row-1-1">
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">天候による回遊変化</h2>
+                  <p class="card-sub">晴天・曇天・雨天で回遊パターンが変化</p>
+                </div>
+              </header>
+              <div id="weather-flow"></div>
+            </section>
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">曜日別の偏り</h2>
+                  <p class="card-sub">平日と週末の集中度</p>
+                </div>
+              </header>
+              <div id="weekday-flow"></div>
+            </section>
+          </div>
+        </section>
+
+        <!-- ====================================================== -->
+        <!-- 4. SPEND ANALYSIS -->
+        <!-- ====================================================== -->
+        <section id="spend" class="view hidden">
+          <div class="page-intro">
+            <p>来訪はあるのに消費や施設利用につながっていないエリアを特定し、改善対象を決定します。</p>
+          </div>
+
+          <div class="card">
+            <header class="card-header">
+              <div>
+                <h2 class="card-title">来訪 × 消費 マトリクス</h2>
+                <p class="card-sub">象限ごとに次に取るべき判断が異なります</p>
+              </div>
+              <div class="quad-legend">
+                <span class="qld-dot bg-red"></span><span>最優先改善</span>
+                <span class="qld-dot bg-gold"></span><span>誘導強化</span>
+                <span class="qld-dot bg-green"></span><span>維持・単価向上</span>
+                <span class="qld-dot bg-muted"></span><span>優先度低</span>
+              </div>
+            </header>
+            <div id="spend-matrix"></div>
+          </div>
+
+          <div class="row row-1-1">
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">消費機会ロスが大きいエリア</h2>
+                  <p class="card-sub">来訪に対して消費が弱いエリア</p>
+                </div>
+              </header>
+              <div id="spend-loss-table"></div>
+            </section>
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">消費効率が高いエリア</h2>
+                  <p class="card-sub">少ない来訪で消費が強い、誘導強化候補</p>
+                </div>
+              </header>
+              <div id="spend-eff-table"></div>
+            </section>
+          </div>
+        </section>
+
+        <!-- ====================================================== -->
+        <!-- 5. INITIATIVES (施策管理) -->
+        <!-- ====================================================== -->
+        <section id="initiatives" class="view hidden">
+          <div class="page-intro">
+            <p>分析結果から実施すべき施策を選び、ステータスを管理します。</p>
+          </div>
+
+          <div class="card no-pad">
+            <div class="card-toolbar">
+              <div class="seg-tabs" id="init-filter-tabs"></div>
+              <div class="toolbar-right">
+                <button class="btn-ghost">
+                  <svg><use href="#i-tune"/></svg><span>並び替え</span>
+                </button>
+                <button class="btn-primary">
+                  <svg><use href="#i-plus"/></svg><span>施策を追加</span>
+                </button>
               </div>
             </div>
-            <div class="poc-right-col">
-              <div class="panel">
-                <div class="panel-header">
-                  <span class="panel-title">必要データ一覧</span>
-                  <span class="hint-label">優先度順</span>
-                </div>
-                <div id="poc-data"></div>
+            <div id="initiative-grid"></div>
+          </div>
+        </section>
+
+        <!-- ====================================================== -->
+        <!-- 6. IMPACT (効果測定) -->
+        <!-- ====================================================== -->
+        <section id="impact" class="view hidden">
+          <div class="page-intro">
+            <p>実施中の施策が、対象エリアでどのような変化を生んでいるかを確認します。</p>
+          </div>
+
+          <div class="kpi-grid kpi-grid-3" id="impact-kpis"></div>
+
+          <div class="card">
+            <header class="card-header">
+              <div>
+                <h2 class="card-title">実施中施策の前後比較</h2>
+                <p class="card-sub">施策実施前後14日の変化を確認</p>
               </div>
-              <div class="panel" style="margin-top:14px">
-                <div class="panel-header">
-                  <span class="panel-title">成果物</span>
+              <div class="header-tools">
+                <div class="seg-tabs sm">
+                  <button class="seg-tab active">全施策</button>
+                  <button class="seg-tab">改善傾向</button>
+                  <button class="seg-tab">要確認</button>
                 </div>
-                <div id="poc-deliverables"></div>
               </div>
-              <div class="panel" style="margin-top:14px">
-                <div class="panel-header">
-                  <span class="panel-title">技術スタック</span>
-                  <span class="hint-label">AWS中心・既存資産活用</span>
+            </header>
+            <div id="impact-table"></div>
+          </div>
+        </section>
+
+        <!-- ====================================================== -->
+        <!-- 7. REPORT -->
+        <!-- ====================================================== -->
+        <section id="report" class="view hidden">
+          <div class="page-intro">
+            <p>分析結果と施策進捗を、社内共有用のレポートとして出力します。</p>
+          </div>
+
+          <div class="row row-7-5">
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">最近のレポート</h2>
+                  <p class="card-sub">エクスポート済みドキュメント</p>
                 </div>
-                <div id="tech-stack"></div>
-              </div>
-            </div>
+                <button class="btn-primary">
+                  <svg><use href="#i-plus"/></svg><span>新規レポート作成</span>
+                </button>
+              </header>
+              <div id="report-list"></div>
+            </section>
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">テンプレート</h2>
+                  <p class="card-sub">用途別の出力形式</p>
+                </div>
+              </header>
+              <div id="report-templates"></div>
+            </section>
           </div>
         </section>
 
       </main>
-    </div><!-- /.main-wrapper -->
-  </div><!-- /.app -->
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>

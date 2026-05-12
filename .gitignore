@@ -1,0 +1,11 @@
+# Local tools / skills (not part of the product)
+skills/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
