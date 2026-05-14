@@ -104,6 +104,38 @@
     </defs>
   </svg>
 
+  <!-- ============ INITIAL LOADER ============ -->
+  <div id="init-loader" class="init-loader" aria-hidden="false">
+    <div class="init-loader-inner">
+      <div class="init-loader-brand">
+        <div class="init-loader-logo">
+          <svg width="28" height="28" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <rect x="0.5" y="0.5" width="21" height="21" rx="5" fill="#fff"/>
+            <path d="M5 7.5L11 4l6 3.5v7L11 18l-6-3.5v-7z" stroke="#0b1c2e" stroke-width="1.4"/>
+            <circle cx="11" cy="11" r="2.2" fill="#0a8e6b"/>
+          </svg>
+        </div>
+        <div>
+          <div class="init-loader-title">小田急 観光インテリジェンス</div>
+          <div class="init-loader-sub">送客候補を整理しています</div>
+        </div>
+      </div>
+
+      <ol class="loader-steps" aria-label="読み込み手順">
+        <li class="loader-step"><span class="loader-step-dot"></span><span class="loader-step-text">来訪・回遊データを確認</span></li>
+        <li class="loader-step"><span class="loader-step-dot"></span><span class="loader-step-text">消費機会ロスを集計</span></li>
+        <li class="loader-step"><span class="loader-step-dot"></span><span class="loader-step-text">送客候補エリアを抽出</span></li>
+        <li class="loader-step"><span class="loader-step-dot"></span><span class="loader-step-text">推奨施策を更新</span></li>
+      </ol>
+
+      <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- ============ DRAWER / TOAST ROOTS ============ -->
+  <div id="drawer-root" class="drawer-root" aria-live="polite"></div>
+  <div id="toast-root" class="toast-root" aria-live="polite"></div>
+
   <div class="app">
 
     <!-- ============ SIDEBAR ============ -->
@@ -221,6 +253,16 @@
               <option value="hakone">箱根エリア</option>
               <option value="enoshima">江ノ島・湘南</option>
               <option value="line">沿線全域</option>
+            </select>
+            <svg class="sw-ic-right"><use href="#i-chevron-down"/></svg>
+          </div>
+          <div class="select-wrap">
+            <svg class="sw-ic-left"><use href="#i-broadcast"/></svg>
+            <select class="select" data-filter="channel" aria-label="チャネル">
+              <option value="all">全チャネル</option>
+              <option value="webapp">Web/App</option>
+              <option value="qr">QR</option>
+              <option value="signage">サイネージ</option>
             </select>
             <svg class="sw-ic-right"><use href="#i-chevron-down"/></svg>
           </div>

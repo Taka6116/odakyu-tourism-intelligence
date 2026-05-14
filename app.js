@@ -390,12 +390,13 @@
   ];
 
   // ----- Referral Optimization (送客最適化) -----
-  const REFERRAL_KPIS = [
+  // KPI: stateTone は state-pill の色トーン用（high=red系, mid=gold系, ok=green系, neutral=navy系）
+  let REFERRAL_KPIS = [
     {
-      label: "送客余地",
+      label: "送客機会スコア",
       value: 78, denom: "/ 100",
-      icon: "i-broadcast", iconColor: "t-navy",
-      decision: "誘導先として活用できるエリア・施設の余地",
+      icon: "i-map", iconColor: "t-navy",
+      decision: "誘導先として活用できるエリア・施設の余地を示します。",
       delta: { dir: "up", text: "+4" },
       spark: [62, 65, 68, 70, 73, 76, 78],
     },
@@ -403,7 +404,7 @@
       label: "消費機会ロス",
       value: "高", denom: "",
       icon: "i-yen", iconColor: "t-red",
-      decision: "来訪はあるが購買・施設利用につながっていない状態",
+      decision: "来訪はあるが購買・施設利用につながっていない状態です。",
       delta: { dir: "flat", text: "横ばい" },
       spark: [70, 72, 71, 73, 72, 73, 72],
     },
@@ -411,7 +412,7 @@
       label: "推奨施策",
       value: 6, denom: "件",
       icon: "i-ticket", iconColor: "t-gold",
-      decision: "優先的に検討すべき案内・クーポン施策の候補",
+      decision: "優先的に検討すべき案内・クーポン施策です。",
       delta: { dir: "up", text: "+2" },
       spark: [3, 3, 4, 4, 5, 5, 6],
     },
@@ -419,7 +420,7 @@
       label: "実施中施策",
       value: 3, denom: "件",
       icon: "i-target", iconColor: "t-green",
-      decision: "現在配信・運用中の送客施策",
+      decision: "現在配信・運用中の施策です。",
       delta: { dir: "up", text: "+1" },
       spark: [1, 1, 2, 2, 2, 3, 3],
     },
@@ -428,88 +429,93 @@
   const REFERRAL_AREAS = [
     {
       area: "箱根湯本",
-      state: "来訪多・消費弱",
-      stateCls: "t-red",
+      state: "来訪多・消費弱", stateCls: "tone-warn",
       decide: "食べ歩きルートと荷物預かり案内",
-      priority: "最優先",
-      priorityCls: "high",
+      priority: "最優先", priorityCls: "high",
       effect: "乗換前消費の改善",
     },
     {
       area: "強羅",
-      state: "回遊あり・施設利用弱",
-      stateCls: "t-gold",
+      state: "回遊余地あり", stateCls: "tone-attention",
       decide: "工芸体験・飲食クーポンの比較検証",
-      priority: "高",
-      priorityCls: "high",
+      priority: "高", priorityCls: "high",
       effect: "体験予約と飲食利用の増加",
     },
     {
       area: "仙石原",
-      state: "来訪少・消費効率高",
-      stateCls: "t-green",
+      state: "消費効率高", stateCls: "tone-good",
       decide: "王道混雑時の代替誘導先として案内",
-      priority: "中",
-      priorityCls: "medium",
+      priority: "中", priorityCls: "medium",
       effect: "分散誘導と高単価利用の増加",
     },
     {
       area: "小田原",
-      state: "乗換滞留あり",
-      stateCls: "t-navy",
+      state: "乗換滞留あり", stateCls: "tone-neutral",
       decide: "改札外の短時間消費導線を案内",
-      priority: "中",
-      priorityCls: "medium",
+      priority: "中", priorityCls: "medium",
       effect: "乗換時間中の街区利用増加",
     },
   ];
 
+  // Offers — incl. drawer-only fields (content, observe, next)
   const REFERRAL_OFFERS = [
     {
+      id: "of01",
       title: "箱根湯本 食べ歩きクーポン",
       area: "箱根湯本",
       channels: ["Web/App", "QR"],
       reason: "来訪は多いが消費転換が弱く、乗換前の短時間消費に余地があるため。",
       kpis: ["クーポン利用率", "湯本周辺購買指数"],
-      priority: "最優先",
-      priorityCls: "high",
+      priority: "最優先", priorityCls: "high",
+      content: "湯本駅出口・商店街サイネージで配布。対象店舗20店、利用条件1,000円以上。",
+      observe: ["クーポン取得数", "対象店舗売上指数", "湯本周辺購買指数"],
+      next: "2週間配信後、利用率15%未達であれば対象店舗の構成を見直し。",
     },
     {
+      id: "of02",
       title: "雨天時 屋内回遊ルート",
       area: "箱根湯本・強羅",
       channels: ["Web/App", "サイネージ"],
       reason: "雨天時は屋外スポットへの流れが弱まり、屋内施設への案内余地があるため。",
       kpis: ["ルート閲覧率", "対象施設利用率"],
-      priority: "高",
-      priorityCls: "high",
+      priority: "高", priorityCls: "high",
+      content: "天気APIと連動し、雨天予報時にアプリ通知と駅サイネージで屋内ルートを提示。",
+      observe: ["ルート閲覧率", "対象施設利用率", "雨天時の回遊指数"],
+      next: "雨天回数の少ない月は仙石原方面の屋内施設にも対象を広げ検証。",
     },
     {
+      id: "of03",
       title: "仙石原 体験施設誘導",
       area: "仙石原",
       channels: ["Web/App", "サイネージ"],
       reason: "来訪は少ないが消費効率が高く、王道混雑時の代替誘導先として有効なため。",
       kpis: ["仙石原来訪指数", "体験施設利用率"],
-      priority: "中",
-      priorityCls: "medium",
+      priority: "中", priorityCls: "medium",
+      content: "王道ルートが混雑指数70超のときに、仙石原方面の体験施設をアプリ・サイネージで案内。",
+      observe: ["仙石原来訪指数", "体験施設利用率", "代替誘導クリック率"],
+      next: "1ヶ月後に分散誘導効果を確認し、混雑時定常運用へ移行するか判断。",
     },
     {
+      id: "of04",
       title: "強羅 工芸体験予約クーポン",
       area: "強羅",
       channels: ["QR", "Web/App"],
       reason: "回遊はあるが施設利用が弱く、体験予約への導線強化が必要なため。",
       kpis: ["予約クリック率", "クーポン利用率"],
-      priority: "高",
-      priorityCls: "high",
+      priority: "高", priorityCls: "high",
+      content: "強羅駅周辺と提携施設にQRを設置し、工芸体験予約への遷移と1,000円OFFを提供。",
+      observe: ["予約クリック率", "クーポン利用率", "強羅施設利用指数"],
+      next: "提携施設別の利用差を比較し、効果の高い施設構成に絞り込み。",
     },
   ];
 
   // x = 来訪指数 (visit), y = 消費指数 (spend), 0–100
   const REFERRAL_MATRIX = [
-    { name: "箱根湯本", visit: 88, spend: 38, tag: "最優先改善",   tagCls: "t-red"   },
-    { name: "大涌谷",   visit: 72, spend: 55, tag: "維持・単価向上", tagCls: "t-green" },
-    { name: "強羅",     visit: 64, spend: 42, tag: "改善余地",     tagCls: "t-gold"  },
-    { name: "仙石原",   visit: 36, spend: 68, tag: "誘導強化",     tagCls: "t-blue"  },
-    { name: "小田原",   visit: 30, spend: 34, tag: "優先度低",     tagCls: "t-navy"  },
+    { name: "箱根湯本", visit: 88, spend: 38, tag: "最優先改善",   tagCls: "tone-warn"      },
+    { name: "大涌谷",   visit: 72, spend: 55, tag: "維持・単価向上", tagCls: "tone-good"      },
+    { name: "強羅",     visit: 64, spend: 42, tag: "改善余地",     tagCls: "tone-attention" },
+    { name: "仙石原",   visit: 36, spend: 68, tag: "誘導強化",     tagCls: "tone-info"      },
+    { name: "小田原",   visit: 30, spend: 34, tag: "優先度低",     tagCls: "tone-neutral"   },
   ];
 
   const REFERRAL_FUNNEL = [
@@ -519,6 +525,16 @@
     { label: "利用",    value: 14,  hint: "店舗・施設での利用" },
     { label: "回遊変化", value: 9,   hint: "対象エリアへの来訪変化" },
   ];
+
+  // Filter response variants (KPI 値のスケーリングだけ少し動かす)
+  const REFERRAL_FILTER_VARIANTS = {
+    "hakone":   { score: 78, loss: "高", rec: 6, run: 3 },
+    "enoshima": { score: 64, loss: "中", rec: 3, run: 1 },
+    "line":     { score: 72, loss: "高", rec: 6, run: 3 },
+  };
+
+  // Per-offer runtime state (holds across re-renders within session)
+  const offerState = {}; // { [offerId]: { status: "added" | "held" | null } }
 
   // ----- Reports -----
   const REPORTS = [
@@ -1475,7 +1491,7 @@
   }
 
   function renderReferralAreas() {
-    const table = el("table", { class: "data-table" });
+    const table = el("table", { class: "data-table ref-area-table" });
     table.appendChild(el("thead", null, el("tr", null, [
       el("th", null, "エリア"),
       el("th", null, "状態"),
@@ -1485,9 +1501,13 @@
     ])));
     const tbody = el("tbody");
     REFERRAL_AREAS.forEach((a) => {
+      const stateCell = el("span", { class: "state-pill " + a.stateCls });
+      stateCell.appendChild(el("span", { class: "state-dot" }));
+      stateCell.appendChild(el("span", { class: "state-label" }, a.state));
+
       tbody.appendChild(el("tr", null, [
         el("td", null, el("span", { class: "td-strong" }, a.area)),
-        el("td", null, tag(a.state, a.stateCls)),
+        el("td", null, stateCell),
         el("td", null, el("span", { class: "ref-decide" }, a.decide)),
         el("td", null, el("span", { class: "pri-badge " + a.priorityCls }, a.priority)),
         el("td", null, el("span", { class: "ref-effect" }, a.effect)),
@@ -1500,58 +1520,125 @@
   function renderReferralOffers() {
     const list = el("div", { class: "offer-list" });
     REFERRAL_OFFERS.forEach((o) => {
-      const card = el("div", { class: "offer-card" });
-
-      const head = el("div", { class: "offer-head" });
-      head.appendChild(el("div", { class: "offer-title" }, o.title));
-      head.appendChild(el("span", { class: "pri-badge " + o.priorityCls }, o.priority));
-      card.appendChild(head);
-
-      const meta = el("div", { class: "offer-meta" });
-      meta.appendChild(el("div", { class: "offer-meta-item" }, [
-        el("span", { class: "offer-meta-key" }, "対象エリア"),
-        el("span", { class: "offer-meta-val" }, o.area),
-      ]));
-      const chWrap = el("div", { class: "offer-meta-item" });
-      chWrap.appendChild(el("span", { class: "offer-meta-key" }, "配信チャネル"));
-      const chips = el("span", { class: "offer-chips" });
-      o.channels.forEach((c) => chips.appendChild(el("span", { class: "offer-chip" }, c)));
-      chWrap.appendChild(chips);
-      meta.appendChild(chWrap);
-      card.appendChild(meta);
-
-      card.appendChild(el("div", { class: "offer-reason-label" }, "判断理由"));
-      card.appendChild(el("div", { class: "offer-reason" }, o.reason));
-
-      card.appendChild(el("div", { class: "offer-reason-label" }, "成功指標"));
-      const kpiChips = el("div", { class: "offer-kpis" });
-      o.kpis.forEach((k) => kpiChips.appendChild(el("span", { class: "offer-kpi-chip" }, k)));
-      card.appendChild(kpiChips);
-
-      const actions = el("div", { class: "offer-actions" });
-      actions.appendChild(el("button", { class: "btn-ghost btn-sm" }, "保留"));
-      actions.appendChild(el("button", { class: "btn-primary btn-sm" }, "施策化する"));
-      card.appendChild(actions);
-
-      list.appendChild(card);
+      list.appendChild(buildOfferCard(o));
     });
     mount("referral-offers", list);
   }
 
+  function buildOfferCard(o) {
+    const state = offerState[o.id] || {};
+    const card = el("div", {
+      class: "offer-card" + (state.status === "held" ? " is-held" : "") + (state.status === "added" ? " is-added" : ""),
+      "data-offer-id": o.id,
+      tabindex: "0",
+      role: "button",
+      "aria-label": o.title + " の詳細を表示",
+    });
+
+    const head = el("div", { class: "offer-head" });
+    head.appendChild(el("div", { class: "offer-title" }, o.title));
+    const headRight = el("div", { class: "offer-head-right" });
+    headRight.appendChild(el("span", { class: "pri-badge " + o.priorityCls }, o.priority));
+    if (state.status === "added") headRight.appendChild(el("span", { class: "offer-status-tag added" }, "追加済み"));
+    if (state.status === "held")  headRight.appendChild(el("span", { class: "offer-status-tag held" }, "保留"));
+    const more = el("button", { class: "offer-more", "aria-label": "メニュー", title: "メニュー" }, icon("i-more"));
+    more.addEventListener("click", (e) => e.stopPropagation());
+    headRight.appendChild(more);
+    head.appendChild(headRight);
+    card.appendChild(head);
+
+    const meta = el("div", { class: "offer-meta" });
+    meta.appendChild(buildMetaItem("対象エリア", el("span", { class: "offer-meta-val" }, o.area)));
+    const chips = el("span", { class: "offer-chips" });
+    o.channels.forEach((c) => chips.appendChild(el("span", { class: "offer-chip" }, c)));
+    meta.appendChild(buildMetaItem("配信チャネル", chips));
+    card.appendChild(meta);
+
+    card.appendChild(el("div", { class: "offer-section-label" }, "判断理由"));
+    card.appendChild(el("div", { class: "offer-reason" }, o.reason));
+
+    card.appendChild(el("div", { class: "offer-section-label" }, "成功指標"));
+    const kpiChips = el("div", { class: "offer-kpis" });
+    o.kpis.forEach((k) => kpiChips.appendChild(el("span", { class: "offer-kpi-chip" }, k)));
+    card.appendChild(kpiChips);
+
+    const actions = el("div", { class: "offer-actions" });
+    const holdBtn = el("button", { class: "btn-ghost btn-sm" }, state.status === "held" ? "保留解除" : "保留");
+    const addBtn  = el("button", {
+      class: "btn-primary btn-sm" + (state.status === "added" ? " is-added" : ""),
+      disabled: state.status === "added" ? "true" : null,
+    }, state.status === "added" ? "追加済み" : "施策管理に追加");
+
+    holdBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (state.status === "held") {
+        offerState[o.id] = { status: null };
+      } else {
+        offerState[o.id] = { status: "held" };
+      }
+      renderReferralOffers();
+    });
+    addBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      addOfferToInitiatives(o.id);
+    });
+
+    actions.appendChild(holdBtn);
+    actions.appendChild(addBtn);
+    card.appendChild(actions);
+
+    // open drawer on card click/keyboard
+    card.addEventListener("click", () => openReferralDrawer(o.id));
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openReferralDrawer(o.id); }
+    });
+
+    return card;
+  }
+
+  function buildMetaItem(label, valueNode) {
+    return el("div", { class: "offer-meta-item" }, [
+      el("span", { class: "offer-meta-key" }, label),
+      valueNode,
+    ]);
+  }
+
+  function addOfferToInitiatives(offerId) {
+    const prev = offerState[offerId] && offerState[offerId].status;
+    if (prev === "added") return;
+    offerState[offerId] = { status: "added" };
+
+    // increment "推奨施策" → 実施中, only when not already added before
+    const recKpi = REFERRAL_KPIS.find(k => k.label === "推奨施策");
+    const runKpi = REFERRAL_KPIS.find(k => k.label === "実施中施策");
+    if (recKpi && typeof recKpi.value === "number" && recKpi.value > 0) recKpi.value = recKpi.value - 1;
+    if (runKpi && typeof runKpi.value === "number") runKpi.value = runKpi.value + 1;
+
+    renderReferralKpis();
+    renderReferralOffers();
+    showToast("施策管理に追加しました。効果測定で継続・改善・停止を確認できます。");
+  }
+
+  function holdOffer(offerId) {
+    offerState[offerId] = { status: "held" };
+    renderReferralOffers();
+  }
+
   function renderReferralMatrix() {
     const wrap = el("div", { class: "ref-matrix" });
+
+    // y-axis label outside board
+    wrap.appendChild(el("div", { class: "ref-axis-y-label" }, "↑ 消費指数（高）"));
+
     const board = el("div", { class: "ref-matrix-board" });
+    board.appendChild(el("div", { class: "ref-axis-x-label" }, "来訪指数（高） →"));
 
-    // axis labels
-    board.appendChild(el("div", { class: "ref-axis-y-label" }, "消費指数 →"));
-    board.appendChild(el("div", { class: "ref-axis-x-label" }, "来訪指数 →"));
-
-    // quadrant captions
+    // quadrant captions (left-top, right-top, left-bottom, right-bottom)
     const captions = [
-      { cls: "q-tl", title: "誘導強化",         note: "来訪少 × 消費多" },
-      { cls: "q-tr", title: "維持・単価向上",   note: "来訪多 × 消費多" },
-      { cls: "q-bl", title: "優先度低",         note: "来訪少 × 消費少" },
-      { cls: "q-br", title: "最優先改善",       note: "来訪多 × 消費少" },
+      { cls: "q-tl", title: "誘導強化",       note: "来訪少 × 消費多" },
+      { cls: "q-tr", title: "維持・単価向上", note: "来訪多 × 消費多" },
+      { cls: "q-bl", title: "優先度低",       note: "来訪少 × 消費少" },
+      { cls: "q-br", title: "最優先改善",     note: "来訪多 × 消費少" },
     ];
     captions.forEach((c) => {
       const cap = el("div", { class: "ref-quadrant " + c.cls });
@@ -1560,30 +1647,29 @@
       board.appendChild(cap);
     });
 
-    // dividing lines
     board.appendChild(el("div", { class: "ref-divider ref-divider-h" }));
     board.appendChild(el("div", { class: "ref-divider ref-divider-v" }));
 
-    // points
     REFERRAL_MATRIX.forEach((p) => {
       const dot = el("div", {
         class: "ref-dot " + p.tagCls,
         style: "left:" + p.visit + "%;bottom:" + p.spend + "%",
         title: p.name + "（" + p.tag + "）",
       });
-      dot.appendChild(el("div", { class: "ref-dot-label" }, p.name));
+      // place label to the right if x < 70, otherwise to the left
+      const labelSide = p.visit > 70 ? " right" : "";
+      dot.appendChild(el("div", { class: "ref-dot-label" + labelSide }, p.name));
       board.appendChild(dot);
     });
 
     wrap.appendChild(board);
 
-    // legend
     const legend = el("div", { class: "ref-legend" });
     REFERRAL_MATRIX.forEach((p) => {
       const item = el("div", { class: "ref-legend-item" });
       item.appendChild(el("span", { class: "ref-legend-dot " + p.tagCls }));
       item.appendChild(el("span", { class: "ref-legend-name" }, p.name));
-      item.appendChild(tag(p.tag, p.tagCls));
+      item.appendChild(el("span", { class: "ref-legend-tag " + p.tagCls }, p.tag));
       legend.appendChild(item);
     });
     wrap.appendChild(legend);
@@ -1596,6 +1682,7 @@
     REFERRAL_FUNNEL.forEach((f, idx) => {
       const row = el("div", { class: "ref-funnel-row" });
       row.appendChild(el("div", { class: "ref-funnel-step" }, String(idx + 1).padStart(2, "0")));
+
       const body = el("div", { class: "ref-funnel-body" });
       const head = el("div", { class: "ref-funnel-head" });
       head.appendChild(el("span", { class: "ref-funnel-label" }, f.label));
@@ -1607,9 +1694,165 @@
       body.appendChild(el("div", { class: "ref-funnel-hint" }, f.hint));
       row.appendChild(body);
       wrap.appendChild(row);
+
+      if (idx < REFERRAL_FUNNEL.length - 1) {
+        wrap.appendChild(el("div", { class: "ref-funnel-arrow" }, icon("i-chevron-down")));
+      }
     });
-    wrap.appendChild(el("div", { class: "ref-funnel-foot" }, "配信後は効果測定画面で、継続・改善・停止を判断します。"));
+    wrap.appendChild(el("div", { class: "ref-funnel-foot" }, "実施後は効果測定画面で、継続・改善・停止を判断します。"));
     mount("referral-funnel", wrap);
+  }
+
+  // ----- Drawer -----
+  function openReferralDrawer(offerId) {
+    const o = REFERRAL_OFFERS.find(x => x.id === offerId);
+    if (!o) return;
+    const root = document.getElementById("drawer-root");
+    if (!root) return;
+
+    root.innerHTML = "";
+    const scrim = el("div", { class: "drawer-scrim" });
+    const drawer = el("aside", { class: "drawer", role: "dialog", "aria-label": o.title });
+
+    // Header
+    const h = el("header", { class: "drawer-head" });
+    const hLeft = el("div", { class: "drawer-head-left" });
+    hLeft.appendChild(el("div", { class: "drawer-eyebrow" }, "推奨施策"));
+    hLeft.appendChild(el("h3", { class: "drawer-title" }, o.title));
+    h.appendChild(hLeft);
+    const closeBtn = el("button", { class: "drawer-close", "aria-label": "閉じる", title: "閉じる" }, "×");
+    closeBtn.addEventListener("click", closeReferralDrawer);
+    h.appendChild(closeBtn);
+    drawer.appendChild(h);
+
+    // Body
+    const body = el("div", { class: "drawer-body" });
+
+    // meta block
+    const metaGrid = el("div", { class: "drawer-meta-grid" });
+    metaGrid.appendChild(drawerMeta("対象エリア", o.area));
+    metaGrid.appendChild(drawerMeta("優先度", el("span", { class: "pri-badge " + o.priorityCls }, o.priority)));
+    metaGrid.appendChild(drawerMeta("配信チャネル", channelChips(o.channels)));
+    body.appendChild(metaGrid);
+
+    body.appendChild(drawerSection("判断理由", el("p", { class: "drawer-text" }, o.reason)));
+    body.appendChild(drawerSection("実施内容", el("p", { class: "drawer-text" }, o.content)));
+    body.appendChild(drawerSection("成功指標", chipList(o.kpis, "kpi")));
+    body.appendChild(drawerSection("確認すべきデータ", chipList(o.observe, "obs")));
+    body.appendChild(drawerSection("次の判断", el("p", { class: "drawer-text" }, o.next)));
+
+    drawer.appendChild(body);
+
+    // Footer
+    const foot = el("footer", { class: "drawer-foot" });
+    const cancel = el("button", { class: "btn-ghost btn-sm" }, "閉じる");
+    cancel.addEventListener("click", closeReferralDrawer);
+    const state = offerState[o.id] || {};
+    const addBtn = el("button", {
+      class: "btn-primary btn-sm" + (state.status === "added" ? " is-added" : ""),
+      disabled: state.status === "added" ? "true" : null,
+    }, state.status === "added" ? "追加済み" : "施策管理に追加");
+    addBtn.addEventListener("click", () => {
+      addOfferToInitiatives(o.id);
+      closeReferralDrawer();
+    });
+    foot.appendChild(cancel);
+    foot.appendChild(addBtn);
+    drawer.appendChild(foot);
+
+    root.appendChild(scrim);
+    root.appendChild(drawer);
+    requestAnimationFrame(() => {
+      root.classList.add("is-open");
+    });
+    scrim.addEventListener("click", closeReferralDrawer);
+    document.addEventListener("keydown", drawerKeyHandler);
+  }
+
+  function drawerKeyHandler(e) {
+    if (e.key === "Escape") closeReferralDrawer();
+  }
+
+  function closeReferralDrawer() {
+    const root = document.getElementById("drawer-root");
+    if (!root) return;
+    root.classList.remove("is-open");
+    document.removeEventListener("keydown", drawerKeyHandler);
+    setTimeout(() => { root.innerHTML = ""; }, 220);
+  }
+
+  function drawerMeta(label, value) {
+    const w = el("div", { class: "drawer-meta-item" });
+    w.appendChild(el("div", { class: "drawer-meta-key" }, label));
+    const v = el("div", { class: "drawer-meta-val" });
+    if (typeof value === "string") v.appendChild(document.createTextNode(value));
+    else v.appendChild(value);
+    w.appendChild(v);
+    return w;
+  }
+  function drawerSection(title, node) {
+    const w = el("section", { class: "drawer-section" });
+    w.appendChild(el("h4", { class: "drawer-section-title" }, title));
+    w.appendChild(node);
+    return w;
+  }
+  function channelChips(arr) {
+    const wrap = el("div", { class: "offer-chips" });
+    arr.forEach((c) => wrap.appendChild(el("span", { class: "offer-chip" }, c)));
+    return wrap;
+  }
+  function chipList(arr, kind) {
+    const wrap = el("div", { class: kind === "kpi" ? "offer-kpis" : "obs-chips" });
+    arr.forEach((c) => wrap.appendChild(el("span", { class: kind === "kpi" ? "offer-kpi-chip" : "obs-chip" }, c)));
+    return wrap;
+  }
+
+  // ----- Toast -----
+  let toastTimer = null;
+  function showToast(message) {
+    const root = document.getElementById("toast-root");
+    if (!root) return;
+    root.innerHTML = "";
+    const t = el("div", { class: "toast", role: "status", "aria-live": "polite" });
+    t.appendChild(el("span", { class: "toast-icon" }, icon("i-check")));
+    t.appendChild(el("span", { class: "toast-text" }, message));
+    root.appendChild(t);
+    requestAnimationFrame(() => t.classList.add("is-visible"));
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      t.classList.remove("is-visible");
+      setTimeout(() => { if (root.firstChild === t) root.innerHTML = ""; }, 220);
+    }, 3200);
+  }
+
+  // ----- Filter response (demo) -----
+  function applyReferralFilter(area) {
+    const v = REFERRAL_FILTER_VARIANTS[area] || REFERRAL_FILTER_VARIANTS["hakone"];
+
+    // update KPIs (without breaking sparkline visuals — just values)
+    const map = {
+      "送客機会スコア": v.score,
+      "消費機会ロス":    v.loss,
+      "推奨施策":        v.rec,
+      "実施中施策":      v.run,
+    };
+    REFERRAL_KPIS = REFERRAL_KPIS.map((k) => ({ ...k, value: map[k.label] !== undefined ? map[k.label] : k.value }));
+
+    // soft re-render with skeleton flash
+    flashSkeleton("referral-kpis", renderReferralKpis);
+    flashSkeleton("referral-areas", renderReferralAreas);
+    flashSkeleton("referral-offers", renderReferralOffers);
+  }
+
+  function flashSkeleton(id, renderFn) {
+    const el_ = document.getElementById(id);
+    if (!el_) return;
+    el_.classList.add("is-loading");
+    setTimeout(() => {
+      renderFn();
+      const el2 = document.getElementById(id);
+      if (el2) el2.classList.remove("is-loading");
+    }, 280);
   }
 
   // ========================================================
@@ -1665,15 +1908,42 @@
     const title = document.getElementById("topbar-title");
     buttons.forEach((b) => {
       b.addEventListener("click", function () {
+        const targetId = b.dataset.view;
+        const current = document.querySelector(".view:not(.hidden)");
+        const next = document.getElementById(targetId);
+
         buttons.forEach((x) => x.classList.remove("active"));
-        views.forEach((v) => v.classList.add("hidden"));
         b.classList.add("active");
-        const view = document.getElementById(b.dataset.view);
-        if (view) view.classList.remove("hidden");
-        if (title) title.textContent = VIEW_TITLES[b.dataset.view] || "";
+
+        if (title) title.textContent = VIEW_TITLES[targetId] || "";
+
+        if (!next || next === current) return;
+
+        if (current) {
+          current.classList.add("is-leaving");
+          setTimeout(() => {
+            current.classList.add("hidden");
+            current.classList.remove("is-leaving");
+            showView(next);
+          }, 140);
+        } else {
+          showView(next);
+        }
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
     });
+  }
+
+  function showView(view) {
+    view.classList.remove("hidden");
+    view.classList.add("is-entering");
+    requestAnimationFrame(() => {
+      view.classList.add("is-entered");
+    });
+    setTimeout(() => {
+      view.classList.remove("is-entering");
+      view.classList.remove("is-entered");
+    }, 280);
   }
 
   function bindSegTabs() {
@@ -1692,15 +1962,47 @@
     document.querySelectorAll("[data-filter]").forEach((sel) => {
       sel.addEventListener("change", function () {
         const key = sel.dataset.filter;
-        document.querySelectorAll(`[data-filter='${key}']`).forEach((s) => (s.value = sel.value));
+        const val = sel.value;
+        document.querySelectorAll(`[data-filter='${key}']`).forEach((s) => (s.value = val));
+        if (key === "area") applyReferralFilter(val);
+        if (key === "month" || key === "channel") {
+          flashSkeleton("referral-kpis", renderReferralKpis);
+        }
       });
     });
+  }
+
+  // ========================================================
+  // INITIAL LOADER
+  // ========================================================
+  function showInitialLoader() {
+    const root = document.getElementById("init-loader");
+    if (!root) return;
+    const steps = root.querySelectorAll(".loader-step");
+    let idx = 0;
+    const interval = setInterval(() => {
+      if (steps[idx]) steps[idx].classList.add("done");
+      idx++;
+      if (idx >= steps.length) clearInterval(interval);
+    }, 260);
+  }
+  function hideInitialLoader() {
+    const root = document.getElementById("init-loader");
+    const app = document.querySelector(".app");
+    if (root) {
+      root.classList.add("is-leaving");
+      setTimeout(() => root.remove(), 280);
+    }
+    if (app) {
+      app.classList.add("is-revealed");
+    }
   }
 
   // ========================================================
   // BOOT
   // ========================================================
   document.addEventListener("DOMContentLoaded", function () {
+    showInitialLoader();
     bindNav();
     bindSegTabs();
     bindFilters();
@@ -1743,6 +2045,9 @@
     // Report
     renderReportList();
     renderTemplates();
+
+    // hide loader after a short reveal
+    setTimeout(hideInitialLoader, 1300);
   });
 
 })();
