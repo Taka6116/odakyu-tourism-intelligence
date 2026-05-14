@@ -389,6 +389,137 @@
     },
   ];
 
+  // ----- Referral Optimization (送客最適化) -----
+  const REFERRAL_KPIS = [
+    {
+      label: "送客余地",
+      value: 78, denom: "/ 100",
+      icon: "i-broadcast", iconColor: "t-navy",
+      decision: "誘導先として活用できるエリア・施設の余地",
+      delta: { dir: "up", text: "+4" },
+      spark: [62, 65, 68, 70, 73, 76, 78],
+    },
+    {
+      label: "消費機会ロス",
+      value: "高", denom: "",
+      icon: "i-yen", iconColor: "t-red",
+      decision: "来訪はあるが購買・施設利用につながっていない状態",
+      delta: { dir: "flat", text: "横ばい" },
+      spark: [70, 72, 71, 73, 72, 73, 72],
+    },
+    {
+      label: "推奨施策",
+      value: 6, denom: "件",
+      icon: "i-ticket", iconColor: "t-gold",
+      decision: "優先的に検討すべき案内・クーポン施策の候補",
+      delta: { dir: "up", text: "+2" },
+      spark: [3, 3, 4, 4, 5, 5, 6],
+    },
+    {
+      label: "実施中施策",
+      value: 3, denom: "件",
+      icon: "i-target", iconColor: "t-green",
+      decision: "現在配信・運用中の送客施策",
+      delta: { dir: "up", text: "+1" },
+      spark: [1, 1, 2, 2, 2, 3, 3],
+    },
+  ];
+
+  const REFERRAL_AREAS = [
+    {
+      area: "箱根湯本",
+      state: "来訪多・消費弱",
+      stateCls: "t-red",
+      decide: "食べ歩きルートと荷物預かり案内",
+      priority: "最優先",
+      priorityCls: "high",
+      effect: "乗換前消費の改善",
+    },
+    {
+      area: "強羅",
+      state: "回遊あり・施設利用弱",
+      stateCls: "t-gold",
+      decide: "工芸体験・飲食クーポンの比較検証",
+      priority: "高",
+      priorityCls: "high",
+      effect: "体験予約と飲食利用の増加",
+    },
+    {
+      area: "仙石原",
+      state: "来訪少・消費効率高",
+      stateCls: "t-green",
+      decide: "王道混雑時の代替誘導先として案内",
+      priority: "中",
+      priorityCls: "medium",
+      effect: "分散誘導と高単価利用の増加",
+    },
+    {
+      area: "小田原",
+      state: "乗換滞留あり",
+      stateCls: "t-navy",
+      decide: "改札外の短時間消費導線を案内",
+      priority: "中",
+      priorityCls: "medium",
+      effect: "乗換時間中の街区利用増加",
+    },
+  ];
+
+  const REFERRAL_OFFERS = [
+    {
+      title: "箱根湯本 食べ歩きクーポン",
+      area: "箱根湯本",
+      channels: ["Web/App", "QR"],
+      reason: "来訪は多いが消費転換が弱く、乗換前の短時間消費に余地があるため。",
+      kpis: ["クーポン利用率", "湯本周辺購買指数"],
+      priority: "最優先",
+      priorityCls: "high",
+    },
+    {
+      title: "雨天時 屋内回遊ルート",
+      area: "箱根湯本・強羅",
+      channels: ["Web/App", "サイネージ"],
+      reason: "雨天時は屋外スポットへの流れが弱まり、屋内施設への案内余地があるため。",
+      kpis: ["ルート閲覧率", "対象施設利用率"],
+      priority: "高",
+      priorityCls: "high",
+    },
+    {
+      title: "仙石原 体験施設誘導",
+      area: "仙石原",
+      channels: ["Web/App", "サイネージ"],
+      reason: "来訪は少ないが消費効率が高く、王道混雑時の代替誘導先として有効なため。",
+      kpis: ["仙石原来訪指数", "体験施設利用率"],
+      priority: "中",
+      priorityCls: "medium",
+    },
+    {
+      title: "強羅 工芸体験予約クーポン",
+      area: "強羅",
+      channels: ["QR", "Web/App"],
+      reason: "回遊はあるが施設利用が弱く、体験予約への導線強化が必要なため。",
+      kpis: ["予約クリック率", "クーポン利用率"],
+      priority: "高",
+      priorityCls: "high",
+    },
+  ];
+
+  // x = 来訪指数 (visit), y = 消費指数 (spend), 0–100
+  const REFERRAL_MATRIX = [
+    { name: "箱根湯本", visit: 88, spend: 38, tag: "最優先改善",   tagCls: "t-red"   },
+    { name: "大涌谷",   visit: 72, spend: 55, tag: "維持・単価向上", tagCls: "t-green" },
+    { name: "強羅",     visit: 64, spend: 42, tag: "改善余地",     tagCls: "t-gold"  },
+    { name: "仙石原",   visit: 36, spend: 68, tag: "誘導強化",     tagCls: "t-blue"  },
+    { name: "小田原",   visit: 30, spend: 34, tag: "優先度低",     tagCls: "t-navy"  },
+  ];
+
+  const REFERRAL_FUNNEL = [
+    { label: "表示",    value: 100, hint: "案内・クーポンの表示数" },
+    { label: "クリック", value: 42,  hint: "詳細閲覧・遷移の発生" },
+    { label: "保存",    value: 26,  hint: "クーポン取得・保存" },
+    { label: "利用",    value: 14,  hint: "店舗・施設での利用" },
+    { label: "回遊変化", value: 9,   hint: "対象エリアへの来訪変化" },
+  ];
+
   // ----- Reports -----
   const REPORTS = [
     { title: "2026年4月 週次レポート", meta: "PDF · 12ページ · 2026-04-22 作成", icon: "i-doc" },
@@ -783,8 +914,8 @@
     const wrap = el("div", { class: "route-flow" });
     const row1 = el("div", { class: "flow-row" });
     row1.appendChild(makeFlowNode("現在集中ルート", ROUTE_FLOW.primary, "primary"));
-    row1.appendChild(arrowDown());
     wrap.appendChild(row1);
+    wrap.appendChild(arrowDown());
     const row2 = el("div", { class: "flow-row" });
     row2.appendChild(makeFlowNode("代替誘導候補", ROUTE_FLOW.candidates, "candidate"));
     wrap.appendChild(row2);
@@ -1327,6 +1458,161 @@
   }
 
   // ========================================================
+  // REFERRAL OPTIMIZATION (送客最適化)
+  // ========================================================
+  function renderReferralOptimization() {
+    renderReferralKpis();
+    renderReferralAreas();
+    renderReferralOffers();
+    renderReferralMatrix();
+    renderReferralFunnel();
+  }
+
+  function renderReferralKpis() {
+    const wrap = el("div", { class: "kpi-grid kpi-grid-4" });
+    REFERRAL_KPIS.forEach((k) => wrap.appendChild(renderKpiCard(k)));
+    mount("referral-kpis", Array.from(wrap.children));
+  }
+
+  function renderReferralAreas() {
+    const table = el("table", { class: "data-table" });
+    table.appendChild(el("thead", null, el("tr", null, [
+      el("th", null, "エリア"),
+      el("th", null, "状態"),
+      el("th", null, "推奨判断"),
+      el("th", null, "優先度"),
+      el("th", null, "期待効果"),
+    ])));
+    const tbody = el("tbody");
+    REFERRAL_AREAS.forEach((a) => {
+      tbody.appendChild(el("tr", null, [
+        el("td", null, el("span", { class: "td-strong" }, a.area)),
+        el("td", null, tag(a.state, a.stateCls)),
+        el("td", null, el("span", { class: "ref-decide" }, a.decide)),
+        el("td", null, el("span", { class: "pri-badge " + a.priorityCls }, a.priority)),
+        el("td", null, el("span", { class: "ref-effect" }, a.effect)),
+      ]));
+    });
+    table.appendChild(tbody);
+    mount("referral-areas", table);
+  }
+
+  function renderReferralOffers() {
+    const list = el("div", { class: "offer-list" });
+    REFERRAL_OFFERS.forEach((o) => {
+      const card = el("div", { class: "offer-card" });
+
+      const head = el("div", { class: "offer-head" });
+      head.appendChild(el("div", { class: "offer-title" }, o.title));
+      head.appendChild(el("span", { class: "pri-badge " + o.priorityCls }, o.priority));
+      card.appendChild(head);
+
+      const meta = el("div", { class: "offer-meta" });
+      meta.appendChild(el("div", { class: "offer-meta-item" }, [
+        el("span", { class: "offer-meta-key" }, "対象エリア"),
+        el("span", { class: "offer-meta-val" }, o.area),
+      ]));
+      const chWrap = el("div", { class: "offer-meta-item" });
+      chWrap.appendChild(el("span", { class: "offer-meta-key" }, "配信チャネル"));
+      const chips = el("span", { class: "offer-chips" });
+      o.channels.forEach((c) => chips.appendChild(el("span", { class: "offer-chip" }, c)));
+      chWrap.appendChild(chips);
+      meta.appendChild(chWrap);
+      card.appendChild(meta);
+
+      card.appendChild(el("div", { class: "offer-reason-label" }, "判断理由"));
+      card.appendChild(el("div", { class: "offer-reason" }, o.reason));
+
+      card.appendChild(el("div", { class: "offer-reason-label" }, "成功指標"));
+      const kpiChips = el("div", { class: "offer-kpis" });
+      o.kpis.forEach((k) => kpiChips.appendChild(el("span", { class: "offer-kpi-chip" }, k)));
+      card.appendChild(kpiChips);
+
+      const actions = el("div", { class: "offer-actions" });
+      actions.appendChild(el("button", { class: "btn-ghost btn-sm" }, "保留"));
+      actions.appendChild(el("button", { class: "btn-primary btn-sm" }, "施策化する"));
+      card.appendChild(actions);
+
+      list.appendChild(card);
+    });
+    mount("referral-offers", list);
+  }
+
+  function renderReferralMatrix() {
+    const wrap = el("div", { class: "ref-matrix" });
+    const board = el("div", { class: "ref-matrix-board" });
+
+    // axis labels
+    board.appendChild(el("div", { class: "ref-axis-y-label" }, "消費指数 →"));
+    board.appendChild(el("div", { class: "ref-axis-x-label" }, "来訪指数 →"));
+
+    // quadrant captions
+    const captions = [
+      { cls: "q-tl", title: "誘導強化",         note: "来訪少 × 消費多" },
+      { cls: "q-tr", title: "維持・単価向上",   note: "来訪多 × 消費多" },
+      { cls: "q-bl", title: "優先度低",         note: "来訪少 × 消費少" },
+      { cls: "q-br", title: "最優先改善",       note: "来訪多 × 消費少" },
+    ];
+    captions.forEach((c) => {
+      const cap = el("div", { class: "ref-quadrant " + c.cls });
+      cap.appendChild(el("div", { class: "ref-quadrant-title" }, c.title));
+      cap.appendChild(el("div", { class: "ref-quadrant-note" }, c.note));
+      board.appendChild(cap);
+    });
+
+    // dividing lines
+    board.appendChild(el("div", { class: "ref-divider ref-divider-h" }));
+    board.appendChild(el("div", { class: "ref-divider ref-divider-v" }));
+
+    // points
+    REFERRAL_MATRIX.forEach((p) => {
+      const dot = el("div", {
+        class: "ref-dot " + p.tagCls,
+        style: "left:" + p.visit + "%;bottom:" + p.spend + "%",
+        title: p.name + "（" + p.tag + "）",
+      });
+      dot.appendChild(el("div", { class: "ref-dot-label" }, p.name));
+      board.appendChild(dot);
+    });
+
+    wrap.appendChild(board);
+
+    // legend
+    const legend = el("div", { class: "ref-legend" });
+    REFERRAL_MATRIX.forEach((p) => {
+      const item = el("div", { class: "ref-legend-item" });
+      item.appendChild(el("span", { class: "ref-legend-dot " + p.tagCls }));
+      item.appendChild(el("span", { class: "ref-legend-name" }, p.name));
+      item.appendChild(tag(p.tag, p.tagCls));
+      legend.appendChild(item);
+    });
+    wrap.appendChild(legend);
+
+    mount("referral-matrix", wrap);
+  }
+
+  function renderReferralFunnel() {
+    const wrap = el("div", { class: "ref-funnel" });
+    REFERRAL_FUNNEL.forEach((f, idx) => {
+      const row = el("div", { class: "ref-funnel-row" });
+      row.appendChild(el("div", { class: "ref-funnel-step" }, String(idx + 1).padStart(2, "0")));
+      const body = el("div", { class: "ref-funnel-body" });
+      const head = el("div", { class: "ref-funnel-head" });
+      head.appendChild(el("span", { class: "ref-funnel-label" }, f.label));
+      head.appendChild(el("span", { class: "ref-funnel-value" }, f.value + " / 100"));
+      body.appendChild(head);
+      const barWrap = el("div", { class: "ref-funnel-bar" });
+      barWrap.appendChild(el("div", { class: "ref-funnel-bar-fill", style: "width:" + f.value + "%" }));
+      body.appendChild(barWrap);
+      body.appendChild(el("div", { class: "ref-funnel-hint" }, f.hint));
+      row.appendChild(body);
+      wrap.appendChild(row);
+    });
+    wrap.appendChild(el("div", { class: "ref-funnel-foot" }, "配信後は効果測定画面で、継続・改善・停止を判断します。"));
+    mount("referral-funnel", wrap);
+  }
+
+  // ========================================================
   // REPORT
   // ========================================================
   function renderReportList() {
@@ -1367,6 +1653,7 @@
     area: "エリア分析",
     flow: "回遊分析",
     spend: "消費分析",
+    referral: "送客最適化",
     initiatives: "施策管理",
     impact: "効果測定",
     report: "レポート",
@@ -1442,6 +1729,9 @@
     renderSpendMatrix();
     renderSpendLoss();
     renderSpendEff();
+
+    // Referral Optimization
+    renderReferralOptimization();
 
     // Initiatives
     renderInitTabs();
