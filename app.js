@@ -334,6 +334,400 @@
     },
   ];
 
+  // ----- Initiative Details (drawer 詳細) -----
+  // 各施策の運用詳細データ。チェックリストの完了とステータス変更は localStorage に保存される。
+  const INITIATIVE_DETAILS = {
+    i01: {
+      related: ["雨天時の回遊指数", "屋内施設利用率", "ルート閲覧率"],
+      department: "観光戦略部", owner: "佐藤 真理",
+      period: { start: "2026/04/01", end: "2026/06/30" },
+      checklist: [
+        { id: "c1", label: "天気API連携と通知条件の確定", checked: true },
+        { id: "c2", label: "対象屋内施設リストの確定", checked: true },
+        { id: "c3", label: "ルート案内素材を作成", checked: true },
+        { id: "c4", label: "アプリ通知文面のレビュー", checked: false },
+        { id: "c5", label: "効果測定KPIを設定", checked: false },
+        { id: "c6", label: "配信開始", checked: false },
+      ],
+      timeline: [
+        { label: "施策設計", date: "04/01〜04/07", done: true },
+        { label: "素材作成", date: "04/08〜04/18", done: true },
+        { label: "配信開始", date: "04/22", done: false },
+        { label: "効果レビュー", date: "05/06", done: false },
+      ],
+      delivery: {
+        channels: ["Web/App", "QR", "サイネージ"],
+        areas: ["箱根湯本", "強羅"],
+        times: ["雨天予報日 全日", "週末 10:00〜15:00"],
+        facilities: ["美術館", "屋内温泉", "屋内体験", "カフェ"],
+        conditions: ["雨天予報が降水確率60%以上", "王道ルート集中度が65以上"],
+        materials: {
+          title: "雨でも楽しめる、屋内をめぐる半日ルート",
+          body:  "美術館・温泉・カフェを組み合わせた屋内回遊コースをご案内します。",
+          cta:   "ルートを見る",
+          qrLabel: "湯本駅・強羅駅サイネージのQRから遷移",
+          place: "湯本駅・強羅駅構内サイネージ、対象施設パートナーQR",
+        },
+      },
+      measurement: {
+        period: "実施開始から14日（前後比較）",
+        events: [
+          { label: "ルート表示数",       current: 78, target: 80, unit: "指数", change: "+18", judge: "改善傾向" },
+          { label: "ルート閲覧率",       current: 24, target: 22, unit: "%",   change: "+12pt", judge: "改善傾向" },
+          { label: "対象施設利用率",     current: 38, target: 40, unit: "%",   change: "+5pt",  judge: "改善傾向" },
+          { label: "クーポン利用率",     current: 12, target: 15, unit: "%",   change: "+3pt",  judge: "要確認" },
+          { label: "雨天時 回遊指数",    current: 64, target: 65, unit: "/100", change: "+8",   judge: "改善傾向" },
+        ],
+        nextDecision: "改善傾向",
+      },
+    },
+    i02: {
+      related: ["来訪集中度", "消費機会ロス", "回遊不足エリア"],
+      department: "沿線事業部", owner: "山田 健太",
+      period: { start: "2026/03/15", end: "2026/06/15" },
+      checklist: [
+        { id: "c1", label: "提携店舗候補を確認",         checked: true  },
+        { id: "c2", label: "クーポン条件を確定",         checked: true  },
+        { id: "c3", label: "QR/サイネージ掲載内容を確認", checked: true  },
+        { id: "c4", label: "Web/App掲載文を確認",        checked: true  },
+        { id: "c5", label: "効果測定KPIを設定",          checked: false },
+        { id: "c6", label: "配信開始",                  checked: false },
+      ],
+      timeline: [
+        { label: "店舗候補選定", date: "03/15〜03/25", done: true  },
+        { label: "条件確定",     date: "03/26〜04/05", done: true  },
+        { label: "配信開始",     date: "04/15",       done: false },
+        { label: "中間レビュー", date: "05/06",       done: false },
+      ],
+      delivery: {
+        channels: ["Web/App", "QR", "サイネージ"],
+        areas: ["箱根湯本"],
+        times: ["平日 11:00〜15:00", "週末 10:00〜16:00"],
+        facilities: ["商店街 提携店", "荷物預かり拠点", "湯本駅前案内"],
+        conditions: ["湯本駅 改札出場 30分以内", "提携店半径500m以内"],
+        materials: {
+          title: "湯本さんぽ 食べ歩きパス",
+          body:  "提携20店で使える、湯本商店街限定の食べ歩きパス。荷物預かりも近くで便利。",
+          cta:   "パスを取得",
+          qrLabel: "湯本駅改札外サイネージから取得",
+          place: "湯本駅構内サイネージ、提携店店頭、Web/Appバナー",
+        },
+      },
+      measurement: {
+        period: "実施開始から14日（前後比較）",
+        events: [
+          { label: "パス取得数",         current: 62, target: 70, unit: "指数",  change: "+22", judge: "改善傾向" },
+          { label: "提携店利用率",       current: 41, target: 45, unit: "%",    change: "+7pt", judge: "改善傾向" },
+          { label: "荷物預かり利用件数", current: 56, target: 60, unit: "指数",  change: "+18", judge: "改善傾向" },
+          { label: "湯本周辺購買指数",   current: 41, target: 42, unit: "/100", change: "+7",   judge: "改善傾向" },
+          { label: "滞在時間",           current: 38, target: 40, unit: "分",   change: "+6",   judge: "要確認" },
+        ],
+        nextDecision: "改善傾向",
+      },
+    },
+    i03: {
+      related: ["王道ルート集中度", "代替先到達率", "サイネージCTR"],
+      department: "箱根担当", owner: "鈴木 香織",
+      period: { start: "2026/05/01", end: "2026/07/31" },
+      checklist: [
+        { id: "c1", label: "混雑検知ルール定義",        checked: true  },
+        { id: "c2", label: "代替先一覧の整備",          checked: true  },
+        { id: "c3", label: "サイネージ表示素材を作成",  checked: false },
+        { id: "c4", label: "アプリ通知文面のレビュー",  checked: false },
+        { id: "c5", label: "効果測定KPIを設定",         checked: false },
+        { id: "c6", label: "配信開始",                 checked: false },
+      ],
+      timeline: [
+        { label: "施策設計",   date: "05/01〜05/10", done: true  },
+        { label: "素材作成",   date: "05/11〜05/22", done: false },
+        { label: "テスト配信", date: "05/26",       done: false },
+        { label: "本配信",     date: "06/03",       done: false },
+      ],
+      delivery: {
+        channels: ["サイネージ", "Web/App"],
+        areas: ["大涌谷", "強羅", "仙石原"],
+        times: ["週末 10:00〜14:00", "祝日 全日"],
+        facilities: ["箱根ロープウェイ駅", "強羅駅", "仙石原バス停"],
+        conditions: ["王道ルート集中度が70以上", "週末ピーク帯"],
+        materials: {
+          title: "混雑時の代替コース案内",
+          body:  "ピーク時間帯は強羅・仙石原方面の代替コースもおすすめです。",
+          cta:   "代替コースを見る",
+          qrLabel: "駅サイネージのQRから遷移",
+          place: "箱根エリア各駅サイネージ、アプリ通知",
+        },
+      },
+      measurement: {
+        period: "実施開始から14日（前後比較）",
+        events: [
+          { label: "案内表示数",       current: 42, target: 60, unit: "指数",  change: "—",   judge: "未実施" },
+          { label: "代替先到達率",     current: 18, target: 25, unit: "%",    change: "—",   judge: "未実施" },
+          { label: "王道集中度",       current: 72, target: 67, unit: "/100", change: "—",   judge: "未実施" },
+          { label: "仙石原 来訪指数",  current: 36, target: 42, unit: "/100", change: "—",   judge: "未実施" },
+          { label: "代替先 消費指数",  current: 55, target: 58, unit: "/100", change: "—",   judge: "未実施" },
+        ],
+        nextDecision: "実施準備中",
+      },
+    },
+    i04: {
+      related: ["仙石原 来訪指数", "客単価指数", "代替誘導クリック率"],
+      department: "マーケティング部", owner: "高橋 沙織",
+      period: { start: "2026/05/15", end: "2026/08/15" },
+      checklist: [
+        { id: "c1", label: "予約完了画面の訴求文を確定",    checked: true  },
+        { id: "c2", label: "サイネージ素材の作成",          checked: false },
+        { id: "c3", label: "対象客層の条件整理",            checked: false },
+        { id: "c4", label: "効果測定KPIを設定",             checked: false },
+        { id: "c5", label: "テスト配信",                   checked: false },
+        { id: "c6", label: "本配信",                       checked: false },
+      ],
+      timeline: [
+        { label: "施策設計",   date: "05/15〜05/25", done: true  },
+        { label: "素材準備",   date: "05/26〜06/05", done: false },
+        { label: "テスト配信", date: "06/10",       done: false },
+        { label: "本配信",     date: "06/15",       done: false },
+      ],
+      delivery: {
+        channels: ["Web/App", "サイネージ"],
+        areas: ["仙石原", "強羅", "小田原"],
+        times: ["週末 全日", "祝前日 16:00〜20:00"],
+        facilities: ["ロマンスカー予約完了画面", "箱根登山バス車内"],
+        conditions: ["王道集中度70以上", "ロマンスカー予約完了直後"],
+        materials: {
+          title: "混雑回避ならこちらもおすすめ",
+          body:  "美術館・自然散策が楽しめる仙石原方面はゆったり過ごせます。",
+          cta:   "仙石原コースを見る",
+          qrLabel: "予約完了画面からアプリへ遷移",
+          place: "予約完了ページ、車内サイネージ、Web/Appバナー",
+        },
+      },
+      measurement: {
+        period: "実施開始から14日（前後比較）",
+        events: [
+          { label: "訴求表示数",       current: 38, target: 60, unit: "指数",  change: "—", judge: "未実施" },
+          { label: "代替先クリック率", current: 12, target: 18, unit: "%",    change: "—", judge: "未実施" },
+          { label: "仙石原 来訪指数",  current: 36, target: 48, unit: "/100", change: "—", judge: "未実施" },
+          { label: "客単価指数",       current: 64, target: 66, unit: "/100", change: "—", judge: "未実施" },
+        ],
+        nextDecision: "実施準備中",
+      },
+    },
+    i05: {
+      related: ["クーポン利用率", "強羅周辺購買指数", "比較検証データ"],
+      department: "箱根担当", owner: "中村 由衣",
+      period: { start: "2026/04/01", end: "2026/04/30" },
+      checklist: [
+        { id: "c1", label: "比較する2案を確定",       checked: true  },
+        { id: "c2", label: "対象施設の選定",          checked: true  },
+        { id: "c3", label: "クーポン条件の設定",      checked: true  },
+        { id: "c4", label: "効果測定KPIを設定",       checked: true  },
+        { id: "c5", label: "テスト配信",             checked: false },
+        { id: "c6", label: "結果レビュー",           checked: false },
+      ],
+      timeline: [
+        { label: "案策定",     date: "04/01〜04/07", done: true  },
+        { label: "条件設定",   date: "04/08〜04/14", done: true  },
+        { label: "配信",       date: "04/15〜04/28", done: false },
+        { label: "結果レビュー", date: "04/30",     done: false },
+      ],
+      delivery: {
+        channels: ["QR", "Web/App"],
+        areas: ["強羅"],
+        times: ["平日 11:00〜17:00", "週末 10:00〜18:00"],
+        facilities: ["強羅駅周辺 工芸体験施設", "提携飲食店"],
+        conditions: ["強羅駅で改札を出場した来訪者"],
+        materials: {
+          title: "強羅で体験＆食事 1,000円OFFクーポン",
+          body:  "工芸体験＋食事をセットで楽しめる強羅周辺の提携施設で使えます。",
+          cta:   "クーポンを取得",
+          qrLabel: "強羅駅サイネージから取得",
+          place: "強羅駅構内QR、Web/App、提携施設掲示",
+        },
+      },
+      measurement: {
+        period: "実施開始から14日（A/B比較）",
+        events: [
+          { label: "クーポン取得数",     current: 52, target: 60, unit: "指数",  change: "+18", judge: "要確認" },
+          { label: "クーポン利用率",     current: 14, target: 18, unit: "%",    change: "±0",   judge: "要確認" },
+          { label: "予約クリック率",     current: 22, target: 25, unit: "%",    change: "+4pt", judge: "改善傾向" },
+          { label: "強羅周辺購買指数",   current: 42, target: 45, unit: "/100", change: "+2",   judge: "要確認" },
+        ],
+        nextDecision: "要確認",
+      },
+    },
+    i06: {
+      related: ["乗換滞留時間", "提携店利用率", "改札外街区流入率"],
+      department: "沿線事業部", owner: "伊藤 大輔",
+      period: { start: "2026/06/01", end: "2026/08/31" },
+      checklist: [
+        { id: "c1", label: "対象提携店リストの確認",  checked: true  },
+        { id: "c2", label: "改札外サイネージ枠を確保", checked: false },
+        { id: "c3", label: "街区マップ案内を作成",    checked: false },
+        { id: "c4", label: "クーポン条件の設定",      checked: false },
+        { id: "c5", label: "効果測定KPIを設定",       checked: false },
+        { id: "c6", label: "配信開始",               checked: false },
+      ],
+      timeline: [
+        { label: "施策設計",   date: "06/01〜06/10", done: true  },
+        { label: "素材作成",   date: "06/11〜06/20", done: false },
+        { label: "テスト配信", date: "06/25",       done: false },
+        { label: "本配信",     date: "07/01",       done: false },
+      ],
+      delivery: {
+        channels: ["サイネージ", "QR", "現地案内"],
+        areas: ["小田原"],
+        times: ["平日 16:00〜20:00", "週末 全日"],
+        facilities: ["小田原駅改札外 提携店", "街区案内所"],
+        conditions: ["乗換待ち15〜30分の来訪者", "改札出場5分以内"],
+        materials: {
+          title: "乗換時間で楽しむ 小田原 改札外案内",
+          body:  "15〜30分で楽しめる近隣のおすすめスポット・グルメをご案内します。",
+          cta:   "近隣マップを見る",
+          qrLabel: "小田原駅改札外サイネージから遷移",
+          place: "小田原駅 改札外サイネージ、QR、街区マップ",
+        },
+      },
+      measurement: {
+        period: "実施開始から14日（前後比較）",
+        events: [
+          { label: "案内表示数",     current: 0, target: 50, unit: "指数",  change: "—", judge: "未実施" },
+          { label: "提携店利用率",   current: 28, target: 32, unit: "%",   change: "—", judge: "未実施" },
+          { label: "街区流入率",     current: 36, target: 42, unit: "%",   change: "—", judge: "未実施" },
+          { label: "滞留時間",       current: 18, target: 22, unit: "分",  change: "—", judge: "未実施" },
+        ],
+        nextDecision: "実施準備中",
+      },
+    },
+    i07: {
+      related: ["閲覧→来訪転換率", "外国語クーポン利用率", "Web言語比"],
+      department: "インバウンド対応TF", owner: "Chen Lin",
+      period: { start: "2026/02/01", end: "2026/07/31" },
+      checklist: [
+        { id: "c1", label: "英語/繁体字/タイ語コース整備", checked: true  },
+        { id: "c2", label: "言語別表示ロジック",         checked: true  },
+        { id: "c3", label: "言語別クーポン素材",         checked: true  },
+        { id: "c4", label: "効果測定KPIを設定",          checked: true  },
+        { id: "c5", label: "配信開始",                  checked: true  },
+        { id: "c6", label: "中間レビュー",              checked: false },
+      ],
+      timeline: [
+        { label: "コース整備",   date: "02/01〜02/28", done: true  },
+        { label: "公開",         date: "03/15",       done: true  },
+        { label: "中間レビュー", date: "05/15",       done: false },
+        { label: "効果総括",     date: "07/31",       done: false },
+      ],
+      delivery: {
+        channels: ["Web/App"],
+        areas: ["沿線全域"],
+        times: ["全日"],
+        facilities: ["訪日向け施設全般"],
+        conditions: ["Web/App言語設定が英/繁/タイ"],
+        materials: {
+          title: "Recommended courses for your stay",
+          body:  "Top model courses curated for first-time visitors. Available in EN / 繁體 / ภาษาไทย.",
+          cta:   "View course",
+          qrLabel: "アプリ言語設定別に表示",
+          place: "Web/Appホーム、検索結果、メール訴求",
+        },
+      },
+      measurement: {
+        period: "実施開始から30日（前後比較）",
+        events: [
+          { label: "言語別表示数",     current: 84, target: 80, unit: "指数",  change: "+12", judge: "改善傾向" },
+          { label: "閲覧→来訪転換率", current: 26, target: 28, unit: "%",   change: "+8pt", judge: "改善傾向" },
+          { label: "外国語クーポン利用率", current: 18, target: 22, unit: "%", change: "+4pt", judge: "要確認" },
+          { label: "滞在時間",         current: 42, target: 45, unit: "分",  change: "+3",   judge: "改善傾向" },
+        ],
+        nextDecision: "改善傾向",
+      },
+    },
+    i08: {
+      related: ["連携店舗数", "提携店利用率", "湯本商店街滞在時間"],
+      department: "沿線事業部", owner: "渡辺 真奈",
+      period: { start: "2026/05/01", end: "2026/06/30" },
+      checklist: [
+        { id: "c1", label: "提携先候補20店をリスト化",   checked: true  },
+        { id: "c2", label: "連携条件の擦り合わせ",        checked: false },
+        { id: "c3", label: "案内素材ドラフト",            checked: false },
+        { id: "c4", label: "効果測定KPIを設定",           checked: false },
+        { id: "c5", label: "テスト配信",                 checked: false },
+        { id: "c6", label: "本配信",                     checked: false },
+      ],
+      timeline: [
+        { label: "店舗候補リスト", date: "05/01〜05/10", done: true  },
+        { label: "条件擦り合わせ", date: "05/11〜05/25", done: false },
+        { label: "素材作成",       date: "05/26〜06/05", done: false },
+        { label: "本配信",         date: "06/15",       done: false },
+      ],
+      delivery: {
+        channels: ["Web/App", "QR", "現地案内"],
+        areas: ["箱根湯本商店街"],
+        times: ["平日 11:00〜15:00", "週末 全日"],
+        facilities: ["商店街 提携食事処"],
+        conditions: ["商店街エリアへの来訪者"],
+        materials: {
+          title: "湯本商店街 ご当地グルメパス（検討中）",
+          body:  "提携食事処で利用できる湯本ならではのグルメ案内（仕様調整中）。",
+          cta:   "詳細を見る",
+          qrLabel: "—",
+          place: "—",
+        },
+      },
+      measurement: {
+        period: "実施前（基準値のみ）",
+        events: [
+          { label: "連携店舗数",       current: 8,  target: 20, unit: "店",   change: "—", judge: "未実施" },
+          { label: "提携店利用率",     current: 14, target: 22, unit: "%",   change: "—", judge: "未実施" },
+          { label: "商店街滞在時間",   current: 22, target: 34, unit: "分",  change: "—", judge: "未実施" },
+        ],
+        nextDecision: "検討中",
+      },
+    },
+    i09: {
+      related: ["免税利用件数", "免税平均単価", "ピーク時間帯売上指数"],
+      department: "インバウンド対応TF", owner: "Park Min Ho",
+      period: { start: "2026/01/10", end: "2026/03/31" },
+      checklist: [
+        { id: "c1", label: "対象店舗の選定",          checked: true },
+        { id: "c2", label: "通知タイミング設計",      checked: true },
+        { id: "c3", label: "サイネージ素材",          checked: true },
+        { id: "c4", label: "効果測定KPIを設定",       checked: true },
+        { id: "c5", label: "配信",                   checked: true },
+        { id: "c6", label: "結果レビュー",           checked: true },
+      ],
+      timeline: [
+        { label: "施策設計",   date: "01/10〜01/20", done: true },
+        { label: "配信開始",   date: "02/01",       done: true },
+        { label: "中間レビュー", date: "03/01",     done: true },
+        { label: "効果総括",   date: "03/31",       done: true },
+      ],
+      delivery: {
+        channels: ["Web/App", "サイネージ"],
+        areas: ["箱根全域"],
+        times: ["12:00〜14:00", "16:00〜18:00"],
+        facilities: ["免税対応店舗 20店"],
+        conditions: ["インバウンド来訪者", "免税対象購入額に近づいた状態"],
+        materials: {
+          title: "Tax-free shops near you",
+          body:  "Find tax-free shops nearby with current peak times.",
+          cta:   "View map",
+          qrLabel: "アプリ通知 + 駅サイネージ",
+          place: "アプリプッシュ、駅サイネージ、店頭",
+        },
+      },
+      measurement: {
+        period: "実施開始から60日（実績）",
+        events: [
+          { label: "案内表示数",       current: 92, target: 80, unit: "指数",  change: "+24", judge: "改善傾向" },
+          { label: "免税利用件数",     current: 78, target: 70, unit: "指数",  change: "+14", judge: "改善傾向" },
+          { label: "免税平均単価",     current: 62, target: 60, unit: "/100", change: "+6",   judge: "改善傾向" },
+          { label: "ピーク時間売上",   current: 71, target: 68, unit: "/100", change: "+9",   judge: "改善傾向" },
+        ],
+        nextDecision: "継続",
+      },
+    },
+  };
+
   // ----- Impact — Gantt + KPI Management -----
   // status: "running" | "review" | "consider" | "done"
   // startCol / endCol: 0-indexed column in the 6-month timeline (0 = Jan)
@@ -1105,7 +1499,8 @@
   function renderInitTabs() {
     const wrap = el("div", { class: "seg-tabs", id: "init-filter-tabs" });
     INIT_FILTERS.forEach((f) => {
-      const count = f.id === "all" ? INITIATIVES.length : INITIATIVES.filter((i) => i.status === f.id).length;
+      const effectiveStatusOf = (i) => lsGetInitStatus(i.id) || i.status;
+      const count = f.id === "all" ? INITIATIVES.length : INITIATIVES.filter((i) => effectiveStatusOf(i) === f.id).length;
       const btn = el("button", {
         class: "seg-tab" + (f.id === activeInitFilter ? " active" : ""),
         onclick: function () {
@@ -1122,9 +1517,10 @@
 
   function renderInitiatives() {
     const grid = el("div", { class: "init-grid", id: "initiative-grid" });
+    const effectiveStatusOf = (i) => lsGetInitStatus(i.id) || i.status;
     const list = activeInitFilter === "all"
       ? INITIATIVES
-      : INITIATIVES.filter((i) => i.status === activeInitFilter);
+      : INITIATIVES.filter((i) => effectiveStatusOf(i) === activeInitFilter);
     list.forEach((it) => grid.appendChild(renderInitCard(it)));
     if (list.length === 0) {
       grid.appendChild(el("div", { style: "padding:40px;text-align:center;color:var(--ink-4);font-size:13px;" }, "該当する施策はありません"));
@@ -1136,9 +1532,14 @@
   function renderInitCard(it) {
     const card = el("div", { class: "init-card" });
 
+    const overrideStatus = lsGetInitStatus(it.id);
+    const effectiveStatus = overrideStatus || it.status;
+    const statusLabelMap = { running: "実施中", consider: "検討中", review: "要確認", done: "完了", held: "保留" };
+    const effectiveStatusLabel = statusLabelMap[effectiveStatus] || it.statusLabel;
+
     const head = el("div", { class: "init-head" }, [
       el("div", { class: "init-title" }, it.title),
-      el("span", { class: "init-status " + it.status }, it.statusLabel),
+      el("span", { class: "init-status " + effectiveStatus }, effectiveStatusLabel),
     ]);
     card.appendChild(head);
 
@@ -1176,10 +1577,484 @@
 
     const foot = el("div", { class: "init-foot" });
     foot.appendChild(el("span", { class: "priority-chip " + it.priority }, it.priorityLabel));
-    foot.appendChild(el("button", { class: "link-btn" }, [el("span", null, "詳細を見る"), icon("i-arrow-right")]));
+    const detailBtn = el("button", { class: "link-btn", "aria-label": it.title + " の詳細を見る" }, [
+      el("span", null, "詳細を見る"),
+      icon("i-arrow-right"),
+    ]);
+    detailBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openInitiativeDrawer(it.id);
+    });
+    foot.appendChild(detailBtn);
     card.appendChild(foot);
 
+    // also allow clicking the card body to open
+    card.classList.add("is-clickable");
+    card.addEventListener("click", () => openInitiativeDrawer(it.id));
+    card.setAttribute("role", "button");
+    card.setAttribute("tabindex", "0");
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openInitiativeDrawer(it.id); }
+    });
+
     return card;
+  }
+
+  // ========================================================
+  // INITIATIVE DETAIL DRAWER
+  // ========================================================
+  const LS_INIT_CHECK  = "oti_init_check_";   // + initiativeId -> {checkId: bool}
+  const LS_INIT_STATUS = "oti_init_status_";  // + initiativeId -> override status
+
+  function lsGetCheck(id) {
+    try { return JSON.parse(localStorage.getItem(LS_INIT_CHECK + id) || "{}"); } catch { return {}; }
+  }
+  function lsSaveCheck(id, obj) {
+    localStorage.setItem(LS_INIT_CHECK + id, JSON.stringify(obj));
+  }
+  function lsGetInitStatus(id) {
+    return localStorage.getItem(LS_INIT_STATUS + id) || "";
+  }
+  function lsSaveInitStatus(id, val) {
+    if (val) localStorage.setItem(LS_INIT_STATUS + id, val);
+    else localStorage.removeItem(LS_INIT_STATUS + id);
+  }
+
+  let activeInitDrawerId = null;
+  let activeInitDrawerTab = "overview";
+
+  function openInitiativeDrawer(initiativeId) {
+    const it = INITIATIVES.find(x => x.id === initiativeId);
+    const detail = INITIATIVE_DETAILS[initiativeId];
+    if (!it || !detail) return;
+
+    activeInitDrawerId = initiativeId;
+    activeInitDrawerTab = "overview";
+    renderInitiativeDrawer(it, detail);
+  }
+
+  function closeInitiativeDrawer() {
+    const root = document.getElementById("drawer-root");
+    if (!root) return;
+    root.classList.remove("is-open");
+    document.removeEventListener("keydown", initDrawerKeyHandler);
+    setTimeout(() => { root.innerHTML = ""; }, 220);
+    activeInitDrawerId = null;
+  }
+
+  function initDrawerKeyHandler(e) {
+    if (e.key === "Escape") closeInitiativeDrawer();
+  }
+
+  function renderInitiativeDrawer(it, detail) {
+    const root = document.getElementById("drawer-root");
+    if (!root) return;
+    root.innerHTML = "";
+
+    const scrim = el("div", { class: "drawer-scrim" });
+    scrim.addEventListener("click", closeInitiativeDrawer);
+
+    const drawer = el("aside", { class: "drawer drawer-wide", role: "dialog", "aria-label": it.title });
+
+    // --- Head ---
+    const head = el("header", { class: "drawer-head init-drawer-head" });
+    const hLeft = el("div", { class: "drawer-head-left" });
+    hLeft.appendChild(el("div", { class: "drawer-eyebrow" }, "施策詳細"));
+    hLeft.appendChild(el("h3", { class: "drawer-title" }, it.title));
+
+    const headMeta = el("div", { class: "init-drawer-meta" });
+    const effectiveStatus = lsGetInitStatus(it.id) || it.status;
+    const statusLabelMap = { running: "実施中", consider: "検討中", review: "要確認", done: "完了", held: "保留" };
+    headMeta.appendChild(el("span", { class: "init-status " + effectiveStatus }, statusLabelMap[effectiveStatus] || it.statusLabel));
+    headMeta.appendChild(el("span", { class: "priority-chip " + it.priority }, it.priorityLabel));
+    headMeta.appendChild(el("span", { class: "init-drawer-area" }, [icon("i-pin"), " " + it.area]));
+    hLeft.appendChild(headMeta);
+
+    head.appendChild(hLeft);
+    const closeBtn = el("button", { class: "drawer-close", "aria-label": "閉じる", title: "閉じる" }, "×");
+    closeBtn.addEventListener("click", closeInitiativeDrawer);
+    head.appendChild(closeBtn);
+    drawer.appendChild(head);
+
+    // --- Tabs ---
+    const tabBar = el("nav", { class: "drawer-tabs", role: "tablist" });
+    const tabs = [
+      { key: "overview",    label: "概要" },
+      { key: "plan",        label: "実施計画" },
+      { key: "delivery",    label: "配信設定" },
+      { key: "measurement", label: "効果測定" },
+    ];
+    tabs.forEach(t => {
+      const btn = el("button", {
+        class: "drawer-tab" + (t.key === activeInitDrawerTab ? " active" : ""),
+        role: "tab",
+        "aria-selected": t.key === activeInitDrawerTab ? "true" : "false",
+      }, t.label);
+      btn.addEventListener("click", () => switchInitiativeDrawerTab(t.key));
+      tabBar.appendChild(btn);
+    });
+    drawer.appendChild(tabBar);
+
+    // --- Body ---
+    const body = el("div", { class: "drawer-body init-drawer-body", id: "init-drawer-body" });
+    body.appendChild(renderInitiativeTabContent(it, detail, activeInitDrawerTab));
+    drawer.appendChild(body);
+
+    // --- Foot ---
+    drawer.appendChild(renderInitiativeDrawerFoot(it));
+
+    root.appendChild(scrim);
+    root.appendChild(drawer);
+    requestAnimationFrame(() => root.classList.add("is-open"));
+    document.addEventListener("keydown", initDrawerKeyHandler);
+  }
+
+  function switchInitiativeDrawerTab(tabKey) {
+    activeInitDrawerTab = tabKey;
+    // toggle button state
+    document.querySelectorAll(".drawer-tab").forEach((b) => {
+      const isActive = b.textContent === ({
+        overview: "概要", plan: "実施計画", delivery: "配信設定", measurement: "効果測定",
+      })[tabKey];
+      b.classList.toggle("active", isActive);
+      b.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+    // swap body
+    const body = document.getElementById("init-drawer-body");
+    if (!body || !activeInitDrawerId) return;
+    const it = INITIATIVES.find(x => x.id === activeInitDrawerId);
+    const detail = INITIATIVE_DETAILS[activeInitDrawerId];
+    if (!it || !detail) return;
+    body.innerHTML = "";
+    body.appendChild(renderInitiativeTabContent(it, detail, tabKey));
+  }
+
+  function renderInitiativeTabContent(it, detail, tabKey) {
+    switch (tabKey) {
+      case "plan":        return renderInitiativePlanTab(it, detail);
+      case "delivery":    return renderInitiativeDeliveryTab(it, detail);
+      case "measurement": return renderInitiativeMeasurementTab(it, detail);
+      case "overview":
+      default:            return renderInitiativeOverviewTab(it, detail);
+    }
+  }
+
+  // -------- Tab 1: Overview --------
+  function renderInitiativeOverviewTab(it, detail) {
+    const wrap = el("div", { class: "tab-pane" });
+
+    wrap.appendChild(drawerSection("判断理由", el("p", { class: "drawer-text" }, it.reason)));
+    wrap.appendChild(drawerSection("期待効果", el("p", { class: "drawer-text drawer-text-strong" }, it.effect)));
+    wrap.appendChild(drawerSection("必要な実施内容", el("p", { class: "drawer-text" }, it.task)));
+    wrap.appendChild(drawerSection("成功指標", chipList(it.kpis, "kpi")));
+    wrap.appendChild(drawerSection("関連する分析指標", chipList(detail.related, "obs")));
+
+    return wrap;
+  }
+
+  // -------- Tab 2: Plan --------
+  function renderInitiativePlanTab(it, detail) {
+    const wrap = el("div", { class: "tab-pane" });
+
+    // top meta
+    const top = el("div", { class: "drawer-meta-grid" });
+    top.appendChild(drawerMeta("担当部署", detail.department));
+    top.appendChild(drawerMeta("担当者", detail.owner));
+    top.appendChild(drawerMeta("実施期間", detail.period.start + " 〜 " + detail.period.end));
+    const effectiveStatus = lsGetInitStatus(it.id) || it.status;
+    const statusLabelMap = { running: "実施中", consider: "検討中", review: "要確認", done: "完了", held: "保留" };
+    top.appendChild(drawerMeta("進行ステータス", el("span", { class: "init-status " + effectiveStatus }, statusLabelMap[effectiveStatus] || it.statusLabel)));
+    wrap.appendChild(top);
+
+    // Checklist
+    const stored = lsGetCheck(it.id);
+    const items = detail.checklist.map(c => ({
+      ...c,
+      checked: stored[c.id] !== undefined ? stored[c.id] : c.checked,
+    }));
+    const total = items.length;
+    const done = items.filter(c => c.checked).length;
+
+    const clHead = el("div", { class: "drawer-section-row" });
+    clHead.appendChild(el("h4", { class: "drawer-section-title" }, "実施チェックリスト"));
+    const progress = el("span", { class: "checklist-progress" }, done + " / " + total + " 完了");
+    clHead.appendChild(progress);
+
+    const clWrap = el("div", { class: "drawer-section" });
+    clWrap.appendChild(clHead);
+
+    const clBar = el("div", { class: "checklist-bar" });
+    clBar.appendChild(el("div", { class: "checklist-bar-fill", style: "width:" + (total === 0 ? 0 : (done / total * 100)) + "%" }));
+    clWrap.appendChild(clBar);
+
+    const clList = el("ul", { class: "checklist" });
+    items.forEach(c => {
+      const li = el("li", { class: "checklist-item" + (c.checked ? " is-checked" : "") });
+      const box = el("span", { class: "checklist-box" });
+      if (c.checked) box.appendChild(icon("i-check"));
+      const label = el("span", { class: "checklist-label" }, c.label);
+      li.appendChild(box);
+      li.appendChild(label);
+      li.addEventListener("click", () => toggleInitiativeChecklist(it.id, c.id));
+      li.tabIndex = 0;
+      li.setAttribute("role", "checkbox");
+      li.setAttribute("aria-checked", c.checked ? "true" : "false");
+      li.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleInitiativeChecklist(it.id, c.id); }
+      });
+      clList.appendChild(li);
+    });
+    clWrap.appendChild(clList);
+    wrap.appendChild(clWrap);
+
+    // Timeline
+    const tlWrap = el("div", { class: "drawer-section" });
+    tlWrap.appendChild(el("h4", { class: "drawer-section-title" }, "簡易タイムライン"));
+    const tl = el("ol", { class: "mini-timeline" });
+    detail.timeline.forEach((t, idx) => {
+      const li = el("li", { class: "mini-timeline-item" + (t.done ? " done" : "") + (idx === detail.timeline.length - 1 ? " last" : "") });
+      li.appendChild(el("span", { class: "mini-timeline-dot" }));
+      const body = el("div", { class: "mini-timeline-body" });
+      body.appendChild(el("div", { class: "mini-timeline-label" }, t.label));
+      body.appendChild(el("div", { class: "mini-timeline-date" }, t.date));
+      li.appendChild(body);
+      tl.appendChild(li);
+    });
+    tlWrap.appendChild(tl);
+    wrap.appendChild(tlWrap);
+
+    return wrap;
+  }
+
+  function toggleInitiativeChecklist(initiativeId, checklistItemId) {
+    const detail = INITIATIVE_DETAILS[initiativeId];
+    if (!detail) return;
+    const stored = lsGetCheck(initiativeId);
+    const defaultItem = detail.checklist.find(c => c.id === checklistItemId);
+    const current = stored[checklistItemId] !== undefined ? stored[checklistItemId] : (defaultItem && defaultItem.checked);
+    stored[checklistItemId] = !current;
+    lsSaveCheck(initiativeId, stored);
+    // Re-render only plan tab
+    if (activeInitDrawerTab === "plan" && activeInitDrawerId === initiativeId) {
+      const body = document.getElementById("init-drawer-body");
+      const it = INITIATIVES.find(x => x.id === initiativeId);
+      if (body && it) {
+        body.innerHTML = "";
+        body.appendChild(renderInitiativePlanTab(it, detail));
+      }
+    }
+    updateInitiativeProgress(initiativeId);
+  }
+
+  function updateInitiativeProgress(initiativeId) {
+    // (placeholder) progress is rendered in plan tab. Could update card badge later.
+    return;
+  }
+
+  // -------- Tab 3: Delivery --------
+  function renderInitiativeDeliveryTab(it, detail) {
+    const wrap = el("div", { class: "tab-pane" });
+    const d = detail.delivery;
+
+    const grid = el("div", { class: "delivery-grid" });
+    grid.appendChild(deliveryField("配信チャネル",   chipList(d.channels, "kpi"),   "i-broadcast"));
+    grid.appendChild(deliveryField("対象エリア",     chipList(d.areas, "obs"),       "i-pin"));
+    grid.appendChild(deliveryField("対象時間帯",     chipList(d.times, "obs"),       "i-calendar"));
+    grid.appendChild(deliveryField("対象施設カテゴリ", chipList(d.facilities, "obs"), "i-store"));
+    grid.appendChild(deliveryField("表示条件",       chipList(d.conditions, "obs"), "i-tune"));
+    wrap.appendChild(grid);
+
+    // Material preview card
+    const m = d.materials;
+    const preview = el("div", { class: "drawer-section" });
+    preview.appendChild(el("h4", { class: "drawer-section-title" }, "配信素材プレビュー"));
+    const card = el("div", { class: "material-card" });
+
+    const cardHead = el("div", { class: "material-card-head" });
+    cardHead.appendChild(el("span", { class: "material-card-eyebrow" }, "PREVIEW"));
+    cardHead.appendChild(el("span", { class: "material-card-place" }, m.place || "—"));
+    card.appendChild(cardHead);
+
+    card.appendChild(el("div", { class: "material-card-title" }, m.title));
+    card.appendChild(el("div", { class: "material-card-body" }, m.body));
+
+    const cta = el("div", { class: "material-card-cta" });
+    cta.appendChild(el("span", { class: "material-card-cta-btn" }, m.cta));
+    cta.appendChild(el("span", { class: "material-card-qrhint" }, m.qrLabel || ""));
+    card.appendChild(cta);
+
+    preview.appendChild(card);
+    wrap.appendChild(preview);
+
+    return wrap;
+  }
+
+  function deliveryField(label, valueNode, iconKey) {
+    const w = el("div", { class: "delivery-field" });
+    const head = el("div", { class: "delivery-field-head" });
+    head.appendChild(el("span", { class: "delivery-field-icon" }, icon(iconKey)));
+    head.appendChild(el("span", { class: "delivery-field-label" }, label));
+    w.appendChild(head);
+    w.appendChild(valueNode);
+    return w;
+  }
+
+  // -------- Tab 4: Measurement --------
+  function renderInitiativeMeasurementTab(it, detail) {
+    const wrap = el("div", { class: "tab-pane" });
+    const m = detail.measurement;
+
+    const top = el("div", { class: "measure-period" });
+    top.appendChild(el("span", { class: "measure-period-label" }, "測定期間"));
+    top.appendChild(el("span", { class: "measure-period-value" }, m.period));
+    wrap.appendChild(top);
+
+    const list = el("div", { class: "measure-list" });
+    m.events.forEach(ev => {
+      const card = el("div", { class: "measure-card" });
+
+      const top1 = el("div", { class: "measure-card-top" });
+      top1.appendChild(el("span", { class: "measure-card-label" }, ev.label));
+      top1.appendChild(buildJudgeChip(ev.judge));
+      card.appendChild(top1);
+
+      const valRow = el("div", { class: "measure-card-values" });
+      const cur = el("div", { class: "measure-val measure-val-current" });
+      cur.appendChild(el("span", { class: "measure-val-num" }, String(ev.current)));
+      cur.appendChild(el("span", { class: "measure-val-unit" }, ev.unit));
+      cur.appendChild(el("span", { class: "measure-val-tag" }, "現在値"));
+      valRow.appendChild(cur);
+
+      valRow.appendChild(el("div", { class: "measure-arrow" }, icon("i-arrow-right")));
+
+      const tgt = el("div", { class: "measure-val measure-val-target" });
+      tgt.appendChild(el("span", { class: "measure-val-num" }, String(ev.target)));
+      tgt.appendChild(el("span", { class: "measure-val-unit" }, ev.unit));
+      tgt.appendChild(el("span", { class: "measure-val-tag" }, "目標値"));
+      valRow.appendChild(tgt);
+
+      const chgWrap = el("div", { class: "measure-change" });
+      chgWrap.appendChild(el("span", { class: "measure-change-key" }, "変化"));
+      chgWrap.appendChild(el("span", { class: "measure-change-val " + classifyChange(ev.change) }, ev.change));
+      valRow.appendChild(chgWrap);
+      card.appendChild(valRow);
+
+      // mini bar (current vs target)
+      const max = Math.max(toNum(ev.current), toNum(ev.target), 1);
+      const bar = el("div", { class: "measure-bar" });
+      bar.appendChild(el("div", { class: "measure-bar-target", style: "width:" + (toNum(ev.target) / max * 100) + "%" }));
+      bar.appendChild(el("div", { class: "measure-bar-current", style: "width:" + (toNum(ev.current) / max * 100) + "%" }));
+      card.appendChild(bar);
+
+      list.appendChild(card);
+    });
+    wrap.appendChild(list);
+
+    const decision = el("div", { class: "drawer-section measure-next" });
+    decision.appendChild(el("h4", { class: "drawer-section-title" }, "次の判断"));
+    decision.appendChild(el("div", { class: "measure-next-row" }, [
+      buildJudgeChip(m.nextDecision),
+      el("p", { class: "drawer-text" }, "実施後は効果測定画面で、継続・改善・停止・追加検証を判断します。"),
+    ]));
+    wrap.appendChild(decision);
+
+    return wrap;
+  }
+
+  function buildJudgeChip(label) {
+    const map = {
+      "改善傾向": "tone-good",
+      "要確認":   "tone-attention",
+      "未実施":   "tone-neutral",
+      "実施準備中": "tone-neutral",
+      "検討中":   "tone-neutral",
+      "継続":     "tone-good",
+      "改善":     "tone-attention",
+      "停止":     "tone-warn",
+      "追加検証": "tone-info",
+    };
+    return el("span", { class: "judge-chip " + (map[label] || "tone-neutral") }, label);
+  }
+  function classifyChange(text) {
+    if (!text || text === "—") return "neutral";
+    if (text.startsWith("+")) return "up";
+    if (text.startsWith("-")) return "down";
+    return "neutral";
+  }
+  function toNum(v) {
+    const n = Number(String(v).replace(/[^\d.\-]/g, ""));
+    return isNaN(n) ? 0 : n;
+  }
+
+  // -------- Foot (status-aware actions) --------
+  function renderInitiativeDrawerFoot(it) {
+    const foot = el("footer", { class: "drawer-foot init-drawer-foot" });
+    const effectiveStatus = lsGetInitStatus(it.id) || it.status;
+
+    // status-specific buttons
+    const buttons = [];
+    if (effectiveStatus === "consider") {
+      buttons.push({ kind: "primary", label: "実施準備へ進める", action: () => {
+        lsSaveInitStatus(it.id, "running");
+        showToast("実施準備に移動しました。");
+        renderInitiatives();
+        closeInitiativeDrawer();
+      }});
+      buttons.push({ kind: "ghost",   label: "保留", action: () => {
+        lsSaveInitStatus(it.id, "held");
+        showToast("保留にしました。");
+        renderInitiatives();
+        closeInitiativeDrawer();
+      }});
+    } else if (effectiveStatus === "running") {
+      buttons.push({ kind: "primary", label: "効果測定で確認", action: () => {
+        showToast("効果測定画面で確認できます。");
+        closeInitiativeDrawer();
+        const btn = document.querySelector('.nav-item[data-view="impact"]');
+        if (btn) btn.click();
+      }});
+      buttons.push({ kind: "ghost",   label: "改善メモを追加", action: () => {
+        showToast("改善メモを追加しました。");
+      }});
+    } else if (effectiveStatus === "review") {
+      buttons.push({ kind: "primary", label: "改善案を作成", action: () => {
+        showToast("改善案を下書きに追加しました。");
+      }});
+      buttons.push({ kind: "ghost",   label: "継続", action: () => {
+        lsSaveInitStatus(it.id, "running");
+        showToast("継続として扱います。");
+        renderInitiatives();
+        closeInitiativeDrawer();
+      }});
+      buttons.push({ kind: "ghost",   label: "停止", action: () => {
+        lsSaveInitStatus(it.id, "done");
+        showToast("施策を停止しました。");
+        renderInitiatives();
+        closeInitiativeDrawer();
+      }});
+    } else if (effectiveStatus === "held") {
+      buttons.push({ kind: "primary", label: "保留を解除", action: () => {
+        lsSaveInitStatus(it.id, "consider");
+        showToast("保留を解除しました。");
+        renderInitiatives();
+        closeInitiativeDrawer();
+      }});
+    } else if (effectiveStatus === "done") {
+      buttons.push({ kind: "ghost",   label: "レポートに追加", action: () => {
+        showToast("レポートに追加しました。");
+      }});
+    }
+
+    buttons.forEach(b => {
+      const btn = el("button", { class: (b.kind === "primary" ? "btn-primary" : "btn-ghost") + " btn-sm" }, b.label);
+      btn.addEventListener("click", (e) => { e.stopPropagation(); b.action(); });
+      foot.appendChild(btn);
+    });
+
+    const closeBtn = el("button", { class: "btn-ghost btn-sm" }, "閉じる");
+    closeBtn.addEventListener("click", closeInitiativeDrawer);
+    foot.appendChild(closeBtn);
+    return foot;
   }
 
   // ========================================================
@@ -1911,6 +2786,13 @@
         const targetId = b.dataset.view;
         const current = document.querySelector(".view:not(.hidden)");
         const next = document.getElementById(targetId);
+
+        // close any open drawer when navigating
+        const drawerRoot = document.getElementById("drawer-root");
+        if (drawerRoot && drawerRoot.classList.contains("is-open")) {
+          if (activeInitDrawerId) closeInitiativeDrawer();
+          else closeReferralDrawer();
+        }
 
         buttons.forEach((x) => x.classList.remove("active"));
         b.classList.add("active");
