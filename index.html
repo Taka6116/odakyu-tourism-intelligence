@@ -172,6 +172,10 @@
           <svg class="nav-icon"><use href="#i-yen"/></svg>
           <span>消費分析</span>
         </button>
+        <button class="nav-item" data-view="segment-insight">
+          <svg class="nav-icon"><use href="#i-info"/></svg>
+          <span>上位客層インサイト</span>
+        </button>
         <button class="nav-item" data-view="referral">
           <svg class="nav-icon"><use href="#i-broadcast"/></svg>
           <span>送客最適化</span>
@@ -181,7 +185,7 @@
         <button class="nav-item" data-view="initiatives">
           <svg class="nav-icon"><use href="#i-target"/></svg>
           <span>施策管理</span>
-          <span class="nav-badge">12</span>
+          <span class="nav-badge">15</span>
         </button>
         <button class="nav-item" data-view="impact">
           <svg class="nav-icon"><use href="#i-chart"/></svg>
@@ -250,9 +254,16 @@
           <div class="select-wrap">
             <svg class="sw-ic-left"><use href="#i-pin"/></svg>
             <select class="select" data-filter="area" aria-label="エリア">
-              <option value="hakone">箱根エリア</option>
+              <option value="all">全エリア</option>
               <option value="enoshima">江ノ島・湘南</option>
-              <option value="line">沿線全域</option>
+              <option value="hakone">箱根</option>
+              <option value="odawara">小田原</option>
+              <option value="atami">熱海</option>
+              <option value="ito">伊東</option>
+              <option value="shuzenji">修善寺</option>
+              <option value="izukogen">伊豆高原</option>
+              <option value="shimoda">下田</option>
+              <option value="izu-all">伊豆全域</option>
             </select>
             <svg class="sw-ic-right"><use href="#i-chevron-down"/></svg>
           </div>
@@ -286,11 +297,25 @@
         <!-- ====================================================== -->
         <section id="dashboard" class="view">
 
+          <div class="page-intro">
+            <p>小田急沿線と接続観光地における広域送客・回遊・消費、および高付加価値需要シグナルを一覧し、次の判断材料にします。</p>
+          </div>
+
           <!-- Alert bar -->
           <div class="alert-bar" id="alert-bar"></div>
 
-          <!-- KPI row (4) -->
-          <div class="kpi-grid" id="kpi-grid"></div>
+          <!-- KPI row (6) -->
+          <div class="kpi-grid kpi-grid-6" id="kpi-grid"></div>
+
+          <section class="card market-signals-card">
+            <header class="card-header">
+              <div>
+                <h2 class="card-title">市場シグナル</h2>
+                <p class="card-sub">天候・訪日動向・宿泊需要・検索関心・休暇カレンダー等を集計した参考情報（DEMO）</p>
+              </div>
+            </header>
+            <div id="market-signals-dash"></div>
+          </section>
 
           <!-- 2 column: 優先対応エリア + 推奨アクション -->
           <div class="row row-7-5">
@@ -298,7 +323,7 @@
               <header class="card-header">
                 <div>
                   <h2 class="card-title">優先対応エリア</h2>
-                  <p class="card-sub">来訪・消費・回遊スコアから自動的に優先度を算出</p>
+                  <p class="card-sub">沿線・接続観光地の来訪・回遊・消費スコアから優先度を算出</p>
                 </div>
                 <button class="link-btn">すべて見る<svg><use href="#i-arrow-right"/></svg></button>
               </header>
@@ -345,7 +370,7 @@
         <!-- ====================================================== -->
         <section id="area" class="view hidden">
           <div class="page-intro">
-            <p>エリア別に来訪・回遊・消費のスコアを比較し、次に取るべき判断を確認します。</p>
+            <p>箱根・湘南・伊豆など接続観光地を含め、来訪・回遊・消費・高付加価値需要のシグナルを比較し、次に取るべき判断を確認します。</p>
           </div>
 
           <div class="card">
@@ -392,7 +417,7 @@
         <!-- ====================================================== -->
         <section id="flow" class="view hidden">
           <div class="page-intro">
-            <p>来訪者がどこに集中し、どこに流れていないかを確認します。</p>
+            <p>沿線・接続観光地における集中ルートと、広域送客・周遊候補の連携導線を確認します。</p>
           </div>
 
           <div class="kpi-grid kpi-grid-3" id="flow-kpis"></div>
@@ -402,7 +427,7 @@
               <header class="card-header">
                 <div>
                   <h2 class="card-title">主要ルートと分散候補</h2>
-                  <p class="card-sub">現在の集中ルートと、混雑時に誘導すべき候補エリア</p>
+                  <p class="card-sub">集中している周遊パターンと、接続観光地への広域送客・周遊候補</p>
                 </div>
               </header>
               <div id="route-flow"></div>
@@ -445,14 +470,14 @@
         <!-- ====================================================== -->
         <section id="spend" class="view hidden">
           <div class="page-intro">
-            <p>来訪はあるのに消費や施設利用につながっていないエリアを特定し、改善対象を決定します。</p>
+            <p>来訪規模に対し、消費・滞在価値が十分に発揮されているかを比較し、上位客層向け施策の検討材料にします。</p>
           </div>
 
           <div class="card">
             <header class="card-header">
               <div>
-                <h2 class="card-title">来訪 × 消費 マトリクス</h2>
-                <p class="card-sub">象限ごとに次に取るべき判断が異なります</p>
+                <h2 class="card-title">来訪 × 消費・滞在価値 マトリクス</h2>
+                <p class="card-sub">縦軸は消費・滞在価値指数（滞在・体験単価の向上余地を含む相対指標）</p>
               </div>
               <div class="quad-legend">
                 <span class="qld-dot bg-red"></span><span>最優先改善</span>
@@ -487,11 +512,74 @@
         </section>
 
         <!-- ====================================================== -->
+        <!-- 3b. 上位客層インサイト -->
+        <!-- ====================================================== -->
+        <section id="segment-insight" class="view hidden">
+          <div class="page-intro">
+            <p>高付加価値需要シグナルと関心テーマから、上位客層向け施策候補とタッチポイントを整理します。</p>
+          </div>
+
+          <div class="kpi-grid kpi-grid-4" id="segment-insight-kpis"></div>
+
+          <div class="row row-7-5">
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">注目エリア</h2>
+                  <p class="card-sub">高付加価値需要シグナルが相対的に高い接続観光地</p>
+                </div>
+              </header>
+              <div id="segment-focus-areas"></div>
+            </section>
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">市場シグナル</h2>
+                  <p class="card-sub">天候・訪日動向・宿泊需要・検索関心・イベント（DEMO）</p>
+                </div>
+              </header>
+              <div id="segment-market-signals"></div>
+            </section>
+          </div>
+
+          <div class="card">
+            <header class="card-header">
+              <div>
+                <h2 class="card-title">関心テーマ</h2>
+                <p class="card-sub">Web/App・検索ログから抽出した関心カテゴリ（集計・匿名化想定）</p>
+              </div>
+            </header>
+            <div id="segment-themes"></div>
+          </div>
+
+          <div class="row row-1-1">
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">推奨タッチポイント</h2>
+                  <p class="card-sub">訴求の届け先候補</p>
+                </div>
+              </header>
+              <div id="segment-touchpoints"></div>
+            </section>
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">推奨コンテンツ造成案</h2>
+                  <p class="card-sub">次に検討するコンテンツ・導線の方向性</p>
+                </div>
+              </header>
+              <div id="segment-content"></div>
+            </section>
+          </div>
+        </section>
+
+        <!-- ====================================================== -->
         <!-- 4b. REFERRAL OPTIMIZATION (送客最適化) -->
         <!-- ====================================================== -->
         <section id="referral" class="view hidden">
           <div class="page-intro">
-            <p>来訪・回遊・消費データから、今打つべき案内・クーポン施策を判断します。</p>
+            <p>沿線・接続観光地の来訪・回遊・消費データから、広域送客と上位客層向け案内・クーポン施策を判断します。</p>
           </div>
 
           <div class="kpi-grid kpi-grid-4" id="referral-kpis"></div>

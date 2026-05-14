@@ -12,156 +12,279 @@
 
   // ----- Dashboard -----
   const ALERT = {
-    title: "箱根湯本エリアで来訪集中が高水準",
-    text: "週末ピーク帯（10–12時）の集中度が前週比 +6pt。代替ルート誘導の検討を推奨。",
+    title: "伊豆エリアで高付加価値需要シグナルが上昇",
+    text: "週末のロマンスカー予約・Web閲覧から、熱海・伊東方面への事前案内を推奨。雨予報日は屋内・温泉導線を優先して検討してください。",
     action: "対応を確認",
   };
 
   const KPI_DASHBOARD = [
     {
-      key: "concentration",
-      label: "来訪集中度",
-      value: 72, denom: "/ 100",
-      delta: { dir: "up", text: "+4 pt", sub: "前週比" },
-      icon: "i-target", iconColor: "t-navy",
-      decision: "<strong>判断:</strong> 特定ルート・エリアへの集中状況。混雑対策・代替ルート誘導の検討に使います。",
-      spark: [55, 58, 60, 62, 65, 68, 72],
+      key: "wide-referral",
+      label: "広域送客余地",
+      value: 81, denom: "/ 100",
+      delta: { dir: "up", text: "+5 pt", sub: "前週比" },
+      icon: "i-map", iconColor: "t-navy",
+      decision: "<strong>判断:</strong> 接続観光地への送客・周遊を伸ばせる余地。広域の案内・クーポン配信の優先度付けに使います。",
+      spark: [68, 70, 72, 74, 76, 78, 81],
     },
     {
-      key: "underflow",
-      label: "回遊不足エリア",
-      value: 3, denom: "エリア",
-      delta: { dir: "flat", text: "横ばい", sub: "前月比" },
-      icon: "i-flow", iconColor: "t-gold",
-      decision: "<strong>判断:</strong> 来訪はあるが周辺回遊が弱いエリア数。周辺施設・別ルートへの誘導を検討します。",
-      spark: [4, 4, 3, 3, 4, 3, 3],
+      key: "hva-signal",
+      label: "高付加価値需要シグナル",
+      value: 74, denom: "/ 100",
+      delta: { dir: "up", text: "+6 pt", sub: "前週比" },
+      icon: "i-chart", iconColor: "t-green",
+      decision: "<strong>判断:</strong> 滞在・体験単価の向上余地が示唆される関心の強さ（集計シグナル）。上位客層向け施策候補の検討に使います。",
+      spark: [58, 60, 62, 65, 68, 71, 74],
     },
     {
       key: "spend-loss",
       label: "消費機会ロス",
-      value: "高",
-      delta: { dir: "up", text: "拡大傾向", sub: "前月比" },
+      value: "中高",
+      delta: { dir: "up", text: "やや拡大", sub: "前月比" },
       icon: "i-yen", iconColor: "t-red",
-      decision: "<strong>判断:</strong> 来訪規模に対し購買・施設利用が弱いエリア。クーポン・荷物預かり・案内導線を検討します。",
-      spark: [40, 42, 45, 48, 50, 52, 55],
+      decision: "<strong>判断:</strong> 来訪規模に対し購買・施設利用が弱いエリア。案内・クーポン・荷物預かり等の検討に使います。",
+      spark: [42, 44, 46, 48, 50, 52, 54],
+    },
+    {
+      key: "underflow",
+      label: "回遊不足エリア",
+      value: 5, denom: "エリア",
+      delta: { dir: "up", text: "+1", sub: "前月比" },
+      icon: "i-flow", iconColor: "t-gold",
+      decision: "<strong>判断:</strong> 来訪はあるが周辺回遊が弱い接続観光地の数。連携導線・周遊候補の見直しに使います。",
+      spark: [3, 3, 4, 4, 4, 5, 5],
     },
     {
       key: "impact",
       label: "施策効果",
       value: "改善傾向",
-      delta: { dir: "up", text: "+8 pt", sub: "効果指数" },
-      icon: "i-chart", iconColor: "t-green",
-      decision: "<strong>判断:</strong> 実施中施策の反応状況。継続・改善・停止の判断に使います。",
-      spark: [50, 52, 55, 58, 60, 64, 68],
+      delta: { dir: "up", text: "+7 pt", sub: "効果指数" },
+      icon: "i-target", iconColor: "t-navy",
+      decision: "<strong>判断:</strong> 実施中施策の反応の変化を確認。継続・改善・停止の判断材料に使います。",
+      spark: [52, 54, 56, 58, 61, 64, 68],
+    },
+    {
+      key: "izu-referral",
+      label: "伊豆送客候補",
+      value: 6, denom: "導線",
+      delta: { dir: "up", text: "+2", sub: "前週比" },
+      icon: "i-broadcast", iconColor: "t-blue",
+      decision: "<strong>判断:</strong> 小田原・熱海接続など、伊豆方面への周遊候補が検出された件数。広域送客の打ち手優先に使います。",
+      spark: [3, 3, 4, 4, 5, 5, 6],
     },
   ];
 
+  const MARKET_SIGNALS_DASH = [
+    { label: "訪日市場", text: "台湾・韓国市場の検索関心が前月比 +12%（想定集計）" },
+    { label: "天候", text: "週末は雨予報のため、屋内・温泉・宿泊体験導線の訴求を優先検討" },
+    { label: "宿泊需要", text: "伊豆方面の宿泊検索・予約関連シグナルが上昇傾向" },
+    { label: "検索関心", text: "「伊豆 温泉 旅館」「熱海 海鮮」クエリの関心指数が上昇" },
+    { label: "イベント", text: "大型連休前後は湘南・箱根の事前閲覧が先行 — 旅前メールの枠を確保" },
+  ];
+
   const PRIORITY_AREAS = [
-    { rank: 1, name: "箱根湯本", judge: "来訪は最大級だが消費転換が弱い。乗換前の摩擦解消を優先。", score: 92, scoreBar: "b-red", priority: "high", priorityLabel: "最優先" },
-    { rank: 2, name: "強羅",     judge: "回遊余地はあるが施設利用が弱い。体験・飲食導線の強化が候補。", score: 76, scoreBar: "b-red", priority: "high", priorityLabel: "高" },
-    { rank: 3, name: "大涌谷",   judge: "ピーク時間帯の集中が顕著。代替ルートへの案内強化を検討。",   score: 68, scoreBar: "b-gold", priority: "medium", priorityLabel: "中" },
-    { rank: 4, name: "小田原",   judge: "乗換待ち時間が常時発生。短時間消費導線の設計余地。",         score: 54, scoreBar: "b-gold", priority: "medium", priorityLabel: "中" },
-    { rank: 5, name: "仙石原",   judge: "来訪は少ないが消費効率が高い。誘導強化候補。",               score: 41, scoreBar: "b-green", priority: "low", priorityLabel: "低" },
+    { rank: 1, name: "熱海", judge: "来訪は高く宿泊・食体験への事前案内を強化する余地。", score: 88, scoreBar: "b-red", priority: "high", priorityLabel: "最優先" },
+    { rank: 2, name: "箱根湯本", judge: "ゲートウェイとして来訪が大きく、消費転換と広域接続の両面で要対応。", score: 86, scoreBar: "b-red", priority: "high", priorityLabel: "高" },
+    { rank: 3, name: "伊東", judge: "滞在価値シグナルが高く、送客強化・半日導線の設計余地。", score: 79, scoreBar: "b-gold", priority: "high", priorityLabel: "高" },
+    { rank: 4, name: "江ノ島", judge: "湘南エリアの立ち寄り需要。箱根・伊豆との周遊候補として訴求余地。", score: 71, scoreBar: "b-gold", priority: "medium", priorityLabel: "中" },
+    { rank: 5, name: "修善寺", judge: "静かな温泉滞在・文化体験志向に合う高付加価値需要シグナル。", score: 64, scoreBar: "b-green", priority: "medium", priorityLabel: "中" },
   ];
 
   const RECOMMENDED_ACTIONS = [
     {
-      title: "箱根湯本: 食べ歩きルート案内と荷物預かりの拡充",
-      sub: "来訪過多と消費転換弱の組み合わせ。乗換前の摩擦を取り除き、滞在時間を延ばす。",
-      tags: [["t-red", "最優先"], ["t-navy", "対象 / 箱根湯本"]],
+      title: "熱海: 温泉宿泊・食体験の旅前案内を強化",
+      sub: "ロマンスカー予約後の閲覧で温泉・飲食ページへの関心が高い。予約後メールと駅サイネージで接続訴求。",
+      tags: [["t-red", "最優先"], ["t-navy", "対象 / 熱海"]],
     },
     {
-      title: "雨天時の屋内回遊ルート案内",
-      sub: "天候による回遊変化に対応。美術館・温泉・カフェの半日ルートを天気予報と連動して案内。",
-      tags: [["t-gold", "高"], ["t-blue", "対象 / 全エリア"]],
+      title: "伊東: 海鮮・温泉・文化施設の半日導線を設計",
+      sub: "日帰り〜短期滞在層向けに、高単価体験を組み合わせた周遊候補を提示。",
+      tags: [["t-gold", "高"], ["t-blue", "対象 / 伊東"]],
     },
     {
-      title: "仙石原への分散誘導案内",
-      sub: "王道ルート混雑時の代替先として認知強化。少ない来訪で消費効率が高い。",
-      tags: [["t-green", "誘導強化"], ["t-navy", "対象 / 仙石原"]],
+      title: "箱根滞在後 → 熱海・伊豆方面の広域周遊案内",
+      sub: "接続観光地としての連携導線。混雑ピーク時は分散周遊の候補として有効。",
+      tags: [["t-green", "広域送客"], ["t-navy", "周遊候補"]],
     },
     {
-      title: "強羅 体験予約クーポンの導入検討",
-      sub: "移動はあるが消費が弱い。体験・工芸・飲食への導線強化を比較検証する案。",
-      tags: [["t-gold", "高"], ["t-navy", "対象 / 強羅"]],
+      title: "江ノ島・湘南: 旅前の立ち寄り導線",
+      sub: "小田原経由の伊豆・箱根周遊と組み合わせた訴求余地。",
+      tags: [["t-gold", "中"], ["t-navy", "対象 / 湘南"]],
     },
   ];
 
-  // Trend chart data (week 1–7 indices for top areas)
   const TREND_AREAS = [
-    { name: "箱根湯本", color: "#1f4775", data: [78, 80, 82, 85, 87, 90, 92] },
-    { name: "大涌谷",   color: "#0a8e6b", data: [62, 64, 65, 68, 72, 70, 68] },
-    { name: "強羅",     color: "#b07712", data: [50, 52, 53, 56, 58, 60, 62] },
-    { name: "仙石原",   color: "#6d4ee0", data: [32, 34, 33, 36, 38, 40, 42] },
+    { name: "熱海",   color: "#1f4775", data: [62, 65, 68, 72, 76, 80, 84] },
+    { name: "箱根湯本", color: "#0a8e6b", data: [78, 80, 82, 84, 85, 86, 86] },
+    { name: "伊東",   color: "#b07712", data: [48, 50, 52, 55, 58, 62, 66] },
+    { name: "江ノ島", color: "#2c5e94", data: [44, 46, 48, 50, 52, 54, 56] },
   ];
   const TREND_LABELS = ["W1", "W2", "W3", "W4", "W5", "W6", "W7"];
 
   const COMPOSITION = [
-    { name: "箱根湯本", val: 32, bar: "" },
-    { name: "大涌谷",   val: 24, bar: "c-green" },
-    { name: "強羅",     val: 18, bar: "c-gold" },
-    { name: "小田原",   val: 14, bar: "c-blue" },
-    { name: "仙石原",   val: 12, bar: "c-violet" },
+    { name: "箱根エリア", val: 28, bar: "" },
+    { name: "伊豆エリア", val: 24, bar: "c-green" },
+    { name: "湘南・江ノ島", val: 18, bar: "c-blue" },
+    { name: "小田原", val: 14, bar: "c-gold" },
+    { name: "その他沿線", val: 16, bar: "c-violet" },
+  ];
+
+  // ----- 上位客層インサイト（セグメント画面） -----
+  const SEGMENT_INSIGHT_KPIS = [
+    { key: "hva-sig", label: "高付加価値需要シグナル", value: 74, denom: "/ 100", delta: { dir: "up", text: "+6 pt", sub: "前週比" }, icon: "i-chart", iconColor: "t-green", decision: "<strong>判断:</strong> 滞在・体験単価の向上余地が示唆される関心の強さ（集計シグナル）。", spark: [58, 60, 64, 66, 69, 72, 74] },
+    { key: "focus-n", label: "注目エリア", value: 5, denom: "件", delta: { dir: "up", text: "+1", sub: "前月比" }, icon: "i-pin", iconColor: "t-navy", decision: "<strong>判断:</strong> 伊豆・湘南・箱根の接続観光地でシグナルが相対的に高い地点。", spark: [3, 3, 4, 4, 4, 5, 5] },
+    { key: "themes", label: "関心テーマ密度", value: 68, denom: "/ 100", delta: { dir: "flat", text: "±0", sub: "前週比" }, icon: "i-ticket", iconColor: "t-gold", decision: "<strong>判断:</strong> 温泉・食・文化・自然などの関心カテゴリが複合して現れている度合い。", spark: [64, 65, 66, 67, 67, 68, 68] },
+    { key: "touch", label: "推奨タッチポイント", value: 7, denom: "経路", delta: { dir: "up", text: "+1", sub: "前月比" }, icon: "i-broadcast", iconColor: "t-blue", decision: "<strong>判断:</strong> 旅前〜現地まで一貫して訴求を載せられる接点候補。", spark: [5, 5, 6, 6, 6, 7, 7] },
+  ];
+  const SEGMENT_FOCUS_AREAS = [
+    { name: "熱海", score: 86, note: "宿泊・食体験ページへの遷移が増加。旅前案内の強化余地。" },
+    { name: "伊東", score: 81, note: "海鮮・温泉・文化施設の複合関心。半日周遊の設計余地。" },
+    { name: "修善寺", score: 74, note: "静穏志向・文化体験の関心が相対的に高い。" },
+    { name: "伊豆高原", score: 72, note: "自然・アート・宿泊の組み合わせ関心。" },
+    { name: "下田", score: 66, note: "海・歴史テーマの閲覧が長期滞在文脈で増加。" },
+  ];
+  const SEGMENT_MARKET_SIGNALS = [
+    { label: "訪日市場", text: "台湾・韓国市場の検索関心が前月比 +12%（想定集計）" },
+    { label: "宿泊需要", text: "伊豆方面の宿泊検索・予約関連シグナルが上昇傾向" },
+    { label: "検索関心", text: "「伊豆 温泉 旅館」「熱海 海鮮」の関心指数が上昇" },
+    { label: "天候", text: "週末は雨予報のため屋内・温泉導線の訴求を優先検討" },
+  ];
+  const SEGMENT_THEMES = [
+    { name: "温泉", weight: 92 },
+    { name: "食・ガストロノミー", weight: 84 },
+    { name: "文化体験", weight: 71 },
+    { name: "自然・アート", weight: 68 },
+    { name: "宿泊滞在", weight: 76 },
+    { name: "プライベート/少人数体験", weight: 58 },
+  ];
+  const SEGMENT_TOUCHPOINTS = [
+    "ロマンスカー予約後メール",
+    "Web/App内レコメンド",
+    "駅サイネージ",
+    "観光案内QR",
+    "宿泊施設連携",
+    "海外向けLP",
+    "海外旅行会社/OTA向け素材",
+  ];
+  const SEGMENT_CONTENT_IDEAS = [
+    "熱海：温泉宿泊と食体験をセットにした旅前ガイド（所要時間・予約導線付き）",
+    "伊東：海鮮・温泉・文化施設を半日で回るモデルコース（乗換・接続の注意書き付き）",
+    "修善寺：静かな温泉滞在と文化体験を組み合わせた滞在型コンテンツ",
+    "伊豆高原：自然散策・アート施設・宿泊をつなぐ周遊候補マップ",
+    "下田：海・歴史を軸にした長期滞在向けテーマ記事と周遊候補",
   ];
 
   // ----- Area Analysis -----
   const AREAS = [
     {
       name: "箱根湯本", sub: "ゲートウェイ / 鉄道・バス",
-      visit: 92, flow: 58, spend: 34, crowd: "高",
+      visit: 92, flow: 58, spend: 34, hva: 48, crowd: "高",
       priority: "high", priorityLabel: "最優先",
-      state: "来訪は多いが消費転換が弱い",
-      decision: "荷物・待ち時間・乗換前消費の改善を優先",
+      state: "来訪は多いが消費転換と広域接続の両面で課題",
+      decision: "荷物・待ち時間・乗換前消費の改善と、接続観光地への周遊案内を優先",
     },
     {
       name: "大涌谷", sub: "王道観光 / 観光ピーク",
-      visit: 88, flow: 81, spend: 61, crowd: "高",
+      visit: 88, flow: 81, spend: 61, hva: 62, crowd: "高",
       priority: "medium", priorityLabel: "中",
       state: "ピーク時の集中度が高く、混雑による満足度低下リスク",
-      decision: "代替ルートと時間帯シフトの案内強化を検討",
+      decision: "時間帯シフトと接続観光地への分散周遊候補を併記して案内",
     },
     {
       name: "強羅", sub: "中継・宿泊エリア",
-      visit: 58, flow: 65, spend: 30, crowd: "中",
+      visit: 58, flow: 65, spend: 30, hva: 55, crowd: "中",
       priority: "high", priorityLabel: "高",
       state: "回遊余地があるが施設利用が弱い",
       decision: "体験・飲食・短時間滞在プランを強化",
     },
     {
       name: "仙石原", sub: "観光・自然散策",
-      visit: 36, flow: 48, spend: 68, crowd: "低",
+      visit: 36, flow: 48, spend: 68, hva: 70, crowd: "低",
       priority: "low", priorityLabel: "低",
       state: "来訪は少ないが消費効率が高い",
       decision: "王道ルート混雑時の代替誘導先として強化",
     },
     {
       name: "小田原", sub: "乗換 / 沿線玄関口",
-      visit: 61, flow: 38, spend: 44, crowd: "中",
+      visit: 61, flow: 52, spend: 44, hva: 50, crowd: "中",
       priority: "medium", priorityLabel: "中",
-      state: "乗換客の滞留時間がある一方で街区消費が弱い",
-      decision: "改札外の短時間消費導線と提携店案内を検討",
+      state: "広域周遊の接続点として滞留と街区消費の両立が課題",
+      decision: "短時間消費導線と、熱海・伊豆方面の連携導線案内を検討",
+    },
+    {
+      name: "江ノ島", sub: "湘南 / 海沿いレジャー",
+      visit: 72, flow: 54, spend: 48, hva: 58, crowd: "高",
+      priority: "medium", priorityLabel: "中",
+      state: "立ち寄り需要が強く、箱根・伊豆との周遊候補として訴求余地",
+      decision: "旅前の立ち寄りと広域周遊を組み合わせた案内を強化",
+    },
+    {
+      name: "熱海", sub: "温泉街・宿泊 / 接続観光地",
+      visit: 86, flow: 62, spend: 52, hva: 82, crowd: "高",
+      priority: "high", priorityLabel: "最優先",
+      state: "来訪は高く、宿泊・食体験への事前案内強化の余地",
+      decision: "宿泊・食体験への事前案内を強化",
+    },
+    {
+      name: "伊東", sub: "温泉・海鮮・文化 / 伊豆東岸",
+      visit: 54, flow: 48, spend: 58, hva: 79, crowd: "中",
+      priority: "high", priorityLabel: "高",
+      state: "滞在価値シグナルが高く、送客強化と半日導線の設計余地",
+      decision: "温泉・海鮮・文化施設の半日導線を設計",
+    },
+    {
+      name: "修善寺", sub: "温泉・文化 / 伊豆中部",
+      visit: 38, flow: 42, spend: 44, hva: 76, crowd: "低",
+      priority: "medium", priorityLabel: "中",
+      state: "静かな温泉滞在・文化体験志向に合う高付加価値需要シグナル",
+      decision: "静かな温泉滞在・文化体験を訴求",
+    },
+    {
+      name: "伊豆高原", sub: "自然・アート・宿泊",
+      visit: 44, flow: 50, spend: 52, hva: 78, crowd: "中",
+      priority: "medium", priorityLabel: "中",
+      state: "自然・アート・宿泊の組み合わせ関心が強い",
+      decision: "自然・アート・宿泊滞在を組み合わせる周遊候補を提示",
+    },
+    {
+      name: "下田", sub: "海・歴史 / 伊豆南端",
+      visit: 32, flow: 36, spend: 46, hva: 72, crowd: "低",
+      priority: "medium", priorityLabel: "中",
+      state: "遠方エリアのため単発誘導より長期滞在テーマとの相性が高い",
+      decision: "海・歴史・長期滞在導線を強化",
     },
   ];
 
   const SEGMENTS = [
+    { seg: "上位客層向け需要シグナル", visit: 62, spend: 71, hint: "温泉・食・文化の複合関心。旅前メールと宿泊連携の余地" },
     { seg: "国内 ファミリー",  visit: 78, spend: 52, hint: "週末・10〜14時に集中" },
-    { seg: "国内 カップル",    visit: 65, spend: 58, hint: "高単価カフェ・体験利用が強い" },
-    { seg: "インバウンド 英語", visit: 42, spend: 64, hint: "Web閲覧→来訪のギャップが要確認" },
-    { seg: "インバウンド 繁体字", visit: 38, spend: 55, hint: "免税ピーク時間帯あり" },
+    { seg: "国内 カップル",    visit: 65, spend: 58, hint: "体験・飲食・宿泊の単価向上余地が相対的に大きい" },
+    { seg: "インバウンド 英語", visit: 42, spend: 64, hint: "Web閲覧から現地周遊までの導線を補強" },
+    { seg: "インバウンド 繁体字", visit: 38, spend: 55, hint: "湘南・箱根・伊豆の周遊候補の訴求余地" },
     { seg: "シニア層",          visit: 48, spend: 40, hint: "平日午前帯の滞留が多い" },
   ];
 
   // ----- Flow Analysis -----
   const FLOW_KPIS = [
-    { label: "王道ルート集中度", value: 72, denom: "/ 100", decision: "代替誘導の必要性を判断", icon: "i-target", iconColor: "t-navy", delta: { dir: "up", text: "+4 pt" }, spark: [60, 62, 65, 67, 68, 70, 72] },
-    { label: "非王道率",         value: 28, denom: "/ 100", decision: "分散誘導の余地を判断",     icon: "i-flow",   iconColor: "t-green", delta: { dir: "down", text: "-2 pt" }, spark: [32, 31, 30, 30, 29, 28, 28] },
+    { label: "主要導線の集中度", value: 69, denom: "/ 100", decision: "分散周遊・連携導線の必要性を判断", icon: "i-target", iconColor: "t-navy", delta: { dir: "up", text: "+3 pt" }, spark: [58, 60, 62, 64, 66, 68, 69] },
+    { label: "周遊分散指数",     value: 41, denom: "/ 100", decision: "接続観光地への送客余地を判断",     icon: "i-flow",   iconColor: "t-green", delta: { dir: "up", text: "+2 pt" }, spark: [34, 35, 36, 37, 39, 40, 41] },
     { label: "天候影響度",       value: "中", denom: "",   decision: "天候連動施策の優先度を判断", icon: "i-cloud-rain", iconColor: "t-gold", delta: { dir: "flat", text: "横ばい" }, spark: [3,3,3,3,3,3,3] },
   ];
 
   const ROUTE_FLOW = {
-    primary: ["箱根湯本", "大涌谷", "芦ノ湖"],
-    candidates: ["強羅", "仙石原", "小田原 周辺"],
-    judgment: "<strong>判断:</strong> 王道ルートの集中度が <strong>72/100</strong> と高水準。混雑時間帯（土日 10〜12時）には <strong>仙石原・強羅方面</strong> への代替案内を強化することを推奨します。",
+    primary: [
+      "新宿 → 箱根湯本 → 大涌谷",
+      "新宿 → 小田原 → 箱根",
+      "新宿 → 片瀬江ノ島",
+    ],
+    candidates: [
+      "小田原 → 熱海",
+      "熱海 → 伊東",
+      "伊東 → 伊豆高原",
+      "三島/小田原接続 → 修善寺",
+      "箱根滞在後 → 熱海/伊豆方面",
+    ],
+    judgment: "<strong>判断:</strong> 小田急線区間のみの直行を前提にしない集計です。鉄道・バス等の<strong>接続観光地</strong>を含む<strong>広域送客・連携導線</strong>として、週末は<strong>熱海・伊東方面の周遊候補</strong>を旅前チャネルで補強することを推奨します。",
   };
 
   // time heatmap: rows = area, cols = time bucket, value = level 1-5
@@ -170,8 +293,9 @@
     rows: [
       { area: "箱根湯本", v: [2, 5, 4, 4, 3, 2] },
       { area: "大涌谷",   v: [1, 4, 5, 4, 2, 1] },
-      { area: "強羅",     v: [1, 2, 3, 4, 3, 2] },
-      { area: "仙石原",   v: [1, 2, 2, 3, 2, 1] },
+      { area: "熱海",     v: [2, 3, 4, 4, 3, 3] },
+      { area: "伊東",     v: [1, 2, 3, 3, 3, 2] },
+      { area: "江ノ島",   v: [2, 4, 4, 3, 3, 2] },
       { area: "小田原",   v: [2, 3, 3, 3, 3, 4] },
     ],
   };
@@ -191,27 +315,29 @@
   ];
 
   // ----- Spend Matrix data (positions in matrix) -----
-  // x: visit (0-100), y: spend (0-100); we map to position
+  // x: 来訪指数, y: 消費・滞在価値指数（0–100）; bottom 座標でプロット
   const SPEND_AREAS = [
-    { name: "箱根湯本", v: 92, s: 34, cls: "priority-a", label: "箱湯" },
-    { name: "大涌谷",   v: 88, s: 61, cls: "priority-c", label: "大涌" },
-    { name: "強羅",     v: 58, s: 30, cls: "priority-a", label: "強羅" },
-    { name: "小田原",   v: 61, s: 44, cls: "priority-b", label: "小田" },
-    { name: "仙石原",   v: 36, s: 68, cls: "priority-b", label: "仙石" },
-    { name: "塔ノ沢",   v: 24, s: 32, cls: "priority-d", label: "塔ノ" },
+    { name: "箱根湯本", v: 92, s: 34, cls: "priority-a", label: "箱湯", note: "来訪多・消費転換に課題" },
+    { name: "熱海",     v: 86, s: 52, cls: "priority-c", label: "熱海", note: "来訪多・宿泊/食体験の伸び余地" },
+    { name: "大涌谷",   v: 88, s: 61, cls: "priority-c", label: "大涌", note: "維持しつつ単価・分散周遊を検討" },
+    { name: "伊東",     v: 52, s: 76, cls: "priority-b", label: "伊東", note: "滞在価値高・送客強化候補" },
+    { name: "修善寺",   v: 38, s: 80, cls: "priority-b", label: "修善", note: "高付加価値体験候補" },
+    { name: "伊豆高原", v: 44, s: 78, cls: "priority-b", label: "伊高", note: "自然・アート滞在候補" },
+    { name: "下田",     v: 30, s: 74, cls: "priority-b", label: "下田", note: "長期滞在候補" },
+    { name: "江ノ島",   v: 70, s: 50, cls: "priority-c", label: "江ノ", note: "立ち寄りと周遊の接続余地" },
   ];
 
   const SPEND_LOSS = [
-    { area: "箱根湯本", visit: 92, spend: 34, gap: -58, hint: "乗換前消費の摩擦が要因候補" },
-    { area: "強羅",     visit: 58, spend: 30, gap: -28, hint: "体験・飲食導線が弱い" },
-    { area: "大涌谷",   visit: 88, spend: 61, gap: -27, hint: "高単価素材の活用余地あり" },
-    { area: "小田原",   visit: 61, spend: 44, gap: -17, hint: "乗換客の街歩き転換が課題" },
+    { area: "箱根湯本", visit: 92, spend: 34, gap: -58, hint: "乗換前消費と広域周遊案内の両面で改善余地" },
+    { area: "強羅",     visit: 58, spend: 30, gap: -28, hint: "体験・飲食・半日導線の設計余地" },
+    { area: "江ノ島",   visit: 72, spend: 48, gap: -24, hint: "箱根・伊豆周遊との接続訴求を強化" },
+    { area: "小田原",   visit: 61, spend: 44, gap: -17, hint: "接続観光地への送客タイミングの最適化" },
   ];
 
   const SPEND_EFF = [
-    { area: "仙石原", visit: 36, spend: 68, eff: "+32", hint: "誘導強化候補。混雑時の代替先に有効" },
-    { area: "大涌谷", visit: 88, spend: 61, eff: "+6",  hint: "高単価素材の伸び余地" },
-    { area: "湯本商店街", visit: 44, spend: 62, eff: "+18", hint: "短時間消費の効率が高い" },
+    { area: "伊東",   visit: 54, spend: 76, eff: "+22", hint: "送客強化・半日モデルコースの訴求余地" },
+    { area: "修善寺", visit: 38, spend: 80, eff: "+42", hint: "静穏・文化体験の上位客層向け施策候補" },
+    { area: "仙石原", visit: 36, spend: 68, eff: "+32", hint: "混雑時の分散周遊先として有効" },
   ];
 
   // ----- Initiatives -----
@@ -331,6 +457,84 @@
       task: "アプリ通知・サイネージで近接店舗を表示。",
       kpis: ["免税利用件数", "免税平均単価"],
       meta: [["t-green", "完了"]],
+    },
+    {
+      id: "i10",
+      title: "熱海 温泉宿泊・食体験パッケージ訴求",
+      status: "running", statusLabel: "実施中",
+      priority: "p-high", priorityLabel: "優先度 高",
+      area: "熱海",
+      segment: "ロマンスカー予約済みで温泉・飲食カテゴリの閲覧が高い層",
+      reason: "ロマンスカー予約後の閲覧で温泉・飲食ページへの関心が高いシグナルが継続しているため。",
+      effect: "予約後ページ閲覧率・宿泊/飲食送客率の改善",
+      task: "予約後メール・Web/App・駅サイネージで旅前モデルコースと予約導線を提示",
+      kpis: ["予約後ページ閲覧率", "宿泊/飲食送客率"],
+      meta: [["t-red", "伊豆送客"], ["t-navy", "旅前案内"]],
+    },
+    {
+      id: "i11",
+      title: "伊東 海鮮・温泉・文化施設の半日導線",
+      status: "consider", statusLabel: "検討中",
+      priority: "p-high", priorityLabel: "優先度 高",
+      area: "伊東",
+      segment: "日帰り〜2泊の国内旅行者、海鮮・温泉の閲覧が重なる層",
+      reason: "日帰り〜短期滞在層向けに、半日で回れる体験導線の不足シグナルがあるため。",
+      effect: "施設利用率・回遊指数・消費指数の改善",
+      task: "半日モデルコースのマップ化、QR・観光案内との連動",
+      kpis: ["施設利用率", "回遊指数", "消費指数"],
+      meta: [["t-gold", "半日導線"], ["t-blue", "伊豆"]],
+    },
+    {
+      id: "i12",
+      title: "修善寺 静かな温泉滞在・文化体験導線",
+      status: "consider", statusLabel: "検討中",
+      priority: "p-med", priorityLabel: "優先度 中",
+      area: "修善寺",
+      segment: "静穏・文化体験カテゴリの閲覧が高い層、海外向けLP流入",
+      reason: "静穏志向・文化体験志向に合う高付加価値需要シグナルが相対的に高いため。",
+      effect: "滞在時間・体験予約率・宿泊送客率の改善",
+      task: "海外向けLP・宿泊施設連携パンフレットで滞在型プランを訴求",
+      kpis: ["滞在時間", "体験予約率", "宿泊送客率"],
+      meta: [["t-navy", "文化体験"], ["t-green", "静穏"]],
+    },
+    {
+      id: "i13",
+      title: "伊豆高原 自然・アート滞在プラン",
+      status: "review", statusLabel: "要確認",
+      priority: "p-med", priorityLabel: "優先度 中",
+      area: "伊豆高原",
+      segment: "自然・アート・宿泊カテゴリの複合閲覧が検出された層",
+      reason: "自然・アート・宿泊の組み合わせ関心が上位客層向け施策候補として検出されているため。",
+      effect: "宿泊導線クリック率・体験予約率の改善",
+      task: "Web/App・SNS・宿泊連携で1日〜2日の周遊候補を提示",
+      kpis: ["宿泊導線クリック率", "体験予約率"],
+      meta: [["t-gold", "要確認"], ["t-blue", "周遊候補"]],
+    },
+    {
+      id: "i14",
+      title: "下田 海・歴史・長期滞在提案",
+      status: "consider", statusLabel: "検討中",
+      priority: "p-med", priorityLabel: "優先度 中",
+      area: "下田",
+      segment: "歴史・海関連の検索と3泊以上プラン閲覧が重なる層",
+      reason: "遠方エリアのため単発誘導より長期滞在テーマとの相性が高いシグナルのため。",
+      effect: "滞在日数・周遊導線利用率の改善",
+      task: "旅前メール・海外向け記事で3泊以上モデルと接続周遊を提示",
+      kpis: ["滞在日数", "周遊導線利用率"],
+      meta: [["t-navy", "長期滞在"], ["t-green", "伊豆南端"]],
+    },
+    {
+      id: "i15",
+      title: "江ノ島・湘南 旅前立ち寄り導線",
+      status: "running", statusLabel: "実施中",
+      priority: "p-med", priorityLabel: "優先度 中",
+      area: "江ノ島・湘南",
+      segment: "湘南エリア閲覧後に箱根・伊豆ページへ遷移した旅前層",
+      reason: "湘南の立ち寄り需要と、箱根・伊豆広域周遊を組み合わせる余地があるため。",
+      effect: "周遊候補クリック率・湘南→伊豆方面遷移率の改善",
+      task: "旅前メール・Web/Appで小田原経由の周遊チェックリストを提示",
+      kpis: ["周遊候補クリック率", "湘南→伊豆方面遷移率"],
+      meta: [["t-blue", "湘南"], ["t-gold", "広域周遊"]],
     },
   ];
 
@@ -726,6 +930,253 @@
         nextDecision: "継続",
       },
     },
+    i10: {
+      related: ["高付加価値需要シグナル", "予約後閲覧率", "宿泊需要"],
+      department: "沿線事業部", owner: "佐藤 真理",
+      period: { start: "2026/05/01", end: "2026/08/31" },
+      checklist: [
+        { id: "c1", label: "予約後メール文面・件名の確定", checked: true },
+        { id: "c2", label: "熱海モデルコースLPの構成", checked: true },
+        { id: "c3", label: "駅サイネージ枠の予約", checked: false },
+        { id: "c4", label: "効果測定KPIの確定", checked: false },
+        { id: "c5", label: "テスト配信", checked: false },
+        { id: "c6", label: "本番配信", checked: false },
+      ],
+      timeline: [
+        { label: "設計", date: "05/01〜05/12", done: true },
+        { label: "素材作成", date: "05/13〜05/24", done: true },
+        { label: "配信開始", date: "05/28", done: false },
+        { label: "中間レビュー", date: "06/15", done: false },
+      ],
+      delivery: {
+        channels: ["Web/App", "予約後メール", "駅サイネージ"],
+        areas: ["熱海"],
+        times: ["予約完了後24時間以内", "旅前72時間以内"],
+        facilities: ["温泉旅館", "飲食", "体験"],
+        conditions: ["温泉・飲食カテゴリの閲覧が高い来訪者"],
+        materials: {
+          title: "熱海の温泉と食を、旅前にまとめてチェック",
+          body: "宿泊・食体験の候補と所要時間の目安を提示。接続観光地への周遊は任意です。",
+          cta: "モデルコースを見る",
+          qrLabel: "駅サイネージQRから同一コンテンツへ",
+          place: "予約完了メール、Web/Appホーム、熱海方面案内サイネージ",
+        },
+      },
+      measurement: {
+        period: "配信開始から14日",
+        events: [
+          { label: "予約後ページ閲覧率", current: 24, target: 28, unit: "%", change: "+3pt", judge: "改善傾向" },
+          { label: "宿泊送客率", current: 11, target: 14, unit: "%", change: "+1pt", judge: "要確認" },
+          { label: "飲食送客率", current: 9, target: 12, unit: "%", change: "+1pt", judge: "要確認" },
+        ],
+        nextDecision: "継続検討",
+      },
+    },
+    i11: {
+      related: ["回遊指数", "消費指数", "半日導線完了率"],
+      department: "伊豆エリア担当", owner: "木村 亮",
+      period: { start: "2026/05/15", end: "2026/09/30" },
+      checklist: [
+        { id: "c1", label: "対象施設リスト確定", checked: true },
+        { id: "c2", label: "半日マップ原稿", checked: false },
+        { id: "c3", label: "QR設置場所調整", checked: false },
+        { id: "c4", label: "観光案内所連携", checked: false },
+        { id: "c5", label: "効果測定KPI設定", checked: false },
+        { id: "c6", label: "本配信", checked: false },
+      ],
+      timeline: [
+        { label: "設計", date: "05/15〜05/28", done: true },
+        { label: "素材", date: "06/01〜06/14", done: false },
+        { label: "テスト", date: "06/20", done: false },
+        { label: "本配信", date: "07/01", done: false },
+      ],
+      delivery: {
+        channels: ["Web/App", "QR", "観光案内"],
+        areas: ["伊東"],
+        times: ["週末 9:00〜15:00", "祝前日"],
+        facilities: ["海鮮市場", "温泉", "文化施設"],
+        conditions: ["伊東エリアの閲覧・検索シグナルが高い来訪者"],
+        materials: {
+          title: "伊東・半日で楽しむ 海と温泉と文化",
+          body: "三島・小田原からの接続例を併記し、周遊候補として選択しやすくします。",
+          cta: "マップを保存",
+          qrLabel: "伊東駅・観光案内所QR",
+          place: "Web/App、駅周辺QR、観光案内所",
+        },
+      },
+      measurement: {
+        period: "配信開始から21日",
+        events: [
+          { label: "施設利用率", current: 0, target: 38, unit: "%", change: "—", judge: "未実施" },
+          { label: "回遊指数", current: 48, target: 55, unit: "/100", change: "—", judge: "未実施" },
+        ],
+        nextDecision: "実施準備中",
+      },
+    },
+    i12: {
+      related: ["滞在時間", "体験予約率", "宿泊送客率"],
+      department: "観光戦略部", owner: "井上 誠",
+      period: { start: "2026/06/01", end: "2026/10/31" },
+      checklist: [
+        { id: "c1", label: "LP構成ドラフト", checked: false },
+        { id: "c2", label: "宿泊協会への素材共有", checked: false },
+        { id: "c3", label: "英語・繁体字表記レビュー", checked: false },
+        { id: "c4", label: "KPI設定", checked: false },
+        { id: "c5", label: "テスト配信", checked: false },
+        { id: "c6", label: "本配信", checked: false },
+      ],
+      timeline: [
+        { label: "設計", date: "06/01〜06/14", done: false },
+        { label: "素材", date: "06/15〜07/05", done: false },
+        { label: "配信", date: "07/12", done: false },
+        { label: "レビュー", date: "08/01", done: false },
+      ],
+      delivery: {
+        channels: ["予約後メール", "海外向けLP", "宿泊施設連携"],
+        areas: ["修善寺"],
+        times: ["旅前14日以内", "平日午前"],
+        facilities: ["温泉旅館", "文化施設", "竹林周辺"],
+        conditions: ["静穏・文化カテゴリの閲覧が高い来訪者"],
+        materials: {
+          title: "修善寺で過ごす、静かな温泉と文化の半日以上",
+          body: "滞在型の体験プランを提示し、混雑ピークとは異なる価値を訴求します。",
+          cta: "プランを見る",
+          qrLabel: "宿泊施設パンフレットQR",
+          place: "海外LP、宿泊施設、予約後メール",
+        },
+      },
+      measurement: {
+        period: "配信開始から30日",
+        events: [
+          { label: "海外LP滞在時間", current: 0, target: 95, unit: "秒", change: "—", judge: "未実施" },
+          { label: "体験予約率", current: 0, target: 8, unit: "%", change: "—", judge: "未実施" },
+        ],
+        nextDecision: "実施準備中",
+      },
+    },
+    i13: {
+      related: ["宿泊導線CTR", "体験予約率", "自然・アート関心"],
+      department: "マーケティング部", owner: "高橋 沙織",
+      period: { start: "2026/05/20", end: "2026/09/15" },
+      checklist: [
+        { id: "c1", label: "コース原稿レビュー", checked: true },
+        { id: "c2", label: "SNSクリエイティブ2案", checked: false },
+        { id: "c3", label: "宿泊施設バナー枠確保", checked: false },
+        { id: "c4", label: "KPI設定", checked: false },
+        { id: "c5", label: "配信", checked: false },
+        { id: "c6", label: "レビュー", checked: false },
+      ],
+      timeline: [
+        { label: "設計", date: "05/20〜06/05", done: true },
+        { label: "素材", date: "06/06〜06/20", done: false },
+        { label: "配信", date: "06/25", done: false },
+        { label: "レビュー", date: "07/20", done: false },
+      ],
+      delivery: {
+        channels: ["Web/App", "SNS広告", "宿泊連携"],
+        areas: ["伊豆高原"],
+        times: ["週末旅前", "連休前2週間"],
+        facilities: ["美術館", "散策路", "宿泊施設"],
+        conditions: ["自然・アートの複合閲覧が高い来訪者"],
+        materials: {
+          title: "伊豆高原：自然とアートと宿泊をつなぐ1日",
+          body: "公共交通と車利用の両パターンを併記し、周遊候補として計画しやすくします。",
+          cta: "滞在プランを見る",
+          qrLabel: "Web/App内バナー",
+          place: "Web/App、SNS、宿泊施設デジタルサイネージ",
+        },
+      },
+      measurement: {
+        period: "配信開始から14日",
+        events: [
+          { label: "宿泊導線クリック率", current: 6, target: 9, unit: "%", change: "+0.4pt", judge: "要確認" },
+          { label: "体験予約率", current: 4, target: 7, unit: "%", change: "±0", judge: "要確認" },
+        ],
+        nextDecision: "要確認",
+      },
+    },
+    i14: {
+      related: ["滞在日数", "周遊導線利用率", "検索関心"],
+      department: "インバウンド対応TF", owner: "王 偉",
+      period: { start: "2026/06/10", end: "2026/11/30" },
+      checklist: [
+        { id: "c1", label: "長期滞在記事構成", checked: false },
+        { id: "c2", label: "旅前メールセグメント条件", checked: false },
+        { id: "c3", label: "英語・繁体字校正", checked: false },
+        { id: "c4", label: "KPI設定", checked: false },
+        { id: "c5", label: "配信", checked: false },
+        { id: "c6", label: "レビュー", checked: false },
+      ],
+      timeline: [
+        { label: "設計", date: "06/10〜06/25", done: false },
+        { label: "素材", date: "07/01〜07/20", done: false },
+        { label: "配信", date: "08/01", done: false },
+        { label: "レビュー", date: "09/15", done: false },
+      ],
+      delivery: {
+        channels: ["旅前メール", "Web/App", "海外向け記事"],
+        areas: ["下田"],
+        times: ["予約完了後7日", "旅前30日"],
+        facilities: ["海浜", "歴史施設", "宿泊"],
+        conditions: ["長期滞在・歴史テーマの閲覧が高い来訪者"],
+        materials: {
+          title: "下田：海と歴史でゆったり3泊以上",
+          body: "小田原・熱海からの接続周遊候補を併記し、計画の幅を提示します。",
+          cta: "記事を読む",
+          qrLabel: "旅前メール内リンク",
+          place: "旅前メール、Web/App特集、海外向けコラム",
+        },
+      },
+      measurement: {
+        period: "配信開始から30日",
+        events: [
+          { label: "滞在日数（指数）", current: 0, target: 52, unit: "/100", change: "—", judge: "未実施" },
+          { label: "周遊導線利用率", current: 0, target: 18, unit: "%", change: "—", judge: "未実施" },
+        ],
+        nextDecision: "実施準備中",
+      },
+    },
+    i15: {
+      related: ["周遊候補CTR", "湘南→伊豆遷移率", "旅前メールCTR"],
+      department: "沿線事業部", owner: "山田 健太",
+      period: { start: "2026/04/20", end: "2026/08/31" },
+      checklist: [
+        { id: "c1", label: "チェックリスト原稿", checked: true },
+        { id: "c2", label: "所要時間データ整備", checked: true },
+        { id: "c3", label: "旅前メール組み込み", checked: true },
+        { id: "c4", label: "駅サイネージ試験掲出", checked: false },
+        { id: "c5", label: "KPIレビュー", checked: false },
+        { id: "c6", label: "定常化判断", checked: false },
+      ],
+      timeline: [
+        { label: "設計", date: "04/20〜05/05", done: true },
+        { label: "配信", date: "05/10", done: true },
+        { label: "拡張", date: "06/01", done: false },
+        { label: "レビュー", date: "07/15", done: false },
+      ],
+      delivery: {
+        channels: ["Web/App", "駅サイネージ", "旅前メール"],
+        areas: ["江ノ島・湘南", "小田原"],
+        times: ["週末旅前", "大型連休前"],
+        facilities: ["海沿いレジャー", "小田原乗換案内"],
+        conditions: ["湘南エリア閲覧後に伊豆・箱根閲覧がある来訪者"],
+        materials: {
+          title: "湘南に立ち寄るなら：箱根・伊豆との周遊チェックリスト",
+          body: "小田原経由の接続例と所要時間目安を提示します（全区間が小田急のみとは限りません）。",
+          cta: "チェックリストを保存",
+          qrLabel: "新宿・藤沢方面案内サイネージ",
+          place: "旅前メール、Web/App特集、駅サイネージ",
+        },
+      },
+      measurement: {
+        period: "実施開始から28日",
+        events: [
+          { label: "旅前メールCTR", current: 14, target: 16, unit: "%", change: "+1.2pt", judge: "改善傾向" },
+          { label: "周遊マップ保存率", current: 21, target: 24, unit: "%", change: "+2pt", judge: "改善傾向" },
+        ],
+        nextDecision: "改善傾向",
+      },
+    },
   };
 
   // ----- Impact — Gantt + KPI Management -----
@@ -788,15 +1239,15 @@
   let REFERRAL_KPIS = [
     {
       label: "送客機会スコア",
-      value: 78, denom: "/ 100",
+      value: 81, denom: "/ 100",
       icon: "i-map", iconColor: "t-navy",
-      decision: "誘導先として活用できるエリア・施設の余地を示します。",
-      delta: { dir: "up", text: "+4" },
-      spark: [62, 65, 68, 70, 73, 76, 78],
+      decision: "接続観光地への送客・周遊を伸ばせる余地を示します。",
+      delta: { dir: "up", text: "+5" },
+      spark: [64, 67, 70, 73, 76, 79, 81],
     },
     {
       label: "消費機会ロス",
-      value: "高", denom: "",
+      value: "中高", denom: "",
       icon: "i-yen", iconColor: "t-red",
       decision: "来訪はあるが購買・施設利用につながっていない状態です。",
       delta: { dir: "flat", text: "横ばい" },
@@ -804,50 +1255,64 @@
     },
     {
       label: "推奨施策",
-      value: 6, denom: "件",
+      value: 8, denom: "件",
       icon: "i-ticket", iconColor: "t-gold",
       decision: "優先的に検討すべき案内・クーポン施策です。",
       delta: { dir: "up", text: "+2" },
-      spark: [3, 3, 4, 4, 5, 5, 6],
+      spark: [4, 4, 5, 5, 6, 7, 8],
     },
     {
       label: "実施中施策",
-      value: 3, denom: "件",
+      value: 4, denom: "件",
       icon: "i-target", iconColor: "t-green",
       decision: "現在配信・運用中の施策です。",
       delta: { dir: "up", text: "+1" },
-      spark: [1, 1, 2, 2, 2, 3, 3],
+      spark: [2, 2, 2, 3, 3, 4, 4],
     },
   ];
 
   const REFERRAL_AREAS = [
     {
-      area: "箱根湯本",
-      state: "来訪多・消費弱", stateCls: "tone-warn",
-      decide: "食べ歩きルートと荷物預かり案内",
+      area: "熱海",
+      state: "来訪多・滞在価値伸長余地", stateCls: "tone-warn",
+      decide: "温泉宿泊・食体験の旅前案内を強化",
       priority: "最優先", priorityCls: "high",
-      effect: "乗換前消費の改善",
+      effect: "予約後閲覧率・宿泊/飲食送客率の改善",
     },
     {
-      area: "強羅",
-      state: "回遊余地あり", stateCls: "tone-attention",
-      decide: "工芸体験・飲食クーポンの比較検証",
+      area: "箱根湯本",
+      state: "来訪多・消費転換弱", stateCls: "tone-warn",
+      decide: "荷物・短時間消費と広域周遊案内の両立",
       priority: "高", priorityCls: "high",
-      effect: "体験予約と飲食利用の増加",
+      effect: "乗換前摩擦の低減と周遊候補の提示",
     },
     {
-      area: "仙石原",
-      state: "消費効率高", stateCls: "tone-good",
-      decide: "王道混雑時の代替誘導先として案内",
+      area: "伊東",
+      state: "滞在価値高・送客余地", stateCls: "tone-good",
+      decide: "海鮮・温泉・文化の半日導線を設計",
+      priority: "高", priorityCls: "high",
+      effect: "施設利用率・回遊指数の向上",
+    },
+    {
+      area: "江ノ島・湘南",
+      state: "立ち寄り需要・周遊接続", stateCls: "tone-attention",
+      decide: "旅前の立ち寄りと伊豆・箱根周遊の訴求",
       priority: "中", priorityCls: "medium",
-      effect: "分散誘導と高単価利用の増加",
+      effect: "広域送客・連携導線の補強",
+    },
+    {
+      area: "修善寺",
+      state: "静穏・文化関心が強い", stateCls: "tone-info",
+      decide: "静かな温泉滞在・文化体験コンテンツ",
+      priority: "中", priorityCls: "medium",
+      effect: "滞在時間・体験予約率の向上",
     },
     {
       area: "小田原",
-      state: "乗換滞留あり", stateCls: "tone-neutral",
-      decide: "改札外の短時間消費導線を案内",
+      state: "接続拠点・街区消費", stateCls: "tone-neutral",
+      decide: "短時間消費と熱海・伊豆方面の案内",
       priority: "中", priorityCls: "medium",
-      effect: "乗換時間中の街区利用増加",
+      effect: "乗換客の街区流入と周遊候補の提示",
     },
   ];
 
@@ -855,61 +1320,88 @@
   const REFERRAL_OFFERS = [
     {
       id: "of01",
-      title: "箱根湯本 食べ歩きクーポン",
-      area: "箱根湯本",
-      channels: ["Web/App", "QR"],
-      reason: "来訪は多いが消費転換が弱く、乗換前の短時間消費に余地があるため。",
-      kpis: ["クーポン利用率", "湯本周辺購買指数"],
+      title: "熱海 温泉宿泊・食体験の事前案内",
+      area: "熱海",
+      channels: ["Web/App", "予約後メール", "駅サイネージ"],
+      reason: "ロマンスカー予約後の閲覧で、温泉・食体験ページへの関心が高いシグナルが継続しているため。",
+      kpis: ["予約後ページ閲覧率", "宿泊/飲食送客率"],
       priority: "最優先", priorityCls: "high",
-      content: "湯本駅出口・商店街サイネージで配布。対象店舗20店、利用条件1,000円以上。",
-      observe: ["クーポン取得数", "対象店舗売上指数", "湯本周辺購買指数"],
-      next: "2週間配信後、利用率15%未達であれば対象店舗の構成を見直し。",
+      content: "予約完了から72時間以内に、熱海の温泉宿・飲食のモデルコースと予約導線を提示。接続観光地である旨を注記。",
+      observe: ["予約後メール開封率", "温泉LP遷移率", "宿泊検索連動率"],
+      next: "開封率が基準未達の場合は件名・送信タイミングを2案で比較。",
     },
     {
       id: "of02",
-      title: "雨天時 屋内回遊ルート",
-      area: "箱根湯本・強羅",
-      channels: ["Web/App", "サイネージ"],
-      reason: "雨天時は屋外スポットへの流れが弱まり、屋内施設への案内余地があるため。",
-      kpis: ["ルート閲覧率", "対象施設利用率"],
+      title: "伊東 海鮮・温泉・文化施設の半日導線",
+      area: "伊東",
+      channels: ["Web/App", "QR", "観光案内"],
+      reason: "日帰り〜短期滞在層に対し、半日で回れる高単価体験の導線が不足しているシグナルのため。",
+      kpis: ["施設利用率", "回遊指数", "消費指数"],
       priority: "高", priorityCls: "high",
-      content: "天気APIと連動し、雨天予報時にアプリ通知と駅サイネージで屋内ルートを提示。",
-      observe: ["ルート閲覧率", "対象施設利用率", "雨天時の回遊指数"],
-      next: "雨天回数の少ない月は仙石原方面の屋内施設にも対象を広げ検証。",
+      content: "海鮮市場・温泉・文化施設をつなぐ半日モデルコースをマップ化。三島・小田原からの接続注記を付与。",
+      observe: ["モデルコース完了率", "施設QR遷移率", "回遊指数"],
+      next: "平日・週末で導線の人気施設を入れ替え、クリック分布を確認。",
     },
     {
       id: "of03",
-      title: "仙石原 体験施設誘導",
-      area: "仙石原",
-      channels: ["Web/App", "サイネージ"],
-      reason: "来訪は少ないが消費効率が高く、王道混雑時の代替誘導先として有効なため。",
-      kpis: ["仙石原来訪指数", "体験施設利用率"],
-      priority: "中", priorityCls: "medium",
-      content: "王道ルートが混雑指数70超のときに、仙石原方面の体験施設をアプリ・サイネージで案内。",
-      observe: ["仙石原来訪指数", "体験施設利用率", "代替誘導クリック率"],
-      next: "1ヶ月後に分散誘導効果を確認し、混雑時定常運用へ移行するか判断。",
+      title: "修善寺 静かな温泉滞在・文化体験",
+      area: "修善寺",
+      channels: ["予約後メール", "海外向けLP", "宿泊施設連携"],
+      reason: "混雑回避志向・文化体験志向に合う高付加価値需要シグナルが相対的に高いため。",
+      kpis: ["滞在時間", "体験予約率", "宿泊送客率"],
+      priority: "高", priorityCls: "high",
+      content: "静穏型温泉と文化施設を組み合わせた滞在プランを多言語LPと宿泊施設パンフレットで案内。",
+      observe: ["海外LP滞在時間", "体験予約クリック率", "宿泊連携CV"],
+      next: "OTA向け短尺素材の追加可否を宿泊協会と協議。",
     },
     {
       id: "of04",
-      title: "強羅 工芸体験予約クーポン",
-      area: "強羅",
-      channels: ["QR", "Web/App"],
-      reason: "回遊はあるが施設利用が弱く、体験予約への導線強化が必要なため。",
-      kpis: ["予約クリック率", "クーポン利用率"],
-      priority: "高", priorityCls: "high",
-      content: "強羅駅周辺と提携施設にQRを設置し、工芸体験予約への遷移と1,000円OFFを提供。",
-      observe: ["予約クリック率", "クーポン利用率", "強羅施設利用指数"],
-      next: "提携施設別の利用差を比較し、効果の高い施設構成に絞り込み。",
+      title: "伊豆高原 自然・アート滞在導線",
+      area: "伊豆高原",
+      channels: ["Web/App", "SNS広告", "宿泊連携"],
+      reason: "自然・アート・宿泊を組み合わせた関心が上位客層向け施策候補として検出されているため。",
+      kpis: ["宿泊導線クリック率", "体験予約率"],
+      priority: "中", priorityCls: "medium",
+      content: "美術館・散策路・宿を1日単位でつなぐ周遊候補を提示。車利用・公共交通の両パターンを併記。",
+      observe: ["滞在プラン保存率", "アート施設利用率"],
+      next: "伊東からの半日接続と2泊目以降案内のAB表示を検討。",
+    },
+    {
+      id: "of05",
+      title: "下田 海・歴史・長期滞在提案",
+      area: "下田",
+      channels: ["旅前メール", "Web/App", "海外向け記事"],
+      reason: "遠方エリアのため単発誘導より長期滞在テーマとの相性が高いシグナルのため。",
+      kpis: ["滞在日数", "周遊導線利用率"],
+      priority: "中", priorityCls: "medium",
+      content: "海・歴史を軸に3泊以上のモデルと、小田原・熱海からの接続周遊候補をセットで提示。",
+      observe: ["長期滞在プラン閲覧率", "周遊マップ利用率"],
+      next: "台湾・韓国向け記事の検索クエリに合わせ見出しを最適化。",
+    },
+    {
+      id: "of06",
+      title: "江ノ島・湘南 旅前の立ち寄り導線",
+      area: "江ノ島・湘南",
+      channels: ["Web/App", "駅サイネージ", "旅前メール"],
+      reason: "湘南の立ち寄り需要と、箱根・伊豆広域周遊を組み合わせる余地があるため。",
+      kpis: ["周遊候補クリック率", "湘南→伊豆方面遷移率"],
+      priority: "中", priorityCls: "medium",
+      content: "小田原経由で湘南→箱根／伊豆をつなぐ旅前チェックリストと所要時間目安を提示。",
+      observe: ["旅前メールCTR", "周遊マップ保存率"],
+      next: "週末ピーク時は混雑時間帯に合わせ訴求順を自動入れ替え。",
     },
   ];
 
-  // x = 来訪指数 (visit), y = 消費指数 (spend), 0–100
+  // x = 来訪指数 (visit), y = 消費・滞在価値指数 (spend), 0–100
   const REFERRAL_MATRIX = [
     { name: "箱根湯本", visit: 88, spend: 38, tag: "最優先改善",   tagCls: "tone-warn"      },
-    { name: "大涌谷",   visit: 72, spend: 55, tag: "維持・単価向上", tagCls: "tone-good"      },
-    { name: "強羅",     visit: 64, spend: 42, tag: "改善余地",     tagCls: "tone-attention" },
-    { name: "仙石原",   visit: 36, spend: 68, tag: "誘導強化",     tagCls: "tone-info"      },
-    { name: "小田原",   visit: 30, spend: 34, tag: "優先度低",     tagCls: "tone-neutral"   },
+    { name: "熱海",     visit: 82, spend: 52, tag: "単価伸長余地", tagCls: "tone-attention" },
+    { name: "大涌谷",   visit: 72, spend: 58, tag: "維持・単価向上", tagCls: "tone-good"      },
+    { name: "伊東",     visit: 52, spend: 76, tag: "誘導強化",     tagCls: "tone-info"      },
+    { name: "修善寺",   visit: 36, spend: 80, tag: "誘導強化",     tagCls: "tone-info"      },
+    { name: "下田",     visit: 28, spend: 72, tag: "誘導強化",     tagCls: "tone-info"      },
+    { name: "江ノ島",   visit: 68, spend: 50, tag: "接続強化",     tagCls: "tone-attention" },
+    { name: "小田原",   visit: 58, spend: 44, tag: "改善余地",     tagCls: "tone-neutral"   },
   ];
 
   const REFERRAL_FUNNEL = [
@@ -922,9 +1414,16 @@
 
   // Filter response variants (KPI 値のスケーリングだけ少し動かす)
   const REFERRAL_FILTER_VARIANTS = {
-    "hakone":   { score: 78, loss: "高", rec: 6, run: 3 },
-    "enoshima": { score: 64, loss: "中", rec: 3, run: 1 },
-    "line":     { score: 72, loss: "高", rec: 6, run: 3 },
+    all:       { score: 81, loss: "中高", rec: 8, run: 4 },
+    enoshima:  { score: 69, loss: "中",   rec: 5, run: 2 },
+    hakone:    { score: 78, loss: "高",   rec: 6, run: 3 },
+    odawara:   { score: 72, loss: "中",   rec: 5, run: 2 },
+    atami:     { score: 84, loss: "中高", rec: 7, run: 3 },
+    ito:       { score: 76, loss: "中",   rec: 6, run: 2 },
+    shuzenji:  { score: 68, loss: "低",   rec: 4, run: 1 },
+    izukogen:  { score: 71, loss: "中",   rec: 5, run: 2 },
+    shimoda:   { score: 62, loss: "低",   rec: 4, run: 1 },
+    "izu-all": { score: 80, loss: "中高", rec: 9, run: 4 },
   };
 
   // Per-offer runtime state (holds across re-renders within session)
@@ -1229,6 +1728,67 @@
     mount("area-composition", list);
   }
 
+  function renderMarketSignalsDash() {
+    const ul = el("ul", { class: "market-signals-list" });
+    MARKET_SIGNALS_DASH.forEach((s) => {
+      const li = el("li", { class: "market-signal-item" });
+      li.appendChild(el("span", { class: "market-signal-label" }, s.label));
+      li.appendChild(el("span", { class: "market-signal-text" }, s.text));
+      ul.appendChild(li);
+    });
+    mount("market-signals-dash", ul);
+  }
+
+  function renderSegmentInsight() {
+    const kwrap = el("div", { class: "kpi-grid kpi-grid-4" });
+    SEGMENT_INSIGHT_KPIS.forEach((k) => kwrap.appendChild(renderKpiCard(k)));
+    mount("segment-insight-kpis", Array.from(kwrap.children));
+
+    const focus = el("div", { class: "priority-list" });
+    SEGMENT_FOCUS_AREAS.forEach((a, i) => {
+      const row = el("div", { class: "priority-row" });
+      row.appendChild(el("div", { class: "pri-rank" }, "#" + (i + 1)));
+      row.appendChild(el("div", { class: "pri-area" }, [
+        el("div", { class: "pri-area-name" }, a.name),
+        el("div", { class: "pri-area-judge" }, a.note),
+      ]));
+      row.appendChild(el("div", { class: "pri-score" }, [
+        el("div", { class: "pri-score-label" }, "需要シグナル"),
+        el("div", { class: "pri-score-bar b-red" }, el("span", { style: "width:" + a.score + "%" })),
+      ]));
+      row.appendChild(el("div", { class: "pri-score-val" }, a.score + " / 100"));
+      row.appendChild(el("span", { class: "pri-badge medium" }, "注目"));
+      focus.appendChild(row);
+    });
+    mount("segment-focus-areas", focus);
+
+    const sms = el("ul", { class: "market-signals-list" });
+    SEGMENT_MARKET_SIGNALS.forEach((s) => {
+      const li = el("li", { class: "market-signal-item" });
+      li.appendChild(el("span", { class: "market-signal-label" }, s.label));
+      li.appendChild(el("span", { class: "market-signal-text" }, s.text));
+      sms.appendChild(li);
+    });
+    mount("segment-market-signals", sms);
+
+    const thWrap = el("div", { class: "judgment-list" });
+    SEGMENT_THEMES.forEach((t) => {
+      const item = el("div", { class: "judgment-item j-gold" });
+      item.appendChild(el("div", { class: "j-area" }, t.name));
+      item.appendChild(el("div", { class: "j-state" }, "関心指数（集計） " + t.weight + " / 100"));
+      thWrap.appendChild(item);
+    });
+    mount("segment-themes", thWrap);
+
+    const tp = el("div", { class: "offer-chips" });
+    SEGMENT_TOUCHPOINTS.forEach((t) => tp.appendChild(el("span", { class: "offer-chip" }, t)));
+    mount("segment-touchpoints", tp);
+
+    const contentList = el("ol", { class: "segment-content-list" });
+    SEGMENT_CONTENT_IDEAS.forEach((c) => contentList.appendChild(el("li", null, c)));
+    mount("segment-content", contentList);
+  }
+
   // ========================================================
   // AREA ANALYSIS
   // ========================================================
@@ -1239,6 +1799,7 @@
       el("th", null, "来訪指数"),
       el("th", null, "回遊指数"),
       el("th", null, "消費指数"),
+      el("th", null, "高付加価値需要"),
       el("th", null, "混雑傾向"),
       el("th", null, "優先度"),
       el("th", null, "推奨判断"),
@@ -1253,6 +1814,7 @@
         el("td", null, scoreCell(a.visit, "b-red")),
         el("td", null, scoreCell(a.flow, "b-gold")),
         el("td", null, scoreCell(a.spend, "b-green")),
+        el("td", null, scoreCell(a.hva, "b-gold")),
         el("td", null, crowdBadge(a.crowd)),
         el("td", null, el("span", { class: "pri-badge " + a.priority }, a.priorityLabel)),
         el("td", null, a.decision),
@@ -1323,11 +1885,11 @@
   function renderRouteFlow() {
     const wrap = el("div", { class: "route-flow" });
     const row1 = el("div", { class: "flow-row" });
-    row1.appendChild(makeFlowNode("現在集中ルート", ROUTE_FLOW.primary, "primary"));
+    row1.appendChild(makeFlowNode("現在集中している主な導線", ROUTE_FLOW.primary, "primary"));
     wrap.appendChild(row1);
     wrap.appendChild(arrowDown());
     const row2 = el("div", { class: "flow-row" });
-    row2.appendChild(makeFlowNode("代替誘導候補", ROUTE_FLOW.candidates, "candidate"));
+    row2.appendChild(makeFlowNode("分散・送客候補（接続観光地・周遊）", ROUTE_FLOW.candidates, "candidate"));
     wrap.appendChild(row2);
     wrap.appendChild(el("div", { class: "flow-judgment", html: ROUTE_FLOW.judgment }));
     mount("route-flow", wrap);
@@ -1410,21 +1972,21 @@
   // ========================================================
   function renderSpendMatrix() {
     const wrap = el("div", { class: "matrix-wrap" });
-    wrap.appendChild(el("div", { class: "axis-y" }, "消費指数（高 →）"));
+    wrap.appendChild(el("div", { class: "axis-y" }, "消費・滞在価値指数（高 →）"));
     const board = el("div", { class: "matrix-board" });
     board.appendChild(el("div", { class: "matrix-axis-line v" }));
     board.appendChild(el("div", { class: "matrix-axis-line h" }));
     board.appendChild(el("div", { class: "quad-label tl" }, [
-      "誘導強化", el("small", null, "来訪少 × 消費多"),
+      "誘導強化", el("small", null, "来訪少 × 消費/滞在価値高"),
     ]));
     board.appendChild(el("div", { class: "quad-label tr" }, [
-      "維持・単価向上", el("small", null, "来訪多 × 消費多"),
+      "維持・単価向上", el("small", null, "来訪多 × 消費/滞在価値高"),
     ]));
     board.appendChild(el("div", { class: "quad-label bl" }, [
-      "優先度 低", el("small", null, "来訪少 × 消費少"),
+      "優先度低", el("small", null, "来訪少 × 消費/滞在価値低"),
     ]));
     board.appendChild(el("div", { class: "quad-label br" }, [
-      "最優先改善", el("small", null, "来訪多 × 消費少"),
+      "最優先改善", el("small", null, "来訪多 × 消費/滞在価値低"),
     ]));
 
     SPEND_AREAS.forEach((a) => {
@@ -1433,7 +1995,7 @@
       const dot = el("div", {
         class: "matrix-dot " + a.cls,
         style: `left:${left}%;bottom:${bottom}%;`,
-        title: `${a.name} / 来訪 ${a.v} × 消費 ${a.s}`,
+        title: `${a.name} / 来訪 ${a.v} × 消費・滞在価値 ${a.s}` + (a.note ? ` — ${a.note}` : ""),
       }, [
         el("div", { class: "dot-bubble" }, a.label),
         el("div", { class: "dot-name" }, a.name),
@@ -1743,11 +2305,20 @@
   function renderInitiativeOverviewTab(it, detail) {
     const wrap = el("div", { class: "tab-pane" });
 
+    wrap.appendChild(drawerSection("対象エリア", el("p", { class: "drawer-text" }, it.area)));
+    wrap.appendChild(drawerSection("対象セグメント", el("p", { class: "drawer-text" }, it.segment || "Web/App・予約・閲覧ログに基づく動的セグメント（条件は配信設定タブで確認）")));
+    if (detail && detail.delivery && detail.delivery.channels) {
+      wrap.appendChild(drawerSection("配信チャネル", chipList(detail.delivery.channels, "kpi")));
+    }
     wrap.appendChild(drawerSection("判断理由", el("p", { class: "drawer-text" }, it.reason)));
     wrap.appendChild(drawerSection("期待効果", el("p", { class: "drawer-text drawer-text-strong" }, it.effect)));
     wrap.appendChild(drawerSection("必要な実施内容", el("p", { class: "drawer-text" }, it.task)));
     wrap.appendChild(drawerSection("成功指標", chipList(it.kpis, "kpi")));
     wrap.appendChild(drawerSection("関連する分析指標", chipList(detail.related, "obs")));
+    const nextStr = detail.measurement && detail.measurement.nextDecision
+      ? "効果測定の見立て: " + detail.measurement.nextDecision + "。詳細は効果測定タブを参照。"
+      : "実施計画の未完了項目を進め、配信条件と素材を確定してください。";
+    wrap.appendChild(drawerSection("次にやること", el("p", { class: "drawer-text" }, nextStr)));
 
     return wrap;
   }
@@ -2503,17 +3074,17 @@
     const wrap = el("div", { class: "ref-matrix" });
 
     // y-axis label outside board
-    wrap.appendChild(el("div", { class: "ref-axis-y-label" }, "↑ 消費指数（高）"));
+    wrap.appendChild(el("div", { class: "ref-axis-y-label" }, "↑ 消費・滞在価値指数（高）"));
 
     const board = el("div", { class: "ref-matrix-board" });
     board.appendChild(el("div", { class: "ref-axis-x-label" }, "来訪指数（高） →"));
 
     // quadrant captions (left-top, right-top, left-bottom, right-bottom)
     const captions = [
-      { cls: "q-tl", title: "誘導強化",       note: "来訪少 × 消費多" },
-      { cls: "q-tr", title: "維持・単価向上", note: "来訪多 × 消費多" },
-      { cls: "q-bl", title: "優先度低",       note: "来訪少 × 消費少" },
-      { cls: "q-br", title: "最優先改善",     note: "来訪多 × 消費少" },
+      { cls: "q-tl", title: "誘導強化",       note: "来訪少 × 消費/滞在価値高" },
+      { cls: "q-tr", title: "維持・単価向上", note: "来訪多 × 消費/滞在価値高" },
+      { cls: "q-bl", title: "優先度低",       note: "来訪少 × 消費/滞在価値低" },
+      { cls: "q-br", title: "最優先改善",     note: "来訪多 × 消費/滞在価値低" },
     ];
     captions.forEach((c) => {
       const cap = el("div", { class: "ref-quadrant " + c.cls });
@@ -2702,7 +3273,7 @@
 
   // ----- Filter response (demo) -----
   function applyReferralFilter(area) {
-    const v = REFERRAL_FILTER_VARIANTS[area] || REFERRAL_FILTER_VARIANTS["hakone"];
+    const v = REFERRAL_FILTER_VARIANTS[area] || REFERRAL_FILTER_VARIANTS["all"];
 
     // update KPIs (without breaking sparkline visuals — just values)
     const map = {
@@ -2775,6 +3346,7 @@
     initiatives: "施策管理",
     impact: "効果測定",
     report: "レポート",
+    "segment-insight": "上位客層インサイト",
   };
 
   function bindNav() {
@@ -2889,9 +3461,13 @@
     bindSegTabs();
     bindFilters();
 
+    const areaSel0 = document.querySelector("select[data-filter='area']");
+    if (areaSel0) applyReferralFilter(areaSel0.value);
+
     // Dashboard
     renderAlertBar();
     renderKpis();
+    renderMarketSignalsDash();
     renderPriorityAreas();
     renderRecommendedActions();
     renderTrendChart();
@@ -2901,6 +3477,8 @@
     renderAreaTable();
     renderAreaJudgment();
     renderSegmentTable();
+
+    renderSegmentInsight();
 
     // Flow
     renderFlowKpis();
