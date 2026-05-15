@@ -3475,3 +3475,241 @@ button, select, input { -webkit-tap-highlight-color: transparent; }
     animation-duration: 0.01ms !important;
   }
 }
+
+/* ==========================================================
+   AREA MAP
+   ========================================================== */
+:root {
+  --map-orange: #c0621a;
+  --map-orange-bg: #fdeee4;
+}
+
+.amap-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .amap-layout { grid-template-columns: 1fr; }
+}
+
+/* SVG canvas */
+.amap-svg-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.amap-svg {
+  display: block;
+  width: 100%;
+  min-width: 480px;
+  height: auto;
+}
+
+/* Edges */
+.amap-edge {
+  stroke-width: 1.8;
+  fill: none;
+  opacity: 0.55;
+}
+.amap-edge-main    { stroke: var(--navy-300); }
+.amap-edge-branch  { stroke: var(--border-strong); }
+.amap-edge-connect { stroke: var(--border-strong); stroke-dasharray: 4 3; }
+
+/* Animated flow dashes */
+.amap-flow-dash {
+  fill: none;
+  stroke-width: 2.4;
+  stroke-dasharray: 6 14;
+  opacity: 0.35;
+  animation: amap-flow 2.4s linear infinite;
+}
+.amap-flow-main    { stroke: var(--navy-500); }
+.amap-flow-connect { stroke: var(--navy-300); animation-duration: 3.2s; }
+@keyframes amap-flow {
+  to { stroke-dashoffset: -20; }
+}
+
+/* Pulse rings */
+.amap-pulse {
+  fill: none;
+  stroke-width: 1.5;
+  opacity: 0;
+  animation: amap-pulse 2.8s ease-out infinite;
+}
+.amap-pulse-critical { stroke: var(--red); animation-duration: 2.2s; }
+.amap-pulse-high     { stroke: var(--map-orange); }
+@keyframes amap-pulse {
+  0%   { opacity: 0.45; r: attr(r); }
+  70%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Node circles */
+.amap-node {
+  stroke-width: 2;
+  transition: filter 0.15s, stroke-width 0.12s;
+}
+.amap-node-low      { fill: var(--green-bg);      stroke: var(--green);      }
+.amap-node-medium   { fill: var(--gold-bg);        stroke: var(--gold);       }
+.amap-node-high     { fill: var(--map-orange-bg);  stroke: var(--map-orange); }
+.amap-node-critical { fill: var(--red-bg);         stroke: var(--red);        }
+.amap-node.amap-selected { stroke-width: 3.5; filter: drop-shadow(0 0 5px rgba(11,28,46,0.18)); }
+
+/* Layer tints (opacity overlay via fill-opacity tweak) */
+.amap-layer-visit   { fill-opacity: 0.92; }
+.amap-layer-flow    { fill-opacity: 0.75; }
+.amap-layer-spend   { fill-opacity: 0.75; }
+.amap-layer-hva     { fill-opacity: 0.75; }
+
+/* Hit area */
+.amap-hit {
+  fill: transparent;
+  cursor: pointer;
+}
+.amap-hit:hover ~ .amap-node,
+.amap-hit:focus ~ .amap-node { stroke-width: 3; }
+
+/* Labels */
+.amap-label {
+  font-family: var(--font-ui), sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--ink-2);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Tooltip */
+.amap-tooltip {
+  position: absolute;
+  z-index: 9999;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  box-shadow: 0 4px 16px rgba(11,28,46,0.12);
+  padding: 10px 12px;
+  min-width: 200px;
+  max-width: 260px;
+  pointer-events: none;
+}
+.amap-tt-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-1);
+  margin-bottom: 6px;
+}
+.amap-tt-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+.amap-tt-row span:first-child { color: var(--ink-4); }
+.amap-tt-rec {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--ink-3);
+  line-height: 1.5;
+  border-top: 1px solid var(--border-soft);
+  padding-top: 6px;
+}
+
+/* Detail card */
+.amap-detail {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 14px;
+  min-height: 200px;
+}
+.amap-detail-inner {}
+.amap-detail-empty {
+  font-size: 12px;
+  color: var(--ink-5);
+  text-align: center;
+  margin-top: 48px;
+}
+.amap-detail-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-1);
+  margin-bottom: 10px;
+}
+.amap-detail-dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 10px;
+  row-gap: 4px;
+  margin: 0 0 10px;
+}
+.amap-detail-dl dt {
+  font-size: 11px;
+  color: var(--ink-4);
+  font-weight: 600;
+  white-space: nowrap;
+  line-height: 1.55;
+}
+.amap-detail-dl dd {
+  font-size: 12px;
+  color: var(--ink-1);
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.55;
+}
+.amap-detail-rec-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--ink-4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.amap-detail-rec {
+  font-size: 12px;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+
+/* Legend */
+.amap-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-soft);
+}
+.amap-leg-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.amap-leg-dot {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border-width: 1.5px;
+  border-style: solid;
+  flex-shrink: 0;
+}
+.amap-leg-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.amap-leg-note {
+  margin-left: auto;
+  font-size: 10.5px;
+  color: var(--ink-5);
+}
+
+/* Table row highlight from map click */
+#area-table tbody tr.amap-row-highlight {
+  background: var(--blue-bg);
+}
+#area-table tbody tr.amap-row-highlight td { color: var(--navy-800); }

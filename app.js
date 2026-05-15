@@ -280,6 +280,100 @@
     { seg: "シニア層",          visit: 48, spend: 40, visitAbs: "推定 6.5万人/週", spendAbs: "参考 推定レンジ 4.1〜5.3億円/週", hint: "平日午前帯の滞留が多い" },
   ];
 
+  // ----- Area Map (広域エリア概況マップ) -----
+  // ノードの座標は概略レイアウト用（px, SVG viewBox 800×460 基準）
+  const MAP_NODES = [
+    {
+      id: "shinjuku", name: "新宿", x: 48, y: 200,
+      weeklyVisitors: 248000, visitorIndex: 100, congestion: "medium",
+      valueDemandIndex: 42, category: "gateway",
+      recommendation: "全エリアへの出発点。旅前コンテンツと予約導線の起点として機能。",
+    },
+    {
+      id: "enoshima", name: "片瀬江ノ島\n江ノ島・湘南", nameShort: "江ノ島", x: 60, y: 330,
+      weeklyVisitors: 128000, visitorIndex: 72, congestion: "high",
+      valueDemandIndex: 58, category: "shonan",
+      recommendation: "旅前の立ち寄りと広域周遊を組み合わせた案内を強化。",
+    },
+    {
+      id: "odawara", name: "小田原", x: 230, y: 200,
+      weeklyVisitors: 114000, visitorIndex: 61, congestion: "medium",
+      valueDemandIndex: 50, category: "connector",
+      recommendation: "短時間消費導線と熱海・伊豆方面の連携導線案内を検討。",
+    },
+    {
+      id: "yumoto", name: "箱根湯本", x: 340, y: 170,
+      weeklyVisitors: 186000, visitorIndex: 92, congestion: "critical",
+      valueDemandIndex: 48, category: "hakone",
+      recommendation: "荷物・待ち時間・乗換前消費の改善を優先。",
+    },
+    {
+      id: "gora", name: "強羅", x: 430, y: 140,
+      weeklyVisitors: 68000, visitorIndex: 58, congestion: "medium",
+      valueDemandIndex: 55, category: "hakone",
+      recommendation: "体験・飲食・短時間滞在プランを強化。",
+    },
+    {
+      id: "owakudani", name: "大涌谷", x: 510, y: 100,
+      weeklyVisitors: 142000, visitorIndex: 88, congestion: "high",
+      valueDemandIndex: 62, category: "hakone",
+      recommendation: "時間帯シフトと代替ルート案内を検討。",
+    },
+    {
+      id: "atami", name: "熱海", x: 320, y: 290,
+      weeklyVisitors: 94000, visitorIndex: 86, congestion: "high",
+      valueDemandIndex: 82, category: "izu",
+      recommendation: "宿泊・食体験への事前案内を強化。",
+    },
+    {
+      id: "ito", name: "伊東", x: 430, y: 330,
+      weeklyVisitors: 58000, visitorIndex: 54, congestion: "medium",
+      valueDemandIndex: 79, category: "izu",
+      recommendation: "温泉・海鮮・文化施設の半日導線を提案。",
+    },
+    {
+      id: "shuzenji", name: "修善寺", x: 390, y: 400,
+      weeklyVisitors: 31000, visitorIndex: 42, congestion: "low",
+      valueDemandIndex: 76, category: "izu",
+      recommendation: "静かな温泉滞在・文化体験を訴求。",
+    },
+    {
+      id: "izukogen", name: "伊豆高原", x: 530, y: 360,
+      weeklyVisitors: 34000, visitorIndex: 44, congestion: "medium",
+      valueDemandIndex: 78, category: "izu",
+      recommendation: "自然・アート・宿泊滞在を組み合わせる周遊候補を提示。",
+    },
+    {
+      id: "shimoda", name: "下田", x: 620, y: 400,
+      weeklyVisitors: 21000, visitorIndex: 32, congestion: "low",
+      valueDemandIndex: 72, category: "izu",
+      recommendation: "海・歴史・長期滞在導線を強化。",
+    },
+  ];
+  const MAP_EDGES = [
+    { from: "shinjuku",  to: "odawara",   type: "main" },
+    { from: "shinjuku",  to: "enoshima",  type: "branch" },
+    { from: "odawara",   to: "yumoto",    type: "main" },
+    { from: "yumoto",    to: "gora",      type: "main" },
+    { from: "gora",      to: "owakudani", type: "main" },
+    { from: "odawara",   to: "atami",     type: "connect" },
+    { from: "atami",     to: "ito",       type: "connect" },
+    { from: "atami",     to: "shuzenji",  type: "connect" },
+    { from: "ito",       to: "izukogen",  type: "connect" },
+    { from: "izukogen",  to: "shimoda",   type: "connect" },
+  ];
+  // 各レイヤーでノードの参照指標とカラーを決定（AREAS配列と名寄せ）
+  function mapNodeArea(n) {
+    var key = n.nameShort || n.name.split("\n")[0];
+    return AREAS.find(function(a) { return a.name === key; }) || null;
+  }
+  const MAP_LAYERS = {
+    visit: { label: "来訪",           barCls: "b-red",   getVal: function(n) { return n.visitorIndex; } },
+    flow:  { label: "回遊",           barCls: "b-gold",  getVal: function(n) { var a = mapNodeArea(n); return a ? a.flow : (n.visitorIndex * 0.6 | 0); } },
+    spend: { label: "消費/利用",      barCls: "b-green", getVal: function(n) { var a = mapNodeArea(n); return a ? a.spend : (n.visitorIndex * 0.45 | 0); } },
+    hva:   { label: "高付加価値需要", barCls: "b-gold",  getVal: function(n) { return n.valueDemandIndex; } },
+  };
+
   // ----- Flow Analysis -----
   const FLOW_KPIS = [
     {
@@ -2025,6 +2119,285 @@
     const contentList = el("ol", { class: "segment-content-list" });
     SEGMENT_CONTENT_IDEAS.forEach((c) => contentList.appendChild(el("li", null, c)));
     mount("segment-content", contentList);
+  }
+
+  // ========================================================
+  // AREA MAP
+  // ========================================================
+  var _mapActiveLayer = "visit";
+  var _mapSelectedNode = null;
+
+  function renderAreaMap() {
+    var host = document.getElementById("area-map-wrap");
+    if (!host) return;
+    host.innerHTML = "";
+
+    // --- outer card is in HTML, inner layout here ---
+    var layout = el("div", { class: "amap-layout" });
+
+    // --- SVG canvas ---
+    var svgWrap = el("div", { class: "amap-svg-wrap" });
+    var VW = 760, VH = 430;
+    var ns = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(ns, "svg");
+    svg.setAttribute("viewBox", "0 0 " + VW + " " + VH);
+    svg.setAttribute("class", "amap-svg");
+    svg.setAttribute("aria-hidden", "true");
+
+    // defs: animated gradient for flow lines + pulse
+    var defs = document.createElementNS(ns, "defs");
+
+    // flow dash animation marker
+    ["main","branch","connect"].forEach(function(t) {
+      var mk = document.createElementNS(ns, "marker");
+      mk.setAttribute("id", "arrow-" + t);
+      mk.setAttribute("markerWidth", "6"); mk.setAttribute("markerHeight", "6");
+      mk.setAttribute("refX", "5"); mk.setAttribute("refY", "3");
+      mk.setAttribute("orient", "auto");
+      var poly = document.createElementNS(ns, "polygon");
+      poly.setAttribute("points", "0 0, 6 3, 0 6");
+      poly.setAttribute("fill", t === "main" ? "var(--navy-300)" : "var(--border-strong)");
+      mk.appendChild(poly);
+      defs.appendChild(mk);
+    });
+    svg.appendChild(defs);
+
+    // edges
+    MAP_EDGES.forEach(function(e) {
+      var from = MAP_NODES.find(function(n){ return n.id === e.from; });
+      var to   = MAP_NODES.find(function(n){ return n.id === e.to; });
+      if (!from || !to) return;
+      var line = document.createElementNS(ns, "line");
+      line.setAttribute("x1", from.x * VW / 800); line.setAttribute("y1", from.y * VH / 460);
+      line.setAttribute("x2", to.x   * VW / 800); line.setAttribute("y2", to.y   * VH / 460);
+      line.setAttribute("class", "amap-edge amap-edge-" + e.type);
+      line.setAttribute("marker-end", "url(#arrow-" + e.type + ")");
+      svg.appendChild(line);
+
+      // flow stream (animated dash on main lines)
+      if (e.type === "main" || e.type === "connect") {
+        var flow = document.createElementNS(ns, "line");
+        flow.setAttribute("x1", from.x * VW / 800); flow.setAttribute("y1", from.y * VH / 460);
+        flow.setAttribute("x2", to.x   * VW / 800); flow.setAttribute("y2", to.y   * VH / 460);
+        flow.setAttribute("class", "amap-flow-dash amap-flow-" + e.type);
+        svg.appendChild(flow);
+      }
+    });
+
+    // nodes
+    MAP_NODES.forEach(function(n) {
+      var cx = n.x * VW / 800;
+      var cy = n.y * VH / 460;
+      var r = nodeRadius(n);
+      var cc = congestionColor(n.congestion);
+
+      // pulse ring for critical/high
+      if (n.congestion === "critical" || n.congestion === "high") {
+        var pulse = document.createElementNS(ns, "circle");
+        pulse.setAttribute("cx", cx); pulse.setAttribute("cy", cy);
+        pulse.setAttribute("r", r + 5);
+        pulse.setAttribute("class", "amap-pulse amap-pulse-" + n.congestion);
+        svg.appendChild(pulse);
+      }
+
+      // node circle
+      var circle = document.createElementNS(ns, "circle");
+      circle.setAttribute("cx", cx); circle.setAttribute("cy", cy);
+      circle.setAttribute("r", r);
+      circle.setAttribute("class", "amap-node amap-node-" + n.congestion);
+      circle.setAttribute("data-id", n.id);
+      svg.appendChild(circle);
+
+      // label
+      var label = document.createElementNS(ns, "text");
+      label.setAttribute("x", cx);
+      var lines = (n.nameShort || n.name).split("\n");
+      label.setAttribute("y", cy + r + 13);
+      label.setAttribute("class", "amap-label");
+      label.setAttribute("text-anchor", "middle");
+      label.textContent = lines[0];
+      svg.appendChild(label);
+    });
+
+    // interaction layer (transparent circles for hit area)
+    MAP_NODES.forEach(function(n) {
+      var cx = n.x * VW / 800;
+      var cy = n.y * VH / 460;
+      var r = nodeRadius(n) + 6;
+      var hit = document.createElementNS(ns, "circle");
+      hit.setAttribute("cx", cx); hit.setAttribute("cy", cy);
+      hit.setAttribute("r", r);
+      hit.setAttribute("class", "amap-hit");
+      hit.setAttribute("data-id", n.id);
+      hit.setAttribute("tabindex", "0");
+      hit.setAttribute("role", "button");
+      hit.setAttribute("aria-label", n.name);
+      hit.addEventListener("mouseenter", function() { showMapTooltip(n, hit, svg); });
+      hit.addEventListener("mouseleave", hideMapTooltip);
+      hit.addEventListener("focus",      function() { showMapTooltip(n, hit, svg); });
+      hit.addEventListener("blur",       hideMapTooltip);
+      hit.addEventListener("click",      function() { selectMapNode(n.id); });
+      hit.addEventListener("keydown",    function(ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); selectMapNode(n.id); } });
+      svg.appendChild(hit);
+    });
+
+    svgWrap.appendChild(svg);
+    layout.appendChild(svgWrap);
+
+    // --- detail card ---
+    var detail = el("div", { class: "amap-detail", id: "amap-detail" });
+    detail.appendChild(buildMapDetailCard(null));
+    layout.appendChild(detail);
+
+    host.appendChild(layout);
+
+    // --- legend ---
+    var legend = el("div", { class: "amap-legend" });
+    var legendItems = [
+      { cls: "low",      label: "低" },
+      { cls: "medium",   label: "中" },
+      { cls: "high",     label: "高" },
+      { cls: "critical", label: "最優先" },
+    ];
+    legendItems.forEach(function(li) {
+      var item = el("span", { class: "amap-leg-item" });
+      item.appendChild(el("span", { class: "amap-leg-dot amap-node-" + li.cls }));
+      item.appendChild(el("span", { class: "amap-leg-label" }, li.label));
+      legend.appendChild(item);
+    });
+    legend.appendChild(el("span", { class: "amap-leg-note" }, "概略マップ / デモデータ"));
+    host.appendChild(legend);
+
+    // apply initial layer colours
+    applyMapLayer(_mapActiveLayer);
+  }
+
+  function nodeRadius(n) {
+    if (n.weeklyVisitors >= 180000) return 22;
+    if (n.weeklyVisitors >= 100000) return 18;
+    if (n.weeklyVisitors >= 60000)  return 15;
+    if (n.weeklyVisitors >= 30000)  return 12;
+    return 10;
+  }
+
+  function congestionColor(c) {
+    return { critical: "var(--red)", high: "var(--map-orange)", medium: "var(--gold)", low: "var(--green)" }[c] || "var(--ink-4)";
+  }
+
+  function applyMapLayer(layerKey) {
+    _mapActiveLayer = layerKey;
+    var host = document.getElementById("area-map-wrap");
+    if (!host) return;
+    var svg = host.querySelector(".amap-svg");
+    if (!svg) return;
+
+    MAP_NODES.forEach(function(n) {
+      var circle = svg.querySelector(".amap-node[data-id='" + n.id + "']");
+      if (!circle) return;
+      // Remove old layer classes
+      ["visit","flow","spend","hva"].forEach(function(l){ circle.classList.remove("amap-layer-" + l); });
+      circle.classList.add("amap-layer-" + layerKey);
+    });
+
+    // Update layer tabs UI
+    var host2 = document.getElementById("area-map-card");
+    if (!host2) return;
+    host2.querySelectorAll(".amap-tab").forEach(function(btn) {
+      btn.classList.toggle("active", btn.dataset.layer === layerKey);
+    });
+  }
+
+  function selectMapNode(nodeId) {
+    _mapSelectedNode = nodeId;
+    var host = document.getElementById("area-map-wrap");
+    if (!host) return;
+    var svg = host.querySelector(".amap-svg");
+    if (svg) {
+      svg.querySelectorAll(".amap-node").forEach(function(c) {
+        c.classList.toggle("amap-selected", c.dataset.id === nodeId);
+      });
+    }
+    var n = MAP_NODES.find(function(x){ return x.id === nodeId; });
+    var detail = document.getElementById("amap-detail");
+    if (detail && n) {
+      detail.innerHTML = "";
+      detail.appendChild(buildMapDetailCard(n));
+    }
+    // highlight table row
+    var tableRows = document.querySelectorAll("#area-table tbody tr");
+    var shortName = n ? (n.nameShort || n.name.split("\n")[0]) : "";
+    tableRows.forEach(function(row) {
+      var nameCell = row.querySelector(".td-strong");
+      var match = nameCell && nameCell.textContent.trim() === shortName;
+      row.classList.toggle("amap-row-highlight", match);
+    });
+  }
+
+  function buildMapDetailCard(n) {
+    var wrap = el("div", { class: "amap-detail-inner" });
+    if (!n) {
+      wrap.appendChild(el("p", { class: "amap-detail-empty" }, "ノードをクリックするとエリア詳細を表示します"));
+      return wrap;
+    }
+    var congMap = { critical: "最優先", high: "高", medium: "中", low: "低" };
+    wrap.appendChild(el("div", { class: "amap-detail-name" }, n.nameShort || n.name.split("\n")[0]));
+
+    var rows = [
+      { label: "推定来訪者数", value: formatVisitors(n.weeklyVisitors) + " / 週" },
+      { label: "来訪指数",     value: n.visitorIndex + " / 100" },
+      { label: "混雑傾向",     value: congMap[n.congestion] || n.congestion },
+      { label: "高付加価値需要", value: n.valueDemandIndex + " / 100" },
+    ];
+    var dl = el("dl", { class: "amap-detail-dl" });
+    rows.forEach(function(row) {
+      dl.appendChild(el("dt", null, row.label));
+      dl.appendChild(el("dd", null, row.value));
+    });
+    wrap.appendChild(dl);
+    wrap.appendChild(el("div", { class: "amap-detail-rec-label" }, "推奨判断"));
+    wrap.appendChild(el("div", { class: "amap-detail-rec" }, n.recommendation));
+    return wrap;
+  }
+
+  function formatVisitors(v) {
+    if (v >= 10000) return (v / 10000).toFixed(1) + "万人";
+    return v.toLocaleString() + "人";
+  }
+
+  var _mapTooltipEl = null;
+  function showMapTooltip(n, el2, svg) {
+    hideMapTooltip();
+    var congMap = { critical: "最優先", high: "高", medium: "中", low: "低" };
+    var tt = document.createElement("div");
+    tt.className = "amap-tooltip";
+    tt.innerHTML =
+      "<div class='amap-tt-name'>" + (n.nameShort || n.name.replace("\n", " ")) + "</div>" +
+      "<div class='amap-tt-row'><span>推定来訪者数</span><span>" + formatVisitors(n.weeklyVisitors) + "/週</span></div>" +
+      "<div class='amap-tt-row'><span>来訪指数</span><span>" + n.visitorIndex + "</span></div>" +
+      "<div class='amap-tt-row'><span>混雑傾向</span><span>" + (congMap[n.congestion]||n.congestion) + "</span></div>" +
+      "<div class='amap-tt-row'><span>高付加価値需要</span><span>" + n.valueDemandIndex + "</span></div>" +
+      "<div class='amap-tt-rec'>" + n.recommendation + "</div>";
+    document.body.appendChild(tt);
+    _mapTooltipEl = tt;
+    var rect = el2.closest("svg").getBoundingClientRect();
+    var svgEl = el2.closest("svg");
+    var svgRect = svgEl.getBoundingClientRect();
+    var cx = parseFloat(el2.getAttribute("cx"));
+    var cy = parseFloat(el2.getAttribute("cy"));
+    var vb = svgEl.viewBox.baseVal;
+    var scaleX = svgRect.width  / vb.width;
+    var scaleY = svgRect.height / vb.height;
+    var px = svgRect.left + cx * scaleX + window.scrollX;
+    var py = svgRect.top  + cy * scaleY + window.scrollY - 8;
+    tt.style.left = px + "px";
+    tt.style.top  = (py - tt.offsetHeight - 4) + "px";
+    // reposition after render
+    requestAnimationFrame(function() {
+      tt.style.top = (py - tt.offsetHeight - 4) + "px";
+    });
+  }
+  function hideMapTooltip() {
+    if (_mapTooltipEl) { _mapTooltipEl.remove(); _mapTooltipEl = null; }
   }
 
   // ========================================================
@@ -3791,7 +4164,13 @@
     renderTrendChart();
     renderComposition();
 
+    // Area map layer tabs
+    document.querySelectorAll(".amap-tab").forEach(function(btn) {
+      btn.addEventListener("click", function() { applyMapLayer(btn.dataset.layer); });
+    });
+
     // Area
+    renderAreaMap();
     renderAreaTable();
     renderAreaJudgment();
     renderSegmentTable();

@@ -200,7 +200,7 @@
       </nav>
 
       <div class="sidebar-user">
-        <div class="user-avatar">小田</div>
+        <div class="user-avatar">後藤</div>
         <div class="user-meta">
           <div class="user-name">後藤 孝</div>
           <div class="user-role">ビジネスデザインユニット / Cellmuller</div>
@@ -371,6 +371,25 @@
         <section id="area" class="view hidden">
           <div class="page-intro">
             <p>箱根・湘南・伊豆など接続観光地を含め、来訪・回遊・消費・高付加価値需要を指数と推定規模で比較し、次に取るべき判断を確認します。</p>
+          </div>
+
+          <!-- 広域エリア概況マップ -->
+          <div class="card" id="area-map-card">
+            <header class="card-header">
+              <div>
+                <h2 class="card-title">広域エリア概況マップ</h2>
+                <p class="card-sub">小田急沿線・接続観光地の来訪集中と送客候補を概略表示</p>
+              </div>
+              <div class="header-tools">
+                <div class="seg-tabs sm amap-tabs" role="tablist">
+                  <button class="seg-tab amap-tab active" data-layer="visit">来訪</button>
+                  <button class="seg-tab amap-tab" data-layer="flow">回遊</button>
+                  <button class="seg-tab amap-tab" data-layer="spend">消費/利用</button>
+                  <button class="seg-tab amap-tab" data-layer="hva">高付加価値需要</button>
+                </div>
+              </div>
+            </header>
+            <div id="area-map-wrap"></div>
           </div>
 
           <div class="card">
