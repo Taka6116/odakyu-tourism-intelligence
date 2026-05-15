@@ -12,7 +12,7 @@
 
   // ----- Dashboard -----
   const ALERT = {
-    title: "伊豆エリアで高付加価値需要シグナルが上昇",
+    title: "伊豆エリアで高付加価値需要が増加傾向",
     text: "週末のロマンスカー予約・Web閲覧から、熱海・伊東方面への事前案内を推奨。雨予報日は屋内・温泉導線を優先して検討してください。",
     action: "対応を確認",
   };
@@ -21,73 +21,78 @@
     {
       key: "wide-referral",
       label: "広域送客余地",
-      value: 81, denom: "/ 100",
-      delta: { dir: "up", text: "+5 pt", sub: "前週比" },
       icon: "i-map", iconColor: "t-navy",
-      decision: "<strong>判断:</strong> 接続観光地への送客・周遊を伸ばせる余地。広域の案内・クーポン配信の優先度付けに使います。",
-      spark: [68, 70, 72, 74, 76, 78, 81],
+      primaryBadge: "推定",
+      primaryMain: "42,800",
+      primaryUnit: "人 / 週",
+      indexLine: "指数 81　前週比 +5pt",
+      caption: "接続観光地へ誘導可能な来訪者の推定規模（乗降・予約・Web/Appから推計）。",
     },
     {
       key: "hva-signal",
-      label: "高付加価値需要シグナル",
-      value: 74, denom: "/ 100",
-      delta: { dir: "up", text: "+6 pt", sub: "前週比" },
+      label: "高付加価値需要",
       icon: "i-chart", iconColor: "t-green",
-      decision: "<strong>判断:</strong> 滞在・体験単価の向上余地が示唆される関心の強さ（集計シグナル）。上位客層向け施策候補の検討に使います。",
-      spark: [58, 60, 62, 65, 68, 71, 74],
+      primaryMain: "8,400",
+      primaryUnit: "件 / 週",
+      indexLine: "指数 74　前週比 +6pt",
+      caption: "宿泊・体験・食・温泉関連の閲覧／予約イベント（Web/App・予約ログから集計したデモ値）。",
     },
     {
       key: "spend-loss",
       label: "消費機会ロス",
-      value: "中高",
-      delta: { dir: "up", text: "やや拡大", sub: "前月比" },
       icon: "i-yen", iconColor: "t-red",
-      decision: "<strong>判断:</strong> 来訪規模に対し購買・施設利用が弱いエリア。案内・クーポン・荷物預かり等の検討に使います。",
-      spark: [42, 44, 46, 48, 50, 52, 54],
+      primaryBadge: "推定",
+      primaryMain: "中高",
+      primaryUnit: "",
+      referenceLine: "参考: 900万〜1,300万円 / 週（推定レンジ）",
+      indexLine: "前月比 やや拡大",
+      caption: "来訪に対して施設利用・予約への転換が弱いと推定される余地。換算は参考値です。",
     },
     {
       key: "underflow",
       label: "回遊不足エリア",
-      value: 5, denom: "エリア",
-      delta: { dir: "up", text: "+1", sub: "前月比" },
       icon: "i-flow", iconColor: "t-gold",
-      decision: "<strong>判断:</strong> 来訪はあるが周辺回遊が弱い接続観光地の数。連携導線・周遊候補の見直しに使います。",
-      spark: [3, 3, 4, 4, 4, 5, 5],
+      primaryMain: "5",
+      primaryUnit: "エリア / 対象12エリア中",
+      indexLine: "指数 72",
+      caption: "来訪はあるが周辺回遊が弱いエリア数。",
     },
     {
       key: "impact",
       label: "施策効果",
-      value: "改善傾向",
-      delta: { dir: "up", text: "+7 pt", sub: "効果指数" },
       icon: "i-target", iconColor: "t-navy",
-      decision: "<strong>判断:</strong> 実施中施策の反応の変化を確認。継続・改善・停止の判断材料に使います。",
-      spark: [52, 54, 56, 58, 61, 64, 68],
+      primaryMain: "12件中8件",
+      primaryUnit: "で反応改善（実測）",
+      referenceLine: "参考（推定レンジ）: 付加売上効果 +9〜15% / 月",
+      indexLine: "指数 68　効果指数 +7pt",
+      caption: "実施中施策に紐づくクリック・予約の変化。効果の裏付けや保証を意味するものではありません。",
     },
     {
       key: "izu-referral",
       label: "伊豆送客候補",
-      value: 6, denom: "導線",
-      delta: { dir: "up", text: "+2", sub: "前週比" },
       icon: "i-broadcast", iconColor: "t-blue",
-      decision: "<strong>判断:</strong> 小田原・熱海接続など、伊豆方面への周遊候補が検出された件数。広域送客の打ち手優先に使います。",
-      spark: [3, 3, 4, 4, 5, 5, 6],
+      primaryMain: "6",
+      primaryUnit: "導線",
+      secondaryAbsolute: "推定接触者 18,000人 / 週",
+      indexLine: "前週比 +2導線",
+      caption: "伊豆方面への周遊候補として検出された導線数。配信・表示のユニーク接触者の推定。",
     },
   ];
 
-  const MARKET_SIGNALS_DASH = [
+  const MARKET_TRENDS_DASH = [
     { label: "訪日市場", text: "台湾・韓国市場の検索関心が前月比 +12%（想定集計）" },
     { label: "天候", text: "週末は雨予報のため、屋内・温泉・宿泊体験導線の訴求を優先検討" },
-    { label: "宿泊需要", text: "伊豆方面の宿泊検索・予約関連シグナルが上昇傾向" },
-    { label: "検索関心", text: "「伊豆 温泉 旅館」「熱海 海鮮」クエリの関心指数が上昇" },
+    { label: "宿泊需要", text: "伊豆方面の宿泊検索・予約関連で、需要が増加傾向" },
+    { label: "検索関心", text: "「伊豆 温泉 旅館」「熱海 海鮮」クエリの関心が上昇" },
     { label: "イベント", text: "大型連休前後は湘南・箱根の事前閲覧が先行 — 旅前メールの枠を確保" },
   ];
 
   const PRIORITY_AREAS = [
-    { rank: 1, name: "熱海", judge: "来訪は高く宿泊・食体験への事前案内を強化する余地。", score: 88, scoreBar: "b-red", priority: "high", priorityLabel: "最優先" },
-    { rank: 2, name: "箱根湯本", judge: "ゲートウェイとして来訪が大きく、消費転換と広域接続の両面で要対応。", score: 86, scoreBar: "b-red", priority: "high", priorityLabel: "高" },
-    { rank: 3, name: "伊東", judge: "滞在価値シグナルが高く、送客強化・半日導線の設計余地。", score: 79, scoreBar: "b-gold", priority: "high", priorityLabel: "高" },
-    { rank: 4, name: "江ノ島", judge: "湘南エリアの立ち寄り需要。箱根・伊豆との周遊候補として訴求余地。", score: 71, scoreBar: "b-gold", priority: "medium", priorityLabel: "中" },
-    { rank: 5, name: "修善寺", judge: "静かな温泉滞在・文化体験志向に合う高付加価値需要シグナル。", score: 64, scoreBar: "b-green", priority: "medium", priorityLabel: "中" },
+    { rank: 1, name: "熱海", judge: "来訪は高く宿泊・食体験への事前案内を強化する余地。", score: 88, scoreBar: "b-red", priority: "high", priorityLabel: "最優先", scale: "推定対象 9.4万人 / 週" },
+    { rank: 2, name: "箱根湯本", judge: "ゲートウェイとして来訪が大きく、消費転換と広域接続の両面で要対応。", score: 86, scoreBar: "b-red", priority: "high", priorityLabel: "高", scale: "推定対象 18.6万人 / 週" },
+    { rank: 3, name: "伊東", judge: "滞在価値指数が高く、送客強化・半日導線の設計余地。", score: 79, scoreBar: "b-gold", priority: "high", priorityLabel: "高", scale: "推定対象 4.9万人 / 週" },
+    { rank: 4, name: "江ノ島", judge: "湘南エリアの立ち寄り需要。箱根・伊豆との周遊候補として訴求余地。", score: 71, scoreBar: "b-gold", priority: "medium", priorityLabel: "中", scale: "推定対象 12.8万人 / 週" },
+    { rank: 5, name: "修善寺", judge: "静かな温泉滞在・文化体験志向に合う高付加価値需要の兆し。", score: 64, scoreBar: "b-green", priority: "medium", priorityLabel: "中", scale: "推定対象 2.6万人 / 週" },
   ];
 
   const RECOMMENDED_ACTIONS = [
@@ -131,22 +136,22 @@
 
   // ----- 上位客層インサイト（セグメント画面） -----
   const SEGMENT_INSIGHT_KPIS = [
-    { key: "hva-sig", label: "高付加価値需要シグナル", value: 74, denom: "/ 100", delta: { dir: "up", text: "+6 pt", sub: "前週比" }, icon: "i-chart", iconColor: "t-green", decision: "<strong>判断:</strong> 滞在・体験単価の向上余地が示唆される関心の強さ（集計シグナル）。", spark: [58, 60, 64, 66, 69, 72, 74] },
-    { key: "focus-n", label: "注目エリア", value: 5, denom: "件", delta: { dir: "up", text: "+1", sub: "前月比" }, icon: "i-pin", iconColor: "t-navy", decision: "<strong>判断:</strong> 伊豆・湘南・箱根の接続観光地でシグナルが相対的に高い地点。", spark: [3, 3, 4, 4, 4, 5, 5] },
-    { key: "themes", label: "関心テーマ密度", value: 68, denom: "/ 100", delta: { dir: "flat", text: "±0", sub: "前週比" }, icon: "i-ticket", iconColor: "t-gold", decision: "<strong>判断:</strong> 温泉・食・文化・自然などの関心カテゴリが複合して現れている度合い。", spark: [64, 65, 66, 67, 67, 68, 68] },
-    { key: "touch", label: "推奨タッチポイント", value: 7, denom: "経路", delta: { dir: "up", text: "+1", sub: "前月比" }, icon: "i-broadcast", iconColor: "t-blue", decision: "<strong>判断:</strong> 旅前〜現地まで一貫して訴求を載せられる接点候補。", spark: [5, 5, 6, 6, 6, 7, 7] },
+    { key: "hva-sig", label: "高付加価値需要", icon: "i-chart", iconColor: "t-green", primaryMain: "6,700", primaryUnit: "件 / 週（関連行動）", indexLine: "指数 74　前週比 +6pt", caption: "滞在・体験単価の向上余地が示唆される関心の強さを、指数化した補助指標です。" },
+    { key: "focus-n", label: "注目エリア", icon: "i-pin", iconColor: "t-navy", primaryMain: "5", primaryUnit: "エリア", indexLine: "関心度 上位 / 前月比 +1", caption: "伊豆・湘南・箱根の接続観光地で、需要の兆しが相対的に強い地点。" },
+    { key: "themes", label: "関心テーマ密度", icon: "i-ticket", iconColor: "t-gold", primaryMain: "182,000", primaryUnit: "ページビュー / 週", indexLine: "指数 68　前週比 ±0pt", caption: "温泉・食・文化・自然など、関心カテゴリが重なって現れる度合い（Web/App集計のデモ）。" },
+    { key: "touch", label: "推奨タッチポイント", icon: "i-broadcast", iconColor: "t-blue", primaryMain: "7", primaryUnit: "経路", secondaryAbsolute: "推定到達 24万人 / 週（リーチ重複あり）", indexLine: "前月比 +1経路", caption: "旅前〜現地まで一貫して訴求を載せられる接点候補。" },
   ];
   const SEGMENT_FOCUS_AREAS = [
-    { name: "熱海", score: 86, note: "宿泊・食体験ページへの遷移が増加。旅前案内の強化余地。" },
-    { name: "伊東", score: 81, note: "海鮮・温泉・文化施設の複合関心。半日周遊の設計余地。" },
-    { name: "修善寺", score: 74, note: "静穏志向・文化体験の関心が相対的に高い。" },
-    { name: "伊豆高原", score: 72, note: "自然・アート・宿泊の組み合わせ関心。" },
-    { name: "下田", score: 66, note: "海・歴史テーマの閲覧が長期滞在文脈で増加。" },
+    { name: "熱海", score: 86, note: "宿泊・食体験ページへの遷移が増加。旅前案内の強化余地。", abs: "関連行動 推定 1,240件/週" },
+    { name: "伊東", score: 81, note: "海鮮・温泉・文化施設の複合関心。半日周遊の設計余地。", abs: "関連行動 推定 980件/週" },
+    { name: "修善寺", score: 74, note: "静穏志向・文化体験の関心が相対的に高い。", abs: "関連行動 推定 620件/週" },
+    { name: "伊豆高原", score: 72, note: "自然・アート・宿泊の組み合わせ関心。", abs: "関連行動 推定 710件/週" },
+    { name: "下田", score: 66, note: "海・歴史テーマの閲覧が長期滞在文脈で増加。", abs: "関連行動 推定 540件/週" },
   ];
-  const SEGMENT_MARKET_SIGNALS = [
+  const SEGMENT_MARKET_TRENDS = [
     { label: "訪日市場", text: "台湾・韓国市場の検索関心が前月比 +12%（想定集計）" },
-    { label: "宿泊需要", text: "伊豆方面の宿泊検索・予約関連シグナルが上昇傾向" },
-    { label: "検索関心", text: "「伊豆 温泉 旅館」「熱海 海鮮」の関心指数が上昇" },
+    { label: "宿泊需要", text: "伊豆方面の宿泊検索・予約関連で、需要が増加傾向" },
+    { label: "検索関心", text: "「伊豆 温泉 旅館」「熱海 海鮮」の関心が上昇" },
     { label: "天候", text: "週末は雨予報のため屋内・温泉導線の訴求を優先検討" },
   ];
   const SEGMENT_THEMES = [
@@ -179,6 +184,7 @@
     {
       name: "箱根湯本", sub: "ゲートウェイ / 鉄道・バス",
       visit: 92, flow: 58, spend: 34, hva: 48, crowd: "高",
+      ev: "推定 18.6万人/週", ef: "推定 10.8万人/週", sr: "参考 推定レンジ 4.2〜5.9億円/週", ha: "関連行動 1,180件/週", pt: "対象規模 推定 18.6万人/週",
       priority: "high", priorityLabel: "最優先",
       state: "来訪は多いが消費転換と広域接続の両面で課題",
       decision: "荷物・待ち時間・乗換前消費の改善と、接続観光地への周遊案内を優先",
@@ -186,6 +192,7 @@
     {
       name: "大涌谷", sub: "王道観光 / 観光ピーク",
       visit: 88, flow: 81, spend: 61, hva: 62, crowd: "高",
+      ev: "推定 14.2万人/週", ef: "推定 11.5万人/週", sr: "参考 推定レンジ 5.6〜7.1億円/週", ha: "関連行動 920件/週", pt: "対象規模 推定 14.2万人/週",
       priority: "medium", priorityLabel: "中",
       state: "ピーク時の集中度が高く、混雑による満足度低下リスク",
       decision: "時間帯シフトと接続観光地への分散周遊候補を併記して案内",
@@ -193,6 +200,7 @@
     {
       name: "強羅", sub: "中継・宿泊エリア",
       visit: 58, flow: 65, spend: 30, hva: 55, crowd: "中",
+      ev: "推定 6.8万人/週", ef: "推定 4.4万人/週", sr: "参考 推定レンジ 1.6〜2.2億円/週", ha: "関連行動 640件/週", pt: "対象規模 推定 6.8万人/週",
       priority: "high", priorityLabel: "高",
       state: "回遊余地があるが施設利用が弱い",
       decision: "体験・飲食・短時間滞在プランを強化",
@@ -200,6 +208,7 @@
     {
       name: "仙石原", sub: "観光・自然散策",
       visit: 36, flow: 48, spend: 68, hva: 70, crowd: "低",
+      ev: "推定 3.1万人/週", ef: "推定 1.5万人/週", sr: "参考 推定レンジ 0.9〜1.3億円/週", ha: "関連行動 510件/週", pt: "対象規模 推定 3.1万人/週",
       priority: "low", priorityLabel: "低",
       state: "来訪は少ないが消費効率が高い",
       decision: "王道ルート混雑時の代替誘導先として強化",
@@ -207,6 +216,7 @@
     {
       name: "小田原", sub: "乗換 / 沿線玄関口",
       visit: 61, flow: 52, spend: 44, hva: 50, crowd: "中",
+      ev: "推定 11.4万人/週", ef: "推定 5.9万人/週", sr: "参考 推定レンジ 2.1〜2.9億円/週", ha: "関連行動 780件/週", pt: "対象規模 推定 11.4万人/週",
       priority: "medium", priorityLabel: "中",
       state: "広域周遊の接続点として滞留と街区消費の両立が課題",
       decision: "短時間消費導線と、熱海・伊豆方面の連携導線案内を検討",
@@ -214,6 +224,7 @@
     {
       name: "江ノ島", sub: "湘南 / 海沿いレジャー",
       visit: 72, flow: 54, spend: 48, hva: 58, crowd: "高",
+      ev: "推定 12.8万人/週", ef: "推定 6.9万人/週", sr: "参考 推定レンジ 2.8〜3.6億円/週", ha: "関連行動 860件/週", pt: "対象規模 推定 12.8万人/週",
       priority: "medium", priorityLabel: "中",
       state: "立ち寄り需要が強く、箱根・伊豆との周遊候補として訴求余地",
       decision: "旅前の立ち寄りと広域周遊を組み合わせた案内を強化",
@@ -221,6 +232,7 @@
     {
       name: "熱海", sub: "温泉街・宿泊 / 接続観光地",
       visit: 86, flow: 62, spend: 52, hva: 82, crowd: "高",
+      ev: "推定 9.4万人/週", ef: "推定 5.8万人/週", sr: "参考 推定レンジ 3.4〜4.5億円/週", ha: "関連行動 1,240件/週", pt: "対象規模 推定 9.4万人/週",
       priority: "high", priorityLabel: "最優先",
       state: "来訪は高く、宿泊・食体験への事前案内強化の余地",
       decision: "宿泊・食体験への事前案内を強化",
@@ -228,20 +240,23 @@
     {
       name: "伊東", sub: "温泉・海鮮・文化 / 伊豆東岸",
       visit: 54, flow: 48, spend: 58, hva: 79, crowd: "中",
+      ev: "推定 4.9万人/週", ef: "推定 2.3万人/週", sr: "参考 推定レンジ 1.4〜1.9億円/週", ha: "関連行動 980件/週", pt: "対象規模 推定 4.9万人/週",
       priority: "high", priorityLabel: "高",
-      state: "滞在価値シグナルが高く、送客強化と半日導線の設計余地",
+      state: "滞在価値指数が高く、送客強化と半日導線の設計余地",
       decision: "温泉・海鮮・文化施設の半日導線を設計",
     },
     {
       name: "修善寺", sub: "温泉・文化 / 伊豆中部",
       visit: 38, flow: 42, spend: 44, hva: 76, crowd: "低",
+      ev: "推定 2.6万人/週", ef: "推定 1.1万人/週", sr: "参考 推定レンジ 0.6〜0.9億円/週", ha: "関連行動 620件/週", pt: "対象規模 推定 2.6万人/週",
       priority: "medium", priorityLabel: "中",
-      state: "静かな温泉滞在・文化体験志向に合う高付加価値需要シグナル",
+      state: "静かな温泉滞在・文化体験志向に合う高付加価値需要の兆し",
       decision: "静かな温泉滞在・文化体験を訴求",
     },
     {
       name: "伊豆高原", sub: "自然・アート・宿泊",
       visit: 44, flow: 50, spend: 52, hva: 78, crowd: "中",
+      ev: "推定 3.4万人/週", ef: "推定 1.7万人/週", sr: "参考 推定レンジ 0.9〜1.2億円/週", ha: "関連行動 710件/週", pt: "対象規模 推定 3.4万人/週",
       priority: "medium", priorityLabel: "中",
       state: "自然・アート・宿泊の組み合わせ関心が強い",
       decision: "自然・アート・宿泊滞在を組み合わせる周遊候補を提示",
@@ -249,6 +264,7 @@
     {
       name: "下田", sub: "海・歴史 / 伊豆南端",
       visit: 32, flow: 36, spend: 46, hva: 72, crowd: "低",
+      ev: "推定 2.1万人/週", ef: "推定 0.8万人/週", sr: "参考 推定レンジ 0.5〜0.7億円/週", ha: "関連行動 540件/週", pt: "対象規模 推定 2.1万人/週",
       priority: "medium", priorityLabel: "中",
       state: "遠方エリアのため単発誘導より長期滞在テーマとの相性が高い",
       decision: "海・歴史・長期滞在導線を強化",
@@ -256,19 +272,42 @@
   ];
 
   const SEGMENTS = [
-    { seg: "上位客層向け需要シグナル", visit: 62, spend: 71, hint: "温泉・食・文化の複合関心。旅前メールと宿泊連携の余地" },
-    { seg: "国内 ファミリー",  visit: 78, spend: 52, hint: "週末・10〜14時に集中" },
-    { seg: "国内 カップル",    visit: 65, spend: 58, hint: "体験・飲食・宿泊の単価向上余地が相対的に大きい" },
-    { seg: "インバウンド 英語", visit: 42, spend: 64, hint: "Web閲覧から現地周遊までの導線を補強" },
-    { seg: "インバウンド 繁体字", visit: 38, spend: 55, hint: "湘南・箱根・伊豆の周遊候補の訴求余地" },
-    { seg: "シニア層",          visit: 48, spend: 40, hint: "平日午前帯の滞留が多い" },
+    { seg: "上位客層の関心", visit: 62, spend: 71, visitAbs: "推定 4.2万人/週", spendAbs: "参考 推定レンジ 7.1〜9.2億円/週", hint: "温泉・食・文化の複合関心。旅前メールと宿泊連携の余地" },
+    { seg: "国内 ファミリー",  visit: 78, spend: 52, visitAbs: "推定 28.6万人/週", spendAbs: "参考 推定レンジ 18〜24億円/週", hint: "週末・10〜14時に集中" },
+    { seg: "国内 カップル",    visit: 65, spend: 58, visitAbs: "推定 11.2万人/週", spendAbs: "参考 推定レンジ 9.4〜12億円/週", hint: "体験・飲食・宿泊の単価向上余地が相対的に大きい" },
+    { seg: "インバウンド 英語", visit: 42, spend: 64, visitAbs: "推定 3.8万人/週", spendAbs: "参考 推定レンジ 5.2〜6.8億円/週", hint: "Web閲覧から現地周遊までの導線を補強" },
+    { seg: "インバウンド 繁体字", visit: 38, spend: 55, visitAbs: "推定 3.1万人/週", spendAbs: "参考 推定レンジ 3.9〜5.1億円/週", hint: "湘南・箱根・伊豆の周遊候補の訴求余地" },
+    { seg: "シニア層",          visit: 48, spend: 40, visitAbs: "推定 6.5万人/週", spendAbs: "参考 推定レンジ 4.1〜5.3億円/週", hint: "平日午前帯の滞留が多い" },
   ];
 
   // ----- Flow Analysis -----
   const FLOW_KPIS = [
-    { label: "主要導線の集中度", value: 69, denom: "/ 100", decision: "分散周遊・連携導線の必要性を判断", icon: "i-target", iconColor: "t-navy", delta: { dir: "up", text: "+3 pt" }, spark: [58, 60, 62, 64, 66, 68, 69] },
-    { label: "周遊分散指数",     value: 41, denom: "/ 100", decision: "接続観光地への送客余地を判断",     icon: "i-flow",   iconColor: "t-green", delta: { dir: "up", text: "+2 pt" }, spark: [34, 35, 36, 37, 39, 40, 41] },
-    { label: "天候影響度",       value: "中", denom: "",   decision: "天候連動施策の優先度を判断", icon: "i-cloud-rain", iconColor: "t-gold", delta: { dir: "flat", text: "横ばい" }, spark: [3,3,3,3,3,3,3] },
+    {
+      label: "主要導線の集中度",
+      icon: "i-target", iconColor: "t-navy",
+      primaryMain: "182,000",
+      primaryUnit: "セッション / 週",
+      secondaryAbsolute: "実測: 周遊モデル閲覧（Web/App・合算）",
+      indexLine: "指数 69　前週比 +3pt",
+      caption: "同一モデルコース閲覧に集中している度合い。分散案内の要否を補助します。",
+    },
+    {
+      label: "周遊分散（副次エリア）",
+      icon: "i-flow", iconColor: "t-green",
+      primaryBadge: "推定",
+      primaryMain: "67,000",
+      primaryUnit: "人 / 週",
+      indexLine: "指数 41　前週比 +2pt",
+      caption: "接続観光地の副次スポットへ移動したと推定される人数（乗降・トラフィックから推計）。",
+    },
+    {
+      label: "天候連動の反応",
+      icon: "i-cloud-rain", iconColor: "t-gold",
+      primaryMain: "+4,200",
+      primaryUnit: "クリック / 週（雨天時・屋内LP）",
+      indexLine: "影響度 中　前週比 ±0",
+      caption: "降水確率しきい値超過日の、屋内・温泉系LPへの追加クリック（ログ実測のデモ）。",
+    },
   ];
 
   const ROUTE_FLOW = {
@@ -317,27 +356,27 @@
   // ----- Spend Matrix data (positions in matrix) -----
   // x: 来訪指数, y: 消費・滞在価値指数（0–100）; bottom 座標でプロット
   const SPEND_AREAS = [
-    { name: "箱根湯本", v: 92, s: 34, cls: "priority-a", label: "箱湯", note: "来訪多・消費転換に課題" },
-    { name: "熱海",     v: 86, s: 52, cls: "priority-c", label: "熱海", note: "来訪多・宿泊/食体験の伸び余地" },
-    { name: "大涌谷",   v: 88, s: 61, cls: "priority-c", label: "大涌", note: "維持しつつ単価・分散周遊を検討" },
-    { name: "伊東",     v: 52, s: 76, cls: "priority-b", label: "伊東", note: "滞在価値高・送客強化候補" },
-    { name: "修善寺",   v: 38, s: 80, cls: "priority-b", label: "修善", note: "高付加価値体験候補" },
-    { name: "伊豆高原", v: 44, s: 78, cls: "priority-b", label: "伊高", note: "自然・アート滞在候補" },
-    { name: "下田",     v: 30, s: 74, cls: "priority-b", label: "下田", note: "長期滞在候補" },
-    { name: "江ノ島",   v: 70, s: 50, cls: "priority-c", label: "江ノ", note: "立ち寄りと周遊の接続余地" },
+    { name: "箱根湯本", v: 92, s: 34, cls: "priority-a", label: "箱湯", note: "来訪多・消費転換に課題", est: "推定来訪 18.6万人/週" },
+    { name: "熱海",     v: 86, s: 52, cls: "priority-c", label: "熱海", note: "来訪多・宿泊/食体験の伸び余地", est: "推定来訪 9.4万人/週" },
+    { name: "大涌谷",   v: 88, s: 61, cls: "priority-c", label: "大涌", note: "維持しつつ単価・分散周遊を検討", est: "推定来訪 14.2万人/週" },
+    { name: "伊東",     v: 52, s: 76, cls: "priority-b", label: "伊東", note: "滞在価値高・送客強化候補", est: "推定来訪 4.9万人/週" },
+    { name: "修善寺",   v: 38, s: 80, cls: "priority-b", label: "修善", note: "高付加価値体験候補", est: "推定来訪 2.6万人/週" },
+    { name: "伊豆高原", v: 44, s: 78, cls: "priority-b", label: "伊高", note: "自然・アート滞在候補", est: "推定来訪 3.4万人/週" },
+    { name: "下田",     v: 30, s: 74, cls: "priority-b", label: "下田", note: "長期滞在候補", est: "推定来訪 2.1万人/週" },
+    { name: "江ノ島",   v: 70, s: 50, cls: "priority-c", label: "江ノ", note: "立ち寄りと周遊の接続余地", est: "推定来訪 12.8万人/週" },
   ];
 
   const SPEND_LOSS = [
-    { area: "箱根湯本", visit: 92, spend: 34, gap: -58, hint: "乗換前消費と広域周遊案内の両面で改善余地" },
-    { area: "強羅",     visit: 58, spend: 30, gap: -28, hint: "体験・飲食・半日導線の設計余地" },
-    { area: "江ノ島",   visit: 72, spend: 48, gap: -24, hint: "箱根・伊豆周遊との接続訴求を強化" },
-    { area: "小田原",   visit: 61, spend: 44, gap: -17, hint: "接続観光地への送客タイミングの最適化" },
+    { area: "箱根湯本", visit: 92, spend: 34, gap: -58, estVisit: "推定 18.6万人/週", estUse: "施設・提携 利用 推定 38万件/週", refLoss: "参考 推定レンジ 2,600〜3,400万円/週", hint: "乗換前消費と広域周遊案内の両面で改善余地" },
+    { area: "強羅",     visit: 58, spend: 30, gap: -28, estVisit: "推定 6.8万人/週", estUse: "施設・提携 利用 推定 11万件/週", refLoss: "参考 推定レンジ 820〜1,100万円/週", hint: "体験・飲食・半日導線の設計余地" },
+    { area: "江ノ島",   visit: 72, spend: 48, gap: -24, estVisit: "推定 12.8万人/週", estUse: "施設・提携 利用 推定 24万件/週", refLoss: "参考 推定レンジ 1,100〜1,450万円/週", hint: "箱根・伊豆周遊との接続訴求を強化" },
+    { area: "小田原",   visit: 61, spend: 44, gap: -17, estVisit: "推定 11.4万人/週", estUse: "施設・提携 利用 推定 19万件/週", refLoss: "参考 推定レンジ 740〜980万円/週", hint: "接続観光地への送客タイミングの最適化" },
   ];
 
   const SPEND_EFF = [
-    { area: "伊東",   visit: 54, spend: 76, eff: "+22", hint: "送客強化・半日モデルコースの訴求余地" },
-    { area: "修善寺", visit: 38, spend: 80, eff: "+42", hint: "静穏・文化体験の上位客層向け施策候補" },
-    { area: "仙石原", visit: 36, spend: 68, eff: "+32", hint: "混雑時の分散周遊先として有効" },
+    { area: "伊東",   visit: 54, spend: 76, eff: "+22", estVisit: "推定 4.9万人/週", estUse: "施設利用 推定 14万件/週", refSpend: "参考 推定レンジ 1.9〜2.5億円/週", hint: "送客強化・半日モデルコースの訴求余地" },
+    { area: "修善寺", visit: 38, spend: 80, eff: "+42", estVisit: "推定 2.6万人/週", estUse: "施設利用 推定 7.8万件/週", refSpend: "参考 推定レンジ 0.9〜1.2億円/週", hint: "静穏・文化体験の上位客層向け施策候補" },
+    { area: "仙石原", visit: 36, spend: 68, eff: "+32", estVisit: "推定 3.1万人/週", estUse: "施設利用 推定 8.2万件/週", refSpend: "参考 推定レンジ 0.7〜0.95億円/週", hint: "混雑時の分散周遊先として有効" },
   ];
 
   // ----- Initiatives -----
@@ -368,11 +407,11 @@
       status: "running", statusLabel: "実施中",
       priority: "p-high", priorityLabel: "優先度 高",
       area: "箱根湯本",
-      reason: "来訪は多いが消費転換が弱く、乗換前の摩擦が要因候補のため。",
-      effect: "湯本周辺の消費転換 +6 pt",
+      reason: "来訪は多いが、施設利用・クーポンへの転換が相対的に低く、乗換前の摩擦が要因候補のため。",
+      effect: "湯本周辺の施設利用・予約転換 +6 pt",
       task: "提携店舗の食べ歩きパス、荷物預かり拠点の拡充、案内マップ更新",
-      kpis: ["食べ歩きパス利用率", "湯本周辺購買指数"],
-      meta: [["t-red", "消費転換"], ["t-navy", "対象 / 箱根湯本"]],
+      kpis: ["食べ歩きパス利用率", "湯本周辺施設利用・予約指数"],
+      meta: [["t-red", "送客転換"], ["t-navy", "対象 / 箱根湯本"]],
     },
     {
       id: "i03",
@@ -404,10 +443,10 @@
       status: "review", statusLabel: "要確認",
       priority: "p-med", priorityLabel: "優先度 中",
       area: "強羅",
-      reason: "移動はあるが消費が弱く、体験素材の有効性を確認したいため。",
-      effect: "強羅周辺消費 +5 pt",
-      task: "体験予約クーポン2案を14日比較。利用率と消費影響を確認。",
-      kpis: ["クーポン利用率", "強羅周辺購買指数"],
+      reason: "移動はあるが、体験・飲食予約への転換が弱く、体験素材の有効性を確認したいため。",
+      effect: "強羅周辺の施設利用・予約転換 +5 pt",
+      task: "体験予約クーポン2案を14日比較。利用率と周辺施設利用・予約指数の変化を確認。",
+      kpis: ["クーポン利用率", "強羅周辺施設利用・予約指数"],
       meta: [["t-gold", "要確認"], ["t-blue", "比較検証"]],
     },
     {
@@ -465,7 +504,7 @@
       priority: "p-high", priorityLabel: "優先度 高",
       area: "熱海",
       segment: "ロマンスカー予約済みで温泉・飲食カテゴリの閲覧が高い層",
-      reason: "ロマンスカー予約後の閲覧で温泉・飲食ページへの関心が高いシグナルが継続しているため。",
+      reason: "ロマンスカー予約後の閲覧で温泉・飲食ページへの関心が高い状態が続いているため。",
       effect: "予約後ページ閲覧率・宿泊/飲食送客率の改善",
       task: "予約後メール・Web/App・駅サイネージで旅前モデルコースと予約導線を提示",
       kpis: ["予約後ページ閲覧率", "宿泊/飲食送客率"],
@@ -478,7 +517,7 @@
       priority: "p-high", priorityLabel: "優先度 高",
       area: "伊東",
       segment: "日帰り〜2泊の国内旅行者、海鮮・温泉の閲覧が重なる層",
-      reason: "日帰り〜短期滞在層向けに、半日で回れる体験導線の不足シグナルがあるため。",
+      reason: "日帰り〜短期滞在層向けに、半日で回れる体験導線の不足が見られるため。",
       effect: "施設利用率・回遊指数・消費指数の改善",
       task: "半日モデルコースのマップ化、QR・観光案内との連動",
       kpis: ["施設利用率", "回遊指数", "消費指数"],
@@ -491,7 +530,7 @@
       priority: "p-med", priorityLabel: "優先度 中",
       area: "修善寺",
       segment: "静穏・文化体験カテゴリの閲覧が高い層、海外向けLP流入",
-      reason: "静穏志向・文化体験志向に合う高付加価値需要シグナルが相対的に高いため。",
+      reason: "静穏志向・文化体験志向に合う高付加価値需要の兆しが相対的に高いため。",
       effect: "滞在時間・体験予約率・宿泊送客率の改善",
       task: "海外向けLP・宿泊施設連携パンフレットで滞在型プランを訴求",
       kpis: ["滞在時間", "体験予約率", "宿泊送客率"],
@@ -517,7 +556,7 @@
       priority: "p-med", priorityLabel: "優先度 中",
       area: "下田",
       segment: "歴史・海関連の検索と3泊以上プラン閲覧が重なる層",
-      reason: "遠方エリアのため単発誘導より長期滞在テーマとの相性が高いシグナルのため。",
+      reason: "遠方エリアのため単発誘導より長期滞在テーマとの相性が高い傾向のため。",
       effect: "滞在日数・周遊導線利用率の改善",
       task: "旅前メール・海外向け記事で3泊以上モデルと接続周遊を提示",
       kpis: ["滞在日数", "周遊導線利用率"],
@@ -537,6 +576,158 @@
       meta: [["t-blue", "湘南"], ["t-gold", "広域周遊"]],
     },
   ];
+
+  // 概要タブ「判断根拠」「関連データ」用（デモ）。実装時はAPI/集計定義に差し替え。
+  const DEFAULT_INIT_RELATED_SOURCES = [
+    "鉄道/バス乗降データ",
+    "フリーパス利用データ",
+    "Web/App閲覧ログ",
+    "QR読み取りログ",
+    "クーポン利用データ",
+    "提携施設/体験予約データ",
+  ];
+  const INITIATIVE_DATA_PIPELINE_STEPS = [
+    "交通利用データ",
+    "エリア/時間帯集計",
+    "Web/App閲覧・予約遷移",
+    "提携施設利用/クーポン利用",
+    "施策候補",
+  ];
+  const INITIATIVE_DATA_BLEND_ROWS = [
+    { item: "移動量", source: "鉄道/バス乗降、フリーパス利用", looking: "対象エリアに人が来ているか" },
+    { item: "時間帯", source: "乗降時刻、予約時刻", looking: "いつ滞在しているか" },
+    { item: "関心", source: "Web/App閲覧、QR読み取り", looking: "何に興味を持っているか" },
+    { item: "利用/予約", source: "施設利用、クーポン、体験予約", looking: "実際の利用につながっているか" },
+    { item: "ギャップ", source: "来訪数と利用/予約率の差分", looking: "送客施策の余地があるか" },
+  ];
+  const INITIATIVE_OVERVIEW_EVIDENCE = {
+    i01: {
+      basis: [
+        { label: "来訪", value: "箱根湯本・強羅 推定流入 24.8万人/週（乗降・フリーパス併算・デモ）" },
+        { label: "天候連動", value: "降水確率60%超の日 屋外モデルコース閲覧 −18%（前週比）" },
+        { label: "屋内関心", value: "屋内温泉・美術館カテゴリ 閲覧 8,600件/週" },
+        { label: "予約/利用", value: "雨天時 提携施設・体験予約遷移 5.2%（エリア平均比 −2.1pt）" },
+        { label: "ギャップ", value: "駅周辺セッションは多いが、屋内施設への予約転換が伸びにくい" },
+      ],
+    },
+    i02: {
+      basis: [
+        { label: "来訪", value: "箱根湯本エリア 推定流入 18.6万人/週" },
+        { label: "時間帯", value: "11:00〜16:00 に乗降・滞留が集中（駅改札・フリーパス照会から集計）" },
+        { label: "関心", value: "商店街・食べ歩きLP 閲覧 5,400件/週" },
+        { label: "利用/予約", value: "提携飲食・体験の予約クリック 4.1%" },
+        { label: "ギャップ", value: "来訪に対して施設利用・予約への転換が相対的に低い" },
+      ],
+    },
+    i03: {
+      basis: [
+        { label: "集中度", value: "王道ルート集中度 72/100（週末ピーク帯・デモ）" },
+        { label: "来訪", value: "大涌谷周辺 推定 8,900人/週（同一時間帯）" },
+        { label: "代替関心", value: "仙石原・強羅方面LP 閲覧 +12%（混雑案内表示後セッション）" },
+        { label: "遷移", value: "代替先バス・体験の予約クリック 2.8%" },
+        { label: "ギャップ", value: "混雑時に誘導余地があるが、代替先到達・予約までの転換が限定的" },
+      ],
+    },
+    i04: {
+      basis: [
+        { label: "来訪", value: "仙石原エリア 推定流入 3,600人/週" },
+        { label: "施設利用・予約", value: "周辺施設利用・予約指数 64/100（エリア内比で高水準）" },
+        { label: "関心", value: "自然散策・美術カテゴリ 閲覧 2,100件/週" },
+        { label: "誘導", value: "王道集中時の代替LP CTR 12%（案内表示後・デモ）" },
+        { label: "ギャップ", value: "来訪規模は限定的だが利用効率が高く、送客の伸長余地がある" },
+      ],
+    },
+    i05: {
+      basis: [
+        { label: "推定流入", value: "強羅周辺 12,400人/週" },
+        { label: "ピーク時間帯", value: "11:00〜17:00に集中（乗降・滞留の集計デモ）" },
+        { label: "Web/App関心", value: "工芸体験・飲食ページ閲覧 3,200件/週" },
+        { label: "予約/利用", value: "提携施設予約率 6.8%（体験・飲食合算）" },
+        { label: "ギャップ", value: "来訪に対して予約転換が低い" },
+      ],
+    },
+    i06: {
+      basis: [
+        { label: "乗換セッション", value: "待ち時間15〜30分相当の行動セッション 推定 4,200件/週" },
+        { label: "時間帯", value: "16:00〜20:00 に駅周辺乗降・フリーパス照会がピーク" },
+        { label: "関心", value: "改札外提携店・街区マップページ閲覧 1,800件/週" },
+        { label: "利用/クーポン", value: "提携店クーポン利用率 9.3%（改札外着地セッション比）" },
+        { label: "ギャップ", value: "待ち時間がある一方で街区流入・予約クリックは限定的" },
+      ],
+    },
+    i07: {
+      basis: [
+        { label: "閲覧", value: "英語・繁体字LPの閲覧比率 34%（エリア来訪推計との差が大きい層あり・デモ）" },
+        { label: "関心", value: "多言語モデルコースの平均閲覧時間 +40秒（日本語ページ比）" },
+        { label: "予約遷移", value: "外国語経路からの体験・施設予約クリック 3.1%" },
+        { label: "ギャップ", value: "言語別の関心と、予約・クーポン取得までの転換にずれ" },
+      ],
+    },
+    i08: {
+      basis: [
+        { label: "滞留", value: "湯本商店街半径500m 推定滞留セッション 高水準帯（デモ）" },
+        { label: "関心", value: "ランチ・カフェカテゴリ 閲覧 2,600件/週" },
+        { label: "クーポン", value: "商店街連携クーポン利用率 11%" },
+        { label: "ギャップ", value: "短時間の回転は良いが提携網の引き上げ余地がある" },
+      ],
+    },
+    i09: {
+      basis: [
+        { label: "時間帯", value: "免税案内・対象店舗LP閲覧が 13:00〜15:00 に偏在" },
+        { label: "来訪", value: "対象エリアの週次流入はおおむね横ばい（乗降ベース・デモ）" },
+        { label: "店舗遷移", value: "免税掲載店への地図・予約遷移 6.4%" },
+        { label: "ギャップ", value: "閲覧はあるが時間帯によって店舗到達・予約が不均一" },
+      ],
+    },
+    i10: {
+      basis: [
+        { label: "予約後行動", value: "ロマンスカー予約完了後7日以内の温泉・飲食カテゴリ閲覧 2,900件/週" },
+        { label: "関心", value: "温泉宿泊パッケージ系ページの滞在が長め（セッション内・デモ）" },
+        { label: "予約/利用", value: "体験・宿泊予約への遷移 5.5%" },
+        { label: "ギャップ", value: "予約確定後の旅前タッチポイントでの整理が弱い" },
+      ],
+    },
+    i11: {
+      basis: [
+        { label: "来訪", value: "伊東エリア 推定流入 9,200人/週" },
+        { label: "関心", value: "海鮮・温泉カテゴリの複合閲覧 1,700件/週" },
+        { label: "導線", value: "半日モデルコース完走率（送信セッション比）42%（デモ）" },
+        { label: "ギャップ", value: "日帰り〜短期滞在で施設が散らばり利用・予約が分散しやすい" },
+      ],
+    },
+    i12: {
+      basis: [
+        { label: "関心", value: "静穏・文化体験カテゴリ 閲覧 1,400件/週" },
+        { label: "流入", value: "海外向けLPから体験詳細へ +9%（前月比・デモ）" },
+        { label: "予約", value: "文化体験・温泉施設の予約率 7.2%" },
+        { label: "ギャップ", value: "高付加価値需要の兆しに対し予約枠取り込みに余地" },
+      ],
+    },
+    i13: {
+      basis: [
+        { label: "関心", value: "自然・アート・宿泊の複合閲覧 980件/週" },
+        { label: "来訪", value: "伊豆高原周辺 推定 5,100人/週" },
+        { label: "予約", value: "1〜2泊プラン・体験バンドルのクリック 4.6%" },
+        { label: "ギャップ", value: "周遊候補提示が散在し、予約・クーポンへの遷移が分散しやすい" },
+      ],
+    },
+    i14: {
+      basis: [
+        { label: "検索・閲覧", value: "歴史・海関連キーワードと3泊以上プラン閲覧の重複セッションあり（デモ）" },
+        { label: "滞在", value: "平均滞在日数の伸長余地（周辺エリア比・デモ）" },
+        { label: "導線", value: "長期滞在モデルページ閲覧 640件/週" },
+        { label: "ギャップ", value: "遠方来訪に対し長期テーマの束ねが弱い" },
+      ],
+    },
+    i15: {
+      basis: [
+        { label: "遷移", value: "湘南閲覧後に箱根・伊豆ページへ遷移 1,200件/週" },
+        { label: "来訪", value: "湘南エリアのセッション規模は安定帯（デモ）" },
+        { label: "周遊", value: "広域チェックリスト・送客クリック 3.3%" },
+        { label: "ギャップ", value: "立ち寄り需要と箱根・伊豆方面の接続が弱い" },
+      ],
+    },
+  };
 
   // ----- Initiative Details (drawer 詳細) -----
   // 各施策の運用詳細データ。チェックリストの完了とステータス変更は localStorage に保存される。
@@ -623,7 +814,7 @@
           { label: "パス取得数",         current: 62, target: 70, unit: "指数",  change: "+22", judge: "改善傾向" },
           { label: "提携店利用率",       current: 41, target: 45, unit: "%",    change: "+7pt", judge: "改善傾向" },
           { label: "荷物預かり利用件数", current: 56, target: 60, unit: "指数",  change: "+18", judge: "改善傾向" },
-          { label: "湯本周辺購買指数",   current: 41, target: 42, unit: "/100", change: "+7",   judge: "改善傾向" },
+          { label: "湯本周辺施設利用・予約指数", current: 41, target: 42, unit: "/100", change: "+7",   judge: "改善傾向" },
           { label: "滞在時間",           current: 38, target: 40, unit: "分",   change: "+6",   judge: "要確認" },
         ],
         nextDecision: "改善傾向",
@@ -668,7 +859,7 @@
           { label: "代替先到達率",     current: 18, target: 25, unit: "%",    change: "—",   judge: "未実施" },
           { label: "王道集中度",       current: 72, target: 67, unit: "/100", change: "—",   judge: "未実施" },
           { label: "仙石原 来訪指数",  current: 36, target: 42, unit: "/100", change: "—",   judge: "未実施" },
-          { label: "代替先 消費指数",  current: 55, target: 58, unit: "/100", change: "—",   judge: "未実施" },
+          { label: "代替先 施設利用・予約指数", current: 55, target: 58, unit: "/100", change: "—", judge: "未実施" },
         ],
         nextDecision: "実施準備中",
       },
@@ -717,7 +908,7 @@
       },
     },
     i05: {
-      related: ["クーポン利用率", "強羅周辺購買指数", "比較検証データ"],
+      related: ["クーポン利用率", "強羅周辺施設利用・予約指数", "比較検証データ"],
       department: "箱根担当", owner: "中村 由衣",
       period: { start: "2026/04/01", end: "2026/04/30" },
       checklist: [
@@ -754,7 +945,7 @@
           { label: "クーポン取得数",     current: 52, target: 60, unit: "指数",  change: "+18", judge: "要確認" },
           { label: "クーポン利用率",     current: 14, target: 18, unit: "%",    change: "±0",   judge: "要確認" },
           { label: "予約クリック率",     current: 22, target: 25, unit: "%",    change: "+4pt", judge: "改善傾向" },
-          { label: "強羅周辺購買指数",   current: 42, target: 45, unit: "/100", change: "+2",   judge: "要確認" },
+          { label: "強羅周辺施設利用・予約指数", current: 42, target: 45, unit: "/100", change: "+2", judge: "要確認" },
         ],
         nextDecision: "要確認",
       },
@@ -931,7 +1122,7 @@
       },
     },
     i10: {
-      related: ["高付加価値需要シグナル", "予約後閲覧率", "宿泊需要"],
+      related: ["高付加価値需要", "予約後閲覧率", "宿泊需要"],
       department: "沿線事業部", owner: "佐藤 真理",
       period: { start: "2026/05/01", end: "2026/08/31" },
       checklist: [
@@ -995,7 +1186,7 @@
         areas: ["伊東"],
         times: ["週末 9:00〜15:00", "祝前日"],
         facilities: ["海鮮市場", "温泉", "文化施設"],
-        conditions: ["伊東エリアの閲覧・検索シグナルが高い来訪者"],
+        conditions: ["伊東エリアの閲覧・検索が高い来訪者"],
         materials: {
           title: "伊東・半日で楽しむ 海と温泉と文化",
           body: "三島・小田原からの接続例を併記し、周遊候補として選択しやすくします。",
@@ -1236,44 +1427,74 @@
 
   // ----- Referral Optimization (送客最適化) -----
   // KPI: stateTone は state-pill の色トーン用（high=red系, mid=gold系, ok=green系, neutral=navy系）
-  let REFERRAL_KPIS = [
-    {
-      label: "送客機会スコア",
-      value: 81, denom: "/ 100",
-      icon: "i-map", iconColor: "t-navy",
-      decision: "接続観光地への送客・周遊を伸ばせる余地を示します。",
-      delta: { dir: "up", text: "+5" },
-      spark: [64, 67, 70, 73, 76, 79, 81],
-    },
-    {
-      label: "消費機会ロス",
-      value: "中高", denom: "",
-      icon: "i-yen", iconColor: "t-red",
-      decision: "来訪はあるが購買・施設利用につながっていない状態です。",
-      delta: { dir: "flat", text: "横ばい" },
-      spark: [70, 72, 71, 73, 72, 73, 72],
-    },
-    {
-      label: "推奨施策",
-      value: 8, denom: "件",
-      icon: "i-ticket", iconColor: "t-gold",
-      decision: "優先的に検討すべき案内・クーポン施策です。",
-      delta: { dir: "up", text: "+2" },
-      spark: [4, 4, 5, 5, 6, 7, 8],
-    },
-    {
-      label: "実施中施策",
-      value: 4, denom: "件",
-      icon: "i-target", iconColor: "t-green",
-      decision: "現在配信・運用中の施策です。",
-      delta: { dir: "up", text: "+1" },
-      spark: [2, 2, 2, 3, 3, 4, 4],
-    },
-  ];
+
+  function fmtNum(n) {
+    return String(Math.round(Number(n))).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  /** エリアフィルタ用。数値はすべてデモ想定。 */
+  const REFERRAL_FILTER_VARIANTS = {
+    all:       { score: 81, scoreDelta: "+5pt", estWeeklyPeople: 42800, reachImpWeekly: 312000, lossTier: "中高", lossRefLow: 900, lossRefHigh: 1300, lossMoM: "やや拡大", rec: 8, run: 4 },
+    enoshima:  { score: 69, scoreDelta: "+3pt", estWeeklyPeople: 28300, reachImpWeekly: 198000, lossTier: "中",   lossRefLow: 620, lossRefHigh: 890, lossMoM: "横ばい", rec: 5, run: 2 },
+    hakone:    { score: 78, scoreDelta: "+4pt", estWeeklyPeople: 36400, reachImpWeekly: 276000, lossTier: "高",   lossRefLow: 840, lossRefHigh: 1240, lossMoM: "やや拡大", rec: 6, run: 3 },
+    odawara:   { score: 72, scoreDelta: "+2pt", estWeeklyPeople: 31200, reachImpWeekly: 241000, lossTier: "中",   lossRefLow: 580, lossRefHigh: 820, lossMoM: "横ばい", rec: 5, run: 2 },
+    atami:     { score: 84, scoreDelta: "+6pt", estWeeklyPeople: 39600, reachImpWeekly: 289000, lossTier: "中高", lossRefLow: 760, lossRefHigh: 1120, lossMoM: "やや拡大", rec: 7, run: 3 },
+    ito:       { score: 76, scoreDelta: "+4pt", estWeeklyPeople: 31800, reachImpWeekly: 224000, lossTier: "中",   lossRefLow: 540, lossRefHigh: 780, lossMoM: "横ばい", rec: 6, run: 2 },
+    shuzenji:  { score: 68, scoreDelta: "+1pt", estWeeklyPeople: 21400, reachImpWeekly: 168000, lossTier: "低",   lossRefLow: 380, lossRefHigh: 520, lossMoM: "横ばい", rec: 4, run: 1 },
+    izukogen:  { score: 71, scoreDelta: "+2pt", estWeeklyPeople: 24600, reachImpWeekly: 186000, lossTier: "中",   lossRefLow: 460, lossRefHigh: 640, lossMoM: "横ばい", rec: 5, run: 2 },
+    shimoda:   { score: 62, scoreDelta: "±0pt", estWeeklyPeople: 18200, reachImpWeekly: 134000, lossTier: "低",   lossRefLow: 310, lossRefHigh: 440, lossMoM: "横ばい", rec: 4, run: 1 },
+    "izu-all": { score: 80, scoreDelta: "+5pt", estWeeklyPeople: 40100, reachImpWeekly: 298000, lossTier: "中高", lossRefLow: 880, lossRefHigh: 1280, lossMoM: "やや拡大", rec: 9, run: 4 },
+  };
+
+  function buildReferralKpis(v) {
+    return [
+      {
+        label: "送客機会スコア",
+        icon: "i-map", iconColor: "t-navy",
+        primaryBadge: "推定",
+        primaryMain: fmtNum(v.estWeeklyPeople),
+        primaryUnit: "人 / 週",
+        secondaryAbsolute: "表示・配信の推定インプレ " + fmtNum(v.reachImpWeekly) + " 回/週（重複あり）",
+        indexLine: "指数 " + v.score + "　前週比 " + v.scoreDelta,
+        caption: "接続観光地へ周遊・送客余地があると推定される来訪者規模。乗降・予約・閲覧等から推計したデモ値です。",
+      },
+      {
+        label: "消費機会ロス",
+        icon: "i-yen", iconColor: "t-red",
+        primaryBadge: "推定",
+        primaryMain: v.lossTier,
+        primaryUnit: "",
+        referenceLine: "参考: " + fmtNum(v.lossRefLow) + "万〜" + fmtNum(v.lossRefHigh) + "万円 / 週（推定レンジ）",
+        indexLine: "前月比 " + v.lossMoM,
+        caption: "来訪に対して施設利用・予約への転換が弱いと推定される余地。金額は換算した参考値であり、断定ではありません。",
+      },
+      {
+        label: "推奨施策",
+        icon: "i-ticket", iconColor: "t-gold",
+        primaryMain: String(v.rec),
+        primaryUnit: "件",
+        secondaryAbsolute: "実測: 候補リストの登録件数（運用ツール）",
+        indexLine: "前週比 +2件",
+        caption: "優先的に検討する案内・クーポン施策の候補数。",
+      },
+      {
+        label: "実施中施策",
+        icon: "i-target", iconColor: "t-green",
+        primaryMain: String(v.run),
+        primaryUnit: "件",
+        secondaryAbsolute: "実測: 稼働フラグのある施策ID数",
+        indexLine: "前週比 +1件",
+        caption: "現在配信・運用中の施策数。",
+      },
+    ];
+  }
+
+  let REFERRAL_KPIS = buildReferralKpis(REFERRAL_FILTER_VARIANTS.all);
 
   const REFERRAL_AREAS = [
     {
       area: "熱海",
+      estVisit: "推定 9.4万人/週", relActs: "関連閲覧・予約 1,240件/週", priScale: "対象規模 推定 3.6万人/週",
       state: "来訪多・滞在価値伸長余地", stateCls: "tone-warn",
       decide: "温泉宿泊・食体験の旅前案内を強化",
       priority: "最優先", priorityCls: "high",
@@ -1281,6 +1502,7 @@
     },
     {
       area: "箱根湯本",
+      estVisit: "推定 18.6万人/週", relActs: "関連閲覧・予約 1,180件/週", priScale: "対象規模 推定 12万人/週",
       state: "来訪多・消費転換弱", stateCls: "tone-warn",
       decide: "荷物・短時間消費と広域周遊案内の両立",
       priority: "高", priorityCls: "high",
@@ -1288,6 +1510,7 @@
     },
     {
       area: "伊東",
+      estVisit: "推定 4.9万人/週", relActs: "関連閲覧・予約 980件/週", priScale: "対象規模 推定 2.8万人/週",
       state: "滞在価値高・送客余地", stateCls: "tone-good",
       decide: "海鮮・温泉・文化の半日導線を設計",
       priority: "高", priorityCls: "high",
@@ -1295,6 +1518,7 @@
     },
     {
       area: "江ノ島・湘南",
+      estVisit: "推定 12.8万人/週", relActs: "関連閲覧・予約 860件/週", priScale: "対象規模 推定 5.1万人/週",
       state: "立ち寄り需要・周遊接続", stateCls: "tone-attention",
       decide: "旅前の立ち寄りと伊豆・箱根周遊の訴求",
       priority: "中", priorityCls: "medium",
@@ -1302,6 +1526,7 @@
     },
     {
       area: "修善寺",
+      estVisit: "推定 2.6万人/週", relActs: "関連閲覧・予約 620件/週", priScale: "対象規模 推定 1.1万人/週",
       state: "静穏・文化関心が強い", stateCls: "tone-info",
       decide: "静かな温泉滞在・文化体験コンテンツ",
       priority: "中", priorityCls: "medium",
@@ -1309,6 +1534,7 @@
     },
     {
       area: "小田原",
+      estVisit: "推定 11.4万人/週", relActs: "関連閲覧・予約 780件/週", priScale: "対象規模 推定 6.8万人/週",
       state: "接続拠点・街区消費", stateCls: "tone-neutral",
       decide: "短時間消費と熱海・伊豆方面の案内",
       priority: "中", priorityCls: "medium",
@@ -1323,7 +1549,7 @@
       title: "熱海 温泉宿泊・食体験の事前案内",
       area: "熱海",
       channels: ["Web/App", "予約後メール", "駅サイネージ"],
-      reason: "ロマンスカー予約後の閲覧で、温泉・食体験ページへの関心が高いシグナルが継続しているため。",
+      reason: "ロマンスカー予約後の閲覧で、温泉・食体験ページへの関心が高い状態が続いているため。",
       kpis: ["予約後ページ閲覧率", "宿泊/飲食送客率"],
       priority: "最優先", priorityCls: "high",
       content: "予約完了から72時間以内に、熱海の温泉宿・飲食のモデルコースと予約導線を提示。接続観光地である旨を注記。",
@@ -1335,7 +1561,7 @@
       title: "伊東 海鮮・温泉・文化施設の半日導線",
       area: "伊東",
       channels: ["Web/App", "QR", "観光案内"],
-      reason: "日帰り〜短期滞在層に対し、半日で回れる高単価体験の導線が不足しているシグナルのため。",
+      reason: "日帰り〜短期滞在層に対し、半日で回れる高単価体験の導線が不足している傾向のため。",
       kpis: ["施設利用率", "回遊指数", "消費指数"],
       priority: "高", priorityCls: "high",
       content: "海鮮市場・温泉・文化施設をつなぐ半日モデルコースをマップ化。三島・小田原からの接続注記を付与。",
@@ -1347,7 +1573,7 @@
       title: "修善寺 静かな温泉滞在・文化体験",
       area: "修善寺",
       channels: ["予約後メール", "海外向けLP", "宿泊施設連携"],
-      reason: "混雑回避志向・文化体験志向に合う高付加価値需要シグナルが相対的に高いため。",
+      reason: "混雑回避志向・文化体験志向に合う高付加価値需要の兆しが相対的に高いため。",
       kpis: ["滞在時間", "体験予約率", "宿泊送客率"],
       priority: "高", priorityCls: "high",
       content: "静穏型温泉と文化施設を組み合わせた滞在プランを多言語LPと宿泊施設パンフレットで案内。",
@@ -1371,7 +1597,7 @@
       title: "下田 海・歴史・長期滞在提案",
       area: "下田",
       channels: ["旅前メール", "Web/App", "海外向け記事"],
-      reason: "遠方エリアのため単発誘導より長期滞在テーマとの相性が高いシグナルのため。",
+      reason: "遠方エリアのため単発誘導より長期滞在テーマとの相性が高い傾向のため。",
       kpis: ["滞在日数", "周遊導線利用率"],
       priority: "中", priorityCls: "medium",
       content: "海・歴史を軸に3泊以上のモデルと、小田原・熱海からの接続周遊候補をセットで提示。",
@@ -1412,21 +1638,6 @@
     { label: "回遊変化", value: 9,   hint: "対象エリアへの来訪変化" },
   ];
 
-  // Filter response variants (KPI 値のスケーリングだけ少し動かす)
-  const REFERRAL_FILTER_VARIANTS = {
-    all:       { score: 81, loss: "中高", rec: 8, run: 4 },
-    enoshima:  { score: 69, loss: "中",   rec: 5, run: 2 },
-    hakone:    { score: 78, loss: "高",   rec: 6, run: 3 },
-    odawara:   { score: 72, loss: "中",   rec: 5, run: 2 },
-    atami:     { score: 84, loss: "中高", rec: 7, run: 3 },
-    ito:       { score: 76, loss: "中",   rec: 6, run: 2 },
-    shuzenji:  { score: 68, loss: "低",   rec: 4, run: 1 },
-    izukogen:  { score: 71, loss: "中",   rec: 5, run: 2 },
-    shimoda:   { score: 62, loss: "低",   rec: 4, run: 1 },
-    "izu-all": { score: 80, loss: "中高", rec: 9, run: 4 },
-  };
-
-  // Per-offer runtime state (holds across re-renders within session)
   const offerState = {}; // { [offerId]: { status: "added" | "held" | null } }
 
   // ----- Reports -----
@@ -1549,14 +1760,39 @@
     ]);
     card.appendChild(head);
 
-    const valRow = el("div", { class: "kpi-value-row" }, [
-      el("div", { class: "kpi-value" }, String(k.value)),
-      k.denom ? el("div", { class: "kpi-value-unit" }, k.denom) : null,
-      k.delta ? deltaBadge(k.delta) : null,
-    ]);
-    card.appendChild(valRow);
-    if (k.spark) card.appendChild(sparkline(k.spark, sparkColor));
-    if (k.decision) card.appendChild(el("div", { class: "kpi-decision", html: k.decision }));
+    if (k.primaryMain != null) {
+      const block = el("div", { class: "kpi-primary-block" });
+      if (k.primaryBadge) {
+        block.appendChild(el("span", { class: "kpi-val-badge" }, k.primaryBadge));
+      }
+      const row = el("div", { class: "kpi-primary-row" });
+      row.appendChild(el("div", { class: "kpi-primary-main" }, String(k.primaryMain)));
+      if (k.primaryUnit) row.appendChild(el("div", { class: "kpi-primary-unit" }, k.primaryUnit));
+      block.appendChild(row);
+      if (k.secondaryAbsolute) {
+        block.appendChild(el("div", { class: "kpi-secondary-abs" }, k.secondaryAbsolute));
+      }
+      if (k.referenceLine) {
+        block.appendChild(el("div", { class: "kpi-reference-line" }, k.referenceLine));
+      }
+      card.appendChild(block);
+      if (k.indexLine) {
+        card.appendChild(el("div", { class: "kpi-index-line" }, k.indexLine));
+      }
+      if (k.caption) {
+        card.appendChild(el("div", { class: "kpi-caption" }, k.caption));
+      }
+      if (k.spark && k.showSpark !== false) card.appendChild(sparkline(k.spark, sparkColor));
+    } else {
+      const valRow = el("div", { class: "kpi-value-row" }, [
+        el("div", { class: "kpi-value" }, String(k.value)),
+        k.denom ? el("div", { class: "kpi-value-unit" }, k.denom) : null,
+        k.delta ? deltaBadge(k.delta) : null,
+      ]);
+      card.appendChild(valRow);
+      if (k.spark) card.appendChild(sparkline(k.spark, sparkColor));
+      if (k.decision) card.appendChild(el("div", { class: "kpi-decision", html: k.decision }));
+    }
     return card;
   }
 
@@ -1596,9 +1832,10 @@
       row.appendChild(el("div", { class: "pri-area" }, [
         el("div", { class: "pri-area-name" }, a.name),
         el("div", { class: "pri-area-judge" }, a.judge),
+        a.scale ? el("div", { class: "pri-area-scale" }, a.scale) : null,
       ]));
       const score = el("div", { class: "pri-score" }, [
-        el("div", { class: "pri-score-label" }, "優先度スコア"),
+        el("div", { class: "pri-score-label" }, "優先度指数"),
         el("div", { class: "pri-score-bar " + a.scoreBar }, el("span", { style: "width:" + a.score + "%" })),
       ]);
       row.appendChild(score);
@@ -1730,7 +1967,7 @@
 
   function renderMarketSignalsDash() {
     const ul = el("ul", { class: "market-signals-list" });
-    MARKET_SIGNALS_DASH.forEach((s) => {
+    MARKET_TRENDS_DASH.forEach((s) => {
       const li = el("li", { class: "market-signal-item" });
       li.appendChild(el("span", { class: "market-signal-label" }, s.label));
       li.appendChild(el("span", { class: "market-signal-text" }, s.text));
@@ -1751,9 +1988,10 @@
       row.appendChild(el("div", { class: "pri-area" }, [
         el("div", { class: "pri-area-name" }, a.name),
         el("div", { class: "pri-area-judge" }, a.note),
+        a.abs ? el("div", { class: "pri-area-scale" }, a.abs) : null,
       ]));
       row.appendChild(el("div", { class: "pri-score" }, [
-        el("div", { class: "pri-score-label" }, "需要シグナル"),
+        el("div", { class: "pri-score-label" }, "需要の兆し（指数）"),
         el("div", { class: "pri-score-bar b-red" }, el("span", { style: "width:" + a.score + "%" })),
       ]));
       row.appendChild(el("div", { class: "pri-score-val" }, a.score + " / 100"));
@@ -1763,7 +2001,7 @@
     mount("segment-focus-areas", focus);
 
     const sms = el("ul", { class: "market-signals-list" });
-    SEGMENT_MARKET_SIGNALS.forEach((s) => {
+    SEGMENT_MARKET_TRENDS.forEach((s) => {
       const li = el("li", { class: "market-signal-item" });
       li.appendChild(el("span", { class: "market-signal-label" }, s.label));
       li.appendChild(el("span", { class: "market-signal-text" }, s.text));
@@ -1796,12 +2034,12 @@
     const table = el("table", { class: "data-table" });
     table.appendChild(el("thead", null, el("tr", null, [
       el("th", null, "エリア"),
-      el("th", null, "来訪指数"),
-      el("th", null, "回遊指数"),
-      el("th", null, "消費指数"),
+      el("th", null, "来訪（指数・推定）"),
+      el("th", null, "回遊（指数・推定）"),
+      el("th", null, "消費（指数・参考）"),
       el("th", null, "高付加価値需要"),
       el("th", null, "混雑傾向"),
-      el("th", null, "優先度"),
+      el("th", null, "優先度（対象規模）"),
       el("th", null, "推奨判断"),
     ])));
     const tbody = el("tbody");
@@ -1811,12 +2049,15 @@
           el("span", { class: "td-strong" }, a.name),
           el("span", { class: "td-area-sub" }, a.sub),
         ])),
-        el("td", null, scoreCell(a.visit, "b-red")),
-        el("td", null, scoreCell(a.flow, "b-gold")),
-        el("td", null, scoreCell(a.spend, "b-green")),
-        el("td", null, scoreCell(a.hva, "b-gold")),
+        el("td", null, scoreCellWithAbs(a.visit, "b-red", a.ev)),
+        el("td", null, scoreCellWithAbs(a.flow, "b-gold", a.ef)),
+        el("td", null, scoreCellWithAbs(a.spend, "b-green", a.sr)),
+        el("td", null, scoreCellWithAbs(a.hva, "b-gold", a.ha)),
         el("td", null, crowdBadge(a.crowd)),
-        el("td", null, el("span", { class: "pri-badge " + a.priority }, a.priorityLabel)),
+        el("td", null, el("div", { class: "td-pri-stack" }, [
+          el("span", { class: "pri-badge " + a.priority }, a.priorityLabel),
+          el("div", { class: "td-abs-note" }, a.pt),
+        ])),
         el("td", null, a.decision),
       ]));
     });
@@ -1829,6 +2070,12 @@
     bar.appendChild(el("span", { style: "width:" + v + "%" }));
     wrap.appendChild(bar);
     wrap.appendChild(el("span", { class: "td-score-val" }, String(v)));
+    return wrap;
+  }
+  function scoreCellWithAbs(v, barCls, absText) {
+    const wrap = el("div", { class: "td-score-stack" });
+    wrap.appendChild(scoreCell(v, barCls));
+    if (absText) wrap.appendChild(el("div", { class: "td-abs-note" }, absText));
     return wrap;
   }
   function crowdBadge(level) {
@@ -1856,16 +2103,16 @@
     const table = el("table", { class: "data-table" });
     table.appendChild(el("thead", null, el("tr", null, [
       el("th", null, "セグメント"),
-      el("th", null, "来訪指数"),
-      el("th", null, "消費指数"),
+      el("th", null, "来訪"),
+      el("th", null, "消費・滞在価値"),
       el("th", null, "特徴"),
     ])));
     const tbody = el("tbody");
     SEGMENTS.forEach((s) => {
       tbody.appendChild(el("tr", null, [
         el("td", null, el("span", { class: "td-strong" }, s.seg)),
-        el("td", null, scoreCell(s.visit, "")),
-        el("td", null, scoreCell(s.spend, "b-green")),
+        el("td", null, scoreCellWithAbs(s.visit, "", s.visitAbs)),
+        el("td", null, scoreCellWithAbs(s.spend, "b-green", s.spendAbs)),
         el("td", null, s.hint),
       ]));
     });
@@ -1909,6 +2156,8 @@
   }
 
   function renderTimeHeatmap() {
+    const wrap = el("div", { class: "heatmap-wrap" });
+    wrap.appendChild(el("p", { class: "heatmap-caption" }, "1〜5は相対混雑度。母数: 主要スポット・駅の推定滞在（乗降・モバイル・現地ログ等から集計したデモ値）。"));
     const table = el("table", { class: "heatmap" });
     const thead = el("thead", null, el("tr", null, [
       el("th", null, ""),
@@ -1923,7 +2172,8 @@
       ]));
     });
     table.appendChild(tbody);
-    mount("time-heatmap", table);
+    wrap.appendChild(table);
+    mount("time-heatmap", wrap);
   }
 
   function renderWeatherFlow() {
@@ -1995,7 +2245,7 @@
       const dot = el("div", {
         class: "matrix-dot " + a.cls,
         style: `left:${left}%;bottom:${bottom}%;`,
-        title: `${a.name} / 来訪 ${a.v} × 消費・滞在価値 ${a.s}` + (a.note ? ` — ${a.note}` : ""),
+        title: `${a.name} / 来訪指数 ${a.v}（${a.est || ""}） × 消費・滞在価値 ${a.s}` + (a.note ? ` — ${a.note}` : ""),
       }, [
         el("div", { class: "dot-bubble" }, a.label),
         el("div", { class: "dot-name" }, a.name),
@@ -2011,9 +2261,12 @@
     const table = el("table", { class: "data-table" });
     table.appendChild(el("thead", null, el("tr", null, [
       el("th", null, "エリア"),
-      el("th", null, "来訪"),
-      el("th", null, "消費"),
+      el("th", null, "来訪指数"),
+      el("th", null, "推定来訪者数"),
+      el("th", null, "消費指数"),
+      el("th", null, "施設利用（推定）"),
       el("th", null, "ギャップ"),
+      el("th", null, "参考（推定レンジ）"),
       el("th", null, "推奨判断"),
     ])));
     const tbody = el("tbody");
@@ -2021,8 +2274,11 @@
       tbody.appendChild(el("tr", null, [
         el("td", null, el("span", { class: "td-strong" }, r.area)),
         el("td", null, el("span", { class: "td-num" }, r.visit)),
+        el("td", null, el("span", { class: "td-note" }, r.estVisit)),
         el("td", null, el("span", { class: "td-num" }, r.spend)),
+        el("td", null, el("span", { class: "td-note" }, r.estUse)),
         el("td", null, el("span", { class: "tag t-red" }, r.gap)),
+        el("td", null, el("span", { class: "td-note" }, r.refLoss)),
         el("td", null, r.hint),
       ]));
     });
@@ -2034,9 +2290,12 @@
     const table = el("table", { class: "data-table" });
     table.appendChild(el("thead", null, el("tr", null, [
       el("th", null, "エリア"),
-      el("th", null, "来訪"),
-      el("th", null, "消費"),
+      el("th", null, "来訪指数"),
+      el("th", null, "推定来訪者数"),
+      el("th", null, "消費指数"),
+      el("th", null, "施設利用（推定）"),
       el("th", null, "効率"),
+      el("th", null, "参考（推定レンジ）"),
       el("th", null, "推奨判断"),
     ])));
     const tbody = el("tbody");
@@ -2044,8 +2303,11 @@
       tbody.appendChild(el("tr", null, [
         el("td", null, el("span", { class: "td-strong" }, r.area)),
         el("td", null, el("span", { class: "td-num" }, r.visit)),
+        el("td", null, el("span", { class: "td-note" }, r.estVisit)),
         el("td", null, el("span", { class: "td-num" }, r.spend)),
+        el("td", null, el("span", { class: "td-note" }, r.estUse)),
         el("td", null, el("span", { class: "tag t-green" }, r.eff)),
+        el("td", null, el("span", { class: "td-note" }, r.refSpend)),
         el("td", null, r.hint),
       ]));
     });
@@ -2304,6 +2566,7 @@
   // -------- Tab 1: Overview --------
   function renderInitiativeOverviewTab(it, detail) {
     const wrap = el("div", { class: "tab-pane" });
+    const relatedList = detail && detail.related ? detail.related : [];
 
     wrap.appendChild(drawerSection("対象エリア", el("p", { class: "drawer-text" }, it.area)));
     wrap.appendChild(drawerSection("対象セグメント", el("p", { class: "drawer-text" }, it.segment || "Web/App・予約・閲覧ログに基づく動的セグメント（条件は配信設定タブで確認）")));
@@ -2311,11 +2574,63 @@
       wrap.appendChild(drawerSection("配信チャネル", chipList(detail.delivery.channels, "kpi")));
     }
     wrap.appendChild(drawerSection("判断理由", el("p", { class: "drawer-text" }, it.reason)));
+
+    const evPack = INITIATIVE_OVERVIEW_EVIDENCE[it.id];
+    const basis = evPack && evPack.basis ? evPack.basis : [];
+    if (basis.length) {
+      const grid = el("div", { class: "judgment-basis-grid" });
+      basis.forEach(function (b) {
+        const card = el("div", { class: "judgment-basis-card" });
+        card.appendChild(el("div", { class: "judgment-basis-label" }, b.label));
+        card.appendChild(el("div", { class: "judgment-basis-value" }, b.value));
+        grid.appendChild(card);
+      });
+      wrap.appendChild(drawerSection("判断根拠", grid));
+    }
+
+    const blendWrap = el("div", { class: "data-blend-wrap" });
+    blendWrap.appendChild(el("p", { class: "drawer-text data-blend-lead" },
+      "鉄道・バス・フリーパス等の移動データと、Web/App・予約・クーポン等の行動ログを、エリア・時間帯で突き合わせて施策仮説に落とし込んでいます（表示はデモ値。実装時は各ソース定義に差し替え）。"));
+    const flow = el("div", { class: "data-blend-flow" });
+    INITIATIVE_DATA_PIPELINE_STEPS.forEach(function (step, i) {
+      flow.appendChild(el("span", { class: "data-blend-flow-step" }, step));
+      if (i < INITIATIVE_DATA_PIPELINE_STEPS.length - 1) {
+        flow.appendChild(el("span", { class: "data-blend-flow-arrow" }, "→"));
+      }
+    });
+    blendWrap.appendChild(flow);
+    const table = el("table", { class: "data-blend-table" });
+    const thead = el("thead");
+    const headTr = el("tr");
+    headTr.appendChild(el("th", null, "判断項目"));
+    headTr.appendChild(el("th", null, "参照データ"));
+    headTr.appendChild(el("th", null, "見ていること"));
+    thead.appendChild(headTr);
+    table.appendChild(thead);
+    const tbody = el("tbody");
+    INITIATIVE_DATA_BLEND_ROWS.forEach(function (row) {
+      const tr = el("tr");
+      tr.appendChild(el("td", null, row.item));
+      tr.appendChild(el("td", null, row.source));
+      tr.appendChild(el("td", null, row.looking));
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    blendWrap.appendChild(table);
+    wrap.appendChild(drawerSection("データの掛け合わせ", blendWrap));
+
+    const sources = evPack && evPack.sources ? evPack.sources : DEFAULT_INIT_RELATED_SOURCES;
+    const srcUl = el("ul", { class: "related-data-list" });
+    sources.forEach(function (s) {
+      srcUl.appendChild(el("li", null, s));
+    });
+    wrap.appendChild(drawerSection("関連データ", srcUl));
+
     wrap.appendChild(drawerSection("期待効果", el("p", { class: "drawer-text drawer-text-strong" }, it.effect)));
     wrap.appendChild(drawerSection("必要な実施内容", el("p", { class: "drawer-text" }, it.task)));
     wrap.appendChild(drawerSection("成功指標", chipList(it.kpis, "kpi")));
-    wrap.appendChild(drawerSection("関連する分析指標", chipList(detail.related, "obs")));
-    const nextStr = detail.measurement && detail.measurement.nextDecision
+    wrap.appendChild(drawerSection("関連する分析指標", chipList(relatedList, "obs")));
+    const nextStr = detail && detail.measurement && detail.measurement.nextDecision
       ? "効果測定の見立て: " + detail.measurement.nextDecision + "。詳細は効果測定タブを参照。"
       : "実施計画の未完了項目を進め、配信条件と素材を確定してください。";
     wrap.appendChild(drawerSection("次にやること", el("p", { class: "drawer-text" }, nextStr)));
@@ -2940,9 +3255,10 @@
     const table = el("table", { class: "data-table ref-area-table" });
     table.appendChild(el("thead", null, el("tr", null, [
       el("th", null, "エリア"),
+      el("th", null, "推定来訪・関連行動"),
       el("th", null, "状態"),
       el("th", null, "推奨判断"),
-      el("th", null, "優先度"),
+      el("th", null, "優先度・対象規模"),
       el("th", null, "期待効果"),
     ])));
     const tbody = el("tbody");
@@ -2951,11 +3267,22 @@
       stateCell.appendChild(el("span", { class: "state-dot" }));
       stateCell.appendChild(el("span", { class: "state-label" }, a.state));
 
+      const absCell = el("div", { class: "td-stack-tight" }, [
+        el("div", { class: "td-note" }, a.estVisit),
+        el("div", { class: "td-note" }, a.relActs),
+      ]);
+
+      const priCell = el("div", { class: "td-pri-stack" }, [
+        el("span", { class: "pri-badge " + a.priorityCls }, a.priority),
+        el("div", { class: "td-abs-note" }, a.priScale),
+      ]);
+
       tbody.appendChild(el("tr", null, [
         el("td", null, el("span", { class: "td-strong" }, a.area)),
+        el("td", null, absCell),
         el("td", null, stateCell),
         el("td", null, el("span", { class: "ref-decide" }, a.decide)),
-        el("td", null, el("span", { class: "pri-badge " + a.priorityCls }, a.priority)),
+        el("td", null, priCell),
         el("td", null, el("span", { class: "ref-effect" }, a.effect)),
       ]));
     });
@@ -3274,17 +3601,8 @@
   // ----- Filter response (demo) -----
   function applyReferralFilter(area) {
     const v = REFERRAL_FILTER_VARIANTS[area] || REFERRAL_FILTER_VARIANTS["all"];
+    REFERRAL_KPIS = buildReferralKpis(v);
 
-    // update KPIs (without breaking sparkline visuals — just values)
-    const map = {
-      "送客機会スコア": v.score,
-      "消費機会ロス":    v.loss,
-      "推奨施策":        v.rec,
-      "実施中施策":      v.run,
-    };
-    REFERRAL_KPIS = REFERRAL_KPIS.map((k) => ({ ...k, value: map[k.label] !== undefined ? map[k.label] : k.value }));
-
-    // soft re-render with skeleton flash
     flashSkeleton("referral-kpis", renderReferralKpis);
     flashSkeleton("referral-areas", renderReferralAreas);
     flashSkeleton("referral-offers", renderReferralOffers);
