@@ -176,9 +176,9 @@
           <svg class="nav-icon"><use href="#i-info"/></svg>
           <span>上位客層インサイト</span>
         </button>
-        <button class="nav-item" data-view="external-insight">
-          <svg class="nav-icon"><use href="#i-search"/></svg>
-          <span>外部市場インサイト</span>
+        <button class="nav-item" data-view="campaign-db">
+          <svg class="nav-icon"><use href="#i-doc"/></svg>
+          <span>施策事例DB</span>
         </button>
         <button class="nav-item" data-view="referral">
           <svg class="nav-icon"><use href="#i-broadcast"/></svg>
@@ -598,58 +598,73 @@
         </section>
 
         <!-- ====================================================== -->
-        <!-- 3c. EXTERNAL MARKET INSIGHT (外部市場インサイト) -->
+        <!-- 3c. CAMPAIGN CASE DB (施策事例DB) -->
         <!-- ====================================================== -->
-        <section id="external-insight" class="view hidden">
+        <section id="campaign-db" class="view hidden">
           <div class="page-intro">
-            <p>公開統計・天候・イベント・他地域の観光施策事例を整理し、小田急沿線・接続観光地へ転用できる施策仮説を確認します。</p>
+            <p>他社鉄道・他地域の公開キャンペーン情報を収集し、施策構造を抽出して小田急データと照合します。箱根・湘南・伊豆向けの転用案を作成し、送客最適化や施策管理の根拠データとして使用します。</p>
           </div>
 
-          <div class="kpi-grid kpi-grid-4" id="external-kpis"></div>
+          <!-- 生成フロー -->
+          <section class="card">
+            <header class="card-header">
+              <div>
+                <h2 class="card-title">施策事例DBの生成フロー</h2>
+                <p class="card-sub">他社・他地域の公開キャンペーン情報を収集し、施策構造を抽出したうえで、小田急データと照合して転用案を作成します。</p>
+              </div>
+            </header>
+            <div id="cdb-pipeline"></div>
+          </section>
 
+          <!-- KPI 4枚 -->
+          <div class="kpi-grid kpi-grid-4" id="cdb-kpis"></div>
+
+          <!-- カード一覧 + 構造化パネル -->
           <div class="row row-7-5">
             <section class="card">
               <header class="card-header">
                 <div>
-                  <h2 class="card-title">外部市場動向</h2>
-                  <p class="card-sub">天候・宿泊需要・検索関心・イベント情報などの参考データ</p>
+                  <h2 class="card-title">キャンペーン事例一覧</h2>
+                  <p class="card-sub">他社鉄道・他地域の公開キャンペーンから収集した事例（カードをクリックすると右側に施策構造が表示されます）</p>
+                </div>
+                <div class="header-tools">
+                  <div class="seg-tabs sm" id="cdb-filter-tabs"></div>
                 </div>
               </header>
-              <div id="external-market-insights"></div>
+              <div id="cdb-case-grid"></div>
             </section>
 
-            <section class="card">
+            <section class="card cdb-detail-card">
               <header class="card-header">
                 <div>
-                  <h2 class="card-title">データ取得状況</h2>
-                  <p class="card-sub">公開データ・API・取得対象ページの更新状況</p>
+                  <h2 class="card-title">抽出された施策構造</h2>
+                  <p class="card-sub">選択中の事例から抽出した施策構造と小田急への転用案</p>
                 </div>
               </header>
-              <div id="external-source-status"></div>
+              <div id="cdb-case-detail"></div>
             </section>
           </div>
 
-          <section class="card external-case-section">
+          <!-- 小田急データとの照合 -->
+          <section class="card">
             <header class="card-header">
               <div>
-                <h2 class="card-title">施策アイデアDB</h2>
-                <p class="card-sub">他社鉄道・他地域の観光キャンペーン、クーポン、体験商品、回遊施策の事例</p>
-              </div>
-              <div class="header-tools">
-                <div class="seg-tabs sm" id="case-filter-tabs"></div>
+                <h2 class="card-title">小田急データとの照合</h2>
+                <p class="card-sub">選択事例の施策構造を、小田急保有データと突き合わせて転用余地を確認します</p>
               </div>
             </header>
-            <div id="campaign-case-db"></div>
+            <div id="cdb-match"></div>
           </section>
 
+          <!-- 小田急向け転用候補 -->
           <section class="card">
             <header class="card-header">
               <div>
                 <h2 class="card-title">小田急向け転用候補</h2>
-                <p class="card-sub">外部事例を箱根・湘南・伊豆送客に転用する案</p>
+                <p class="card-sub">複数の参照事例を組み合わせた、箱根・湘南・伊豆向けの転用案</p>
               </div>
             </header>
-            <div id="odakyu-transfer-ideas"></div>
+            <div id="cdb-transfer-ideas"></div>
           </section>
         </section>
 

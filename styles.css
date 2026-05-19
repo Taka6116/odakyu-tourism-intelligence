@@ -3868,180 +3868,252 @@ button, select, input { -webkit-tap-highlight-color: transparent; }
 }
 
 /* ==========================================================
-   EXTERNAL MARKET INSIGHT
+   CAMPAIGN CASE DB (施策事例DB)
    ========================================================== */
 
-/* KPI pill icon: blue tone (for external KPIs) */
-.kpi-pill-icon.t-blue { background: var(--blue-bg); color: var(--blue); }
+/* KPI pill icon: blue tone (gold tone is already defined elsewhere) */
+.kpi-pill-icon.t-blue  { background: var(--blue-bg); color: var(--blue); }
 
-.external-insight-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.external-insight-item {
-  display: grid;
-  grid-template-columns: 92px 1fr;
-  gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border-soft);
-}
-
-.external-insight-item:last-child {
-  border-bottom: 0;
-}
-
-.external-insight-type {
-  display: inline-flex;
-  width: fit-content;
-  align-items: center;
-  justify-content: center;
-  height: 24px;
-  padding: 0 8px;
-  border-radius: var(--r-xs);
-  background: var(--bg-soft);
-  border: 1px solid var(--border);
-  color: var(--ink-3);
-  font-size: 10.5px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.external-insight-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--ink-1);
-  line-height: 1.45;
-  margin: 0 0 4px;
-}
-
-.external-insight-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 6px;
-}
-
-.external-insight-text {
-  font-size: 12px;
-  color: var(--ink-3);
-  line-height: 1.65;
+/* ---- 生成フロー（パイプライン） ---- */
+.cdb-pipeline {
+  list-style: none;
   margin: 0;
-}
-
-.source-status-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.source-status-item {
+  padding: 4px 2px 2px;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: stretch;
   gap: 10px;
-  padding: 11px 12px;
-  border: 1px solid var(--border-soft);
-  border-radius: var(--r-sm);
-  background: var(--surface);
+  counter-reset: cdb-step;
 }
 
-.source-status-name {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--ink-1);
-  margin-bottom: 2px;
-}
-
-.source-status-desc {
-  font-size: 11.5px;
-  color: var(--ink-4);
-  line-height: 1.5;
-}
-
-.source-status-date {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--ink-3);
-  font-family: var(--font-num);
-  white-space: nowrap;
-  align-self: center;
-}
-
-.case-grid {
+.cdb-pipe-step {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.case-card {
+  grid-template-columns: 28px 1fr;
+  align-items: start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
-  background: var(--surface);
-  padding: 14px 16px;
-  box-shadow: var(--shadow-1);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition: background 0.12s, border-color 0.12s, box-shadow 0.12s;
+  min-height: 78px;
 }
 
-.case-card:hover {
-  background: var(--surface-hover);
-  border-color: var(--border-strong);
-  box-shadow: var(--shadow-2);
+.cdb-pipe-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--navy-700);
+  color: #fff;
+  font-family: var(--font-num);
+  font-size: 12.5px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.case-card-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 8px;
-}
-
-.case-card-title {
-  font-size: 13.5px;
+.cdb-pipe-label {
+  font-size: 12.5px;
   font-weight: 800;
   color: var(--ink-1);
-  line-height: 1.45;
-  margin: 0;
-}
-
-.case-card-operator {
-  font-size: 11px;
-  color: var(--ink-4);
-  font-weight: 600;
-  margin-top: 2px;
-}
-
-.case-card-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-
-.case-card-block {
-  padding-top: 8px;
-  border-top: 1px solid var(--border-soft);
-}
-
-.case-card-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-4);
+  line-height: 1.35;
   margin-bottom: 4px;
 }
 
-.case-card-text {
+.cdb-pipe-desc {
+  font-size: 11px;
+  color: var(--ink-4);
+  line-height: 1.55;
+}
+
+.cdb-pipe-arrow {
+  position: absolute;
+  right: -11px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  color: var(--ink-3);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  z-index: 2;
+}
+
+@media (max-width: 1280px) {
+  .cdb-pipeline { grid-template-columns: repeat(3, 1fr); }
+  .cdb-pipe-step:nth-child(3) .cdb-pipe-arrow { display: none; }
+}
+@media (max-width: 720px) {
+  .cdb-pipeline { grid-template-columns: 1fr; }
+  .cdb-pipe-arrow { display: none; }
+}
+
+/* ---- カード一覧 ---- */
+.cdb-case-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.cdb-case-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.12s, box-shadow 0.12s, transform 0.12s;
+}
+.cdb-case-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-2);
+}
+.cdb-case-card.is-selected {
+  border-color: var(--navy-700);
+  box-shadow: 0 0 0 2px rgba(20, 41, 91, 0.12), var(--shadow-2);
+}
+.cdb-case-card:focus-visible {
+  outline: 2px solid var(--navy-600);
+  outline-offset: 2px;
+}
+
+/* CSSベースのプレースホルダー・サムネ */
+.cdb-thumb {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 14px;
+  min-height: 96px;
+  color: #fff;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--navy-700) 0%, var(--navy-500) 100%);
+  background-size: cover;
+  letter-spacing: 0.02em;
+}
+.cdb-thumb::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.06) 0 8px, transparent 8px 18px),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.18), transparent 55%);
+  pointer-events: none;
+}
+.cdb-thumb-tag {
+  position: relative;
   font-size: 12px;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 999px;
+  padding: 3px 10px;
+  letter-spacing: 0.04em;
+}
+.cdb-thumb-operator {
+  position: relative;
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.92;
+}
+
+/* サムネ・トーン */
+.cdb-thumb-pink   { background: linear-gradient(135deg, #c64166 0%, #8b2348 100%); }
+.cdb-thumb-blue   { background: linear-gradient(135deg, #2f6ba6 0%, #14397a 100%); }
+.cdb-thumb-green  { background: linear-gradient(135deg, #2e7d56 0%, #155633 100%); }
+.cdb-thumb-gold   { background: linear-gradient(135deg, #b07a1a 0%, #6b4a0a 100%); }
+.cdb-thumb-navy   { background: linear-gradient(135deg, #1f3b6b 0%, #0a1b3d 100%); }
+.cdb-thumb-brown  { background: linear-gradient(135deg, #8a5a30 0%, #4e3014 100%); }
+
+.cdb-case-body {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cdb-case-meta-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.cdb-case-period {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--ink-4);
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xs);
+  padding: 2px 8px;
+}
+
+.cdb-case-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink-1);
+  line-height: 1.4;
+  margin: 0;
+}
+.cdb-case-operator {
+  font-size: 11px;
+  color: var(--ink-4);
+  font-weight: 600;
+}
+
+.cdb-case-dl {
+  display: grid;
+  grid-template-columns: 78px 1fr;
+  gap: 4px 10px;
+  margin: 4px 0 0;
+  padding: 8px 0 0;
+  border-top: 1px solid var(--border-soft);
+}
+.cdb-case-dl dt {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--ink-4);
+  letter-spacing: 0.04em;
+}
+.cdb-case-dl dd {
+  font-size: 11.5px;
   color: var(--ink-2);
-  line-height: 1.6;
+  line-height: 1.55;
   margin: 0;
 }
 
-.case-card-link {
+.cdb-case-adapt {
+  margin-top: 4px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-sm);
+  padding: 8px 10px;
+}
+.cdb-case-adapt-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--navy-700);
+  margin-bottom: 4px;
+}
+.cdb-case-adapt p {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+
+.cdb-case-link {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -4052,13 +4124,11 @@ button, select, input { -webkit-tap-highlight-color: transparent; }
   text-decoration: none;
   margin-top: auto;
 }
-.case-card-link:hover {
+.cdb-case-link:hover {
   color: var(--navy-800);
   text-decoration: underline;
 }
-.case-card-link svg {
-  width: 13px;
-  height: 13px;
+.cdb-case-link svg {
   fill: none;
   stroke: currentColor;
   stroke-width: 1.8;
@@ -4066,19 +4136,146 @@ button, select, input { -webkit-tap-highlight-color: transparent; }
   stroke-linejoin: round;
 }
 
+@media (max-width: 1440px) {
+  .cdb-case-grid { grid-template-columns: 1fr; }
+}
+
+/* ---- 構造化データパネル（右側） ---- */
+.cdb-detail-card { position: relative; }
+
+.cdb-detail-empty {
+  font-size: 12px;
+  color: var(--ink-4);
+  margin: 0;
+  padding: 12px 4px;
+  line-height: 1.6;
+}
+
+.cdb-detail-head {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 12px;
+  align-items: stretch;
+  margin-bottom: 12px;
+}
+.cdb-detail-thumb {
+  min-height: 70px;
+  padding: 10px;
+  border-radius: var(--r-sm);
+  align-items: center;
+  justify-content: center;
+}
+.cdb-detail-thumb .cdb-thumb-tag { font-size: 11px; padding: 2px 8px; }
+.cdb-detail-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink-1);
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+.cdb-detail-operator {
+  font-size: 11.5px;
+  color: var(--ink-4);
+  font-weight: 600;
+}
+
+.cdb-detail-dl {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 6px 12px;
+  margin: 0 0 12px;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--border-soft);
+}
+.cdb-detail-dl dt {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-4);
+}
+.cdb-detail-dl dd {
+  font-size: 12px;
+  color: var(--ink-2);
+  line-height: 1.55;
+  margin: 0;
+  word-break: break-word;
+}
+.cdb-detail-link {
+  color: var(--navy-600);
+  text-decoration: none;
+  word-break: break-all;
+}
+.cdb-detail-link:hover { text-decoration: underline; }
+
+.cdb-detail-block {
+  background: var(--bg-soft);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-sm);
+  padding: 10px 12px;
+}
+.cdb-detail-block-label {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--navy-700);
+  margin-bottom: 4px;
+}
+.cdb-detail-block-text {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+
+/* ---- 小田急データとの照合（テーブル） ---- */
+.cdb-match-lead {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+.cdb-match-table-wrap {
+  overflow-x: auto;
+}
+.cdb-match-table th,
+.cdb-match-table td {
+  font-size: 12px;
+  vertical-align: middle;
+}
+.cdb-match-name {
+  font-weight: 700;
+  color: var(--ink-1);
+}
+.cdb-match-cov {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: var(--r-xs);
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid var(--border);
+}
+.cdb-match-cov.cov-high { background: var(--green-bg); color: var(--green); border-color: transparent; }
+.cdb-match-cov.cov-med  { background: var(--gold-bg);  color: var(--gold);  border-color: transparent; }
+.cdb-match-cov.cov-low  { background: var(--red-bg);   color: var(--red);   border-color: transparent; }
+
+/* ---- 小田急向け転用候補 ---- */
 .transfer-list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
-
 .transfer-card {
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   background: var(--surface);
   padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
 }
-
 .transfer-title {
   font-size: 13px;
   font-weight: 800;
@@ -4086,36 +4283,108 @@ button, select, input { -webkit-tap-highlight-color: transparent; }
   line-height: 1.45;
   margin: 0 0 6px;
 }
-
 .transfer-target {
   font-size: 11.5px;
   color: var(--ink-4);
   margin-bottom: 8px;
   font-weight: 600;
 }
-
 .transfer-text {
   font-size: 12px;
   color: var(--ink-2);
   line-height: 1.65;
-  margin: 0;
+  margin: 0 0 10px;
 }
 
-/* Evidence grid (内部根拠 / 外部根拠) — also used in offer cards & drawer */
+/* 参照事例チップ（転用候補カード内・送客カード内 共通） */
+.cdb-ref-label,
+.offer-section-label {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--navy-700);
+  margin: 6px 0 4px;
+}
+.cdb-ref-list,
+.offer-ref-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.cdb-ref-chip,
+.offer-ref-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  padding: 6px 10px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.12s, background 0.12s;
+  max-width: 100%;
+}
+.cdb-ref-chip:hover,
+.offer-ref-chip:hover {
+  border-color: var(--navy-500);
+  background: var(--surface-hover);
+}
+.offer-ref-operator {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-4);
+  letter-spacing: 0.02em;
+}
+.offer-ref-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ink-1);
+  line-height: 1.35;
+}
+.cdb-ref-chip {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--navy-700);
+}
+
+/* 送客最適化offerカード内の「参照事例」ブロック */
+.offer-ref-cases {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
+.offer-ref-see {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  font-size: 11.5px;
+  font-weight: 800;
+  border-radius: var(--r-sm);
+  background: var(--navy-700);
+  color: #fff;
+  border: 0;
+  cursor: pointer;
+}
+.offer-ref-see:hover { background: var(--navy-800); }
+
+/* Evidence grid (内部根拠 / 外部根拠) — offer cards & drawer 共通 */
 .evidence-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-top: 10px;
 }
-
 .evidence-card {
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
   background: var(--surface);
   padding: 10px 12px;
 }
-
 .evidence-label {
   font-size: 10.5px;
   font-weight: 700;
@@ -4124,7 +4393,6 @@ button, select, input { -webkit-tap-highlight-color: transparent; }
   color: var(--ink-4);
   margin-bottom: 6px;
 }
-
 .evidence-card ul {
   margin: 0;
   padding-left: 16px;
@@ -4132,26 +4400,17 @@ button, select, input { -webkit-tap-highlight-color: transparent; }
   color: var(--ink-2);
   line-height: 1.65;
 }
-
-.evidence-card ul li {
-  margin: 0;
-}
+.evidence-card ul li { margin: 0; }
 
 @media (max-width: 1280px) {
-  .case-grid,
-  .transfer-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  .transfer-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-
 @media (max-width: 880px) {
-  .case-grid,
   .transfer-list,
   .evidence-grid {
     grid-template-columns: 1fr;
   }
-
-  .external-insight-item {
-    grid-template-columns: 1fr;
-  }
+  .cdb-detail-head { grid-template-columns: 80px 1fr; }
+  .cdb-case-dl,
+  .cdb-detail-dl { grid-template-columns: 72px 1fr; }
 }

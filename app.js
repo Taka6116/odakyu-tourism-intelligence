@@ -1652,212 +1652,175 @@
     },
   ];
 
-  // ----- External Market Insight -----
-  const EXTERNAL_KPIS = [
-    {
-      label: "取得対象データ",
-      value: "42",
-      unit: "件",
-      delta: "+8",
-      icon: "i-search",
-      tone: "navy",
-      caption: "公開統計・天候・イベント・他地域施策を整理",
-    },
-    {
-      label: "施策事例DB",
-      value: "18",
-      unit: "件",
-      delta: "+5",
-      icon: "i-doc",
-      tone: "green",
-      caption: "他社鉄道・他地域キャンペーンの転用候補",
-    },
-    {
-      label: "伊豆送客候補",
-      value: "7",
-      unit: "案",
-      delta: "+3",
-      icon: "i-pin",
-      tone: "gold",
-      caption: "熱海・伊東・伊豆高原方面への送客案",
-    },
-    {
-      label: "雨天対応施策",
-      value: "5",
-      unit: "案",
-      delta: "+2",
-      icon: "i-cloud-rain",
-      tone: "blue",
-      caption: "屋内回遊・温泉・飲食導線の施策候補",
-    },
+  // ----- Campaign Case DB (施策事例DB) -----
+  const CDB_PIPELINE = [
+    { step: 1, label: "他社キャンペーンページ", desc: "鉄道会社・自治体・観光協会の公開キャンペーンを対象に巡回" },
+    { step: 2, label: "クローリング / 公開情報取得", desc: "robots.txt遵守の上で公開情報を取得" },
+    { step: 3, label: "施策情報を構造化", desc: "施策名・事業者・対象客層・施策タイプ・訴求軸・参加条件・期間を抽出" },
+    { step: 4, label: "小田急データと照合", desc: "ロマンスカー予約・フリーパス・Web/App・施設利用と突き合わせ" },
+    { step: 5, label: "転用案を生成", desc: "箱根・湘南・伊豆向けの転用案を作成し、施策管理に接続" },
   ];
 
-  const EXTERNAL_MARKET_INSIGHTS = [
-    {
-      id: "weather-rain-hakone",
-      type: "天候",
-      area: "箱根",
-      title: "週末は雨予報。屋内回遊需要が高まりやすい",
-      source: "気象庁 / 天気API",
-      metric: "降水確率 68%",
-      implication: "美術館・温泉・カフェ・屋内体験への案内を優先",
-      confidence: "参考",
-    },
-    {
-      id: "lodging-izu",
-      type: "宿泊需要",
-      area: "伊豆",
-      title: "伊豆方面の宿泊検索・予約関連需要が上昇傾向",
-      source: "観光庁統計 / 公開データ",
-      metric: "前月比 +12%",
-      implication: "ロマンスカー利用者への事前案内・宿泊連動施策を検討",
-      confidence: "推定",
-    },
-    {
-      id: "event-atami",
-      type: "イベント",
-      area: "熱海",
-      title: "週末イベントにより夕方以降の滞在延長余地あり",
-      source: "自治体・観光協会公開情報",
-      metric: "イベント 3件",
-      implication: "夕方到着客向けに食体験・温泉・宿泊導線を提示",
-      confidence: "公開情報",
-    },
-    {
-      id: "search-premium",
-      type: "検索関心",
-      area: "箱根 / 伊豆",
-      title: "温泉・海鮮・高単価宿泊に関する検索関心が上昇",
-      source: "検索トレンド / 公開データ",
-      metric: "関連KW +15%",
-      implication: "上位客層向けに食・温泉・宿泊体験の訴求を強化",
-      confidence: "参考",
-    },
-  ];
-
-  const EXTERNAL_SOURCE_STATUS = [
-    {
-      name: "天候データ",
-      desc: "気象庁・天気APIから降水確率、気温、荒天情報を取得想定",
-      updated: "毎日",
-    },
-    {
-      name: "宿泊需要データ",
-      desc: "観光庁統計・公開統計からエリア別宿泊需要を参照",
-      updated: "月次",
-    },
-    {
-      name: "イベント情報",
-      desc: "自治体・観光協会の公開ページからイベント日程を取得想定",
-      updated: "週次",
-    },
-    {
-      name: "他社施策事例",
-      desc: "鉄道会社・観光地・旅行会社の公開キャンペーンページを事例DB化",
-      updated: "週次",
-    },
+  const CDB_KPIS = [
+    { label: "取得対象サイト",   value: "15", unit: "件", delta: "+2", icon: "i-search",    tone: "navy",  caption: "巡回対象として登録された他社・他地域の公開サイト" },
+    { label: "構造化済み事例",   value: "42", unit: "件", delta: "+9", icon: "i-doc",       tone: "green", caption: "項目抽出・分類が完了し、参照可能になった事例" },
+    { label: "小田急転用候補",   value: "18", unit: "案", delta: "+5", icon: "i-target",    tone: "gold",  caption: "箱根・湘南・伊豆向けに転用余地がある事例" },
+    { label: "今月追加事例",     value: "9",  unit: "件", delta: "+3", icon: "i-plus",      tone: "blue",  caption: "今月新たに構造化された事例" },
   ];
 
   const CAMPAIGN_CASE_CATEGORIES = [
     "すべて",
-    "鉄道送客",
-    "クーポン",
-    "体験商品",
-    "雨天回遊",
-    "手ぶら観光",
-    "高付加価値",
+    "IPコラボ / 車内体験",
+    "平日分散 / 宿泊セット",
+    "パス特典 / 訪日客向け",
+    "体験商品 / パス連動",
+    "高付加価値列車",
+    "食体験 / 観光列車",
   ];
 
   const CAMPAIGN_CASE_STUDIES = [
     {
-      id: "jr-oshitabi",
-      category: "鉄道送客",
-      operator: "JR東海",
+      id: "jr-central-oshitabi",
       title: "推し旅型キャンペーン",
+      operator: "JR東海",
+      period: "期間限定",
+      category: "IPコラボ / 車内体験",
+      target: "ファン層 / 若年層 / 訪日客",
+      appeal: "限定性 / 乗車中体験 / デジタル特典",
+      condition: "対象列車への乗車 / 特設ページ閲覧 / 位置情報またはQR",
       sourceUrl: "https://recommend.jr-central.co.jp/oshi-tabi/",
-      originalMechanism: "鉄道移動と限定コンテンツ・位置情報・デジタル特典を連動",
-      target: "ファン層 / 若年層 / 訪日客にも展開可能",
-      odakyuAdaptation: "ロマンスカー乗車中限定コンテンツ、箱根・伊豆到着後のQR特典へ転用",
-      suitableArea: "箱根 / 伊豆",
-      priority: "高",
+      thumbnailTone: "pink",
+      thumbnailTag: "IPコラボ",
+      areaLabel: "東海道沿線",
+      originalMechanism: "鉄道移動と限定コンテンツ、位置情報、デジタル特典を連動させ、移動時間そのものを体験化する。",
+      odakyuAdaptation: "ロマンスカー乗車中限定コンテンツを提供し、箱根・伊豆到着後のQR特典や施設回遊に接続する。",
+      matchData: ["ロマンスカー予約", "Web/App閲覧", "箱根フリーパス利用", "QR取得"],
     },
     {
-      id: "jr-weekday",
-      category: "鉄道送客",
-      operator: "JR東日本",
+      id: "jr-east-weekday",
       title: "平日旅需要喚起キャンペーン",
-      sourceUrl: "https://www.jreast.co.jp/heijitsutabi/",
-      originalMechanism: "平日移動・宿泊・観光をセットで訴求し、混雑分散と需要平準化を狙う",
+      operator: "JR東日本",
+      period: "季節限定",
+      category: "平日分散 / 宿泊セット",
       target: "平日旅行者 / シニア / 休暇取得層",
-      odakyuAdaptation: "箱根・伊豆の平日限定特典、ロマンスカー平日利用促進に転用",
-      suitableArea: "箱根 / 熱海 / 伊東",
-      priority: "高",
+      appeal: "混雑回避 / お得 / 宿泊連動",
+      condition: "平日利用 / 対象きっぷ購入 / 対象宿泊利用",
+      sourceUrl: "https://www.jreast.co.jp/heijitsutabi/",
+      thumbnailTone: "blue",
+      thumbnailTag: "平日旅",
+      areaLabel: "東日本全域",
+      originalMechanism: "平日移動と宿泊・観光特典を組み合わせ、週末集中を避けた需要創出を行う。",
+      odakyuAdaptation: "箱根・伊豆の平日限定特典、ロマンスカー平日利用促進、宿泊連動クーポンに転用する。",
+      matchData: ["ロマンスカー予約", "曜日別来訪", "宿泊需要", "クーポン利用"],
     },
     {
-      id: "nikko-experience",
-      category: "体験商品",
+      id: "jr-west-pass-benefit",
+      title: "レールパス提示特典",
+      operator: "JR西日本",
+      period: "常設 / 期間更新",
+      category: "パス特典 / 訪日客向け",
+      target: "訪日客 / 周遊旅行者",
+      appeal: "パス保有者限定 / 施設優待 / 多言語対応",
+      condition: "対象パス提示 / 対象施設利用",
+      sourceUrl: "https://www.westjr.co.jp/global/en/ticket/pass/benefits/",
+      thumbnailTone: "green",
+      thumbnailTag: "パス特典",
+      areaLabel: "西日本全域",
+      originalMechanism: "鉄道パス利用者に対し、観光施設・飲食・体験の優待を付与し、周遊消費を促進する。",
+      odakyuAdaptation: "箱根フリーパスやロマンスカー利用者向けに、温浴・美術館・飲食特典を束ねる。",
+      matchData: ["箱根フリーパス利用", "施設利用", "言語別閲覧", "クーポン利用"],
+    },
+    {
+      id: "tobu-nikko-experience",
+      title: "NIKKO EXPERIENCE 型体験訴求",
       operator: "東武鉄道",
-      title: "NIKKO EXPERIENCE 型の地域体験訴求",
-      sourceUrl: "https://www.tobu.co.jp/en/sightseeing/cp/nikkoexperience/",
-      originalMechanism: "鉄道パスと地域体験を組み合わせ、訪日客向けに地域滞在価値を高める",
+      period: "通年 / 季節更新",
+      category: "体験商品 / パス連動",
       target: "訪日客 / 体験志向層",
-      odakyuAdaptation: "箱根フリーパス・伊豆方面送客と温泉、食、文化体験をセット化",
-      suitableArea: "箱根 / 伊豆",
-      priority: "高",
+      appeal: "文化体験 / 自然 / パス連動",
+      condition: "NIKKO PASS利用 / 対象体験予約",
+      sourceUrl: "https://www.tobu.co.jp/en/sightseeing/cp/nikkoexperience/",
+      thumbnailTone: "gold",
+      thumbnailTag: "体験商品",
+      areaLabel: "日光エリア",
+      originalMechanism: "鉄道パスと地域体験を組み合わせ、移動後の滞在価値を高める。",
+      odakyuAdaptation: "箱根フリーパス・伊豆方面送客と温泉、食、文化体験をセット化する。",
+      matchData: ["フリーパス利用", "エリア別来訪", "体験予約", "Web/App閲覧"],
     },
     {
-      id: "rainy-indoor-route",
-      category: "雨天回遊",
-      operator: "他地域観光施策",
-      title: "雨天時の屋内回遊ルート訴求",
-      sourceUrl: "",
-      originalMechanism: "雨天時に屋内施設・飲食・温浴をセットで案内し、滞在価値を維持",
-      target: "ファミリー / 訪日客 / 日帰り客",
-      odakyuAdaptation: "箱根湯本・強羅で雨天時の屋内ルートとクーポンを配信",
-      suitableArea: "箱根湯本 / 強羅",
-      priority: "高",
+      id: "spacia-x-premium",
+      title: "高付加価値特急体験",
+      operator: "東武鉄道",
+      period: "常設",
+      category: "高付加価値列車",
+      target: "準富裕層 / 記念日旅行 / 訪日客",
+      appeal: "上質な移動体験 / 地域性 / 車内体験",
+      condition: "対象特急への乗車 / 車内サービス利用",
+      sourceUrl: "https://www.tobu.co.jp/spaciax/en/en/",
+      thumbnailTone: "navy",
+      thumbnailTag: "高付加価値列車",
+      areaLabel: "日光・鬼怒川",
+      originalMechanism: "特急列車そのものを観光体験化し、車内サービスや地域産品と結びつける。",
+      odakyuAdaptation: "ロマンスカー上位利用者に対して、伊豆・箱根の食体験や宿泊体験を事前提案する。",
+      matchData: ["ロマンスカー予約", "上位席種", "宿泊需要", "高付加価値需要"],
     },
     {
-      id: "hands-free",
-      category: "手ぶら観光",
-      operator: "温泉地・自治体施策",
-      title: "荷物預かり・手ぶら観光施策",
-      sourceUrl: "",
-      originalMechanism: "駅・宿泊施設・観光拠点で荷物預かりや配送を提供し、回遊を促進",
-      target: "日帰り客 / 訪日客 / 宿泊前後客",
-      odakyuAdaptation: "箱根湯本・小田原で荷物預かり案内を強化し、到着直後の回遊を増やす",
-      suitableArea: "箱根湯本 / 小田原",
-      priority: "中",
-    },
-    {
-      id: "premium-train-food",
-      category: "高付加価値",
-      operator: "JR九州等",
-      title: "食体験連動型の高付加価値列車企画",
+      id: "jr-kyushu-aru",
+      title: "食体験連動型観光列車",
+      operator: "JR九州",
+      period: "運行日限定",
+      category: "食体験 / 観光列車",
+      target: "準富裕層 / 食体験志向 / 旅行者",
+      appeal: "食 / 限定性 / 日帰り体験",
+      condition: "対象列車予約 / 旅行商品購入",
       sourceUrl: "https://www.jrkyushu.co.jp/english/train/aruressha.html",
-      originalMechanism: "移動時間そのものを体験化し、食・地域性・限定性を訴求",
-      target: "準富裕層 / 上位客層 / 記念日旅行",
-      odakyuAdaptation: "ロマンスカー利用者向けに伊豆・箱根の食体験、宿泊、温泉を連動提案",
-      suitableArea: "伊豆 / 箱根",
-      priority: "中",
+      thumbnailTone: "brown",
+      thumbnailTag: "食体験",
+      areaLabel: "九州エリア",
+      originalMechanism: "移動時間に食体験を組み込み、列車そのものを目的化する。",
+      odakyuAdaptation: "ロマンスカー利用者向けに、箱根・伊豆の食体験、温泉、宿泊を組み合わせて提案する。",
+      matchData: ["ロマンスカー予約", "飲食関心", "宿泊需要", "予約後メール閲覧"],
     },
   ];
+
+  // 小田急データとの照合（選択事例ごとに matchData を解釈）
+  const ODAKYU_DATA_DICTIONARY = {
+    "ロマンスカー予約":     { type: "予約",   coverage: "高", note: "予約日・席種・人数を保有。事前案内導線の起点。" },
+    "上位席種":             { type: "予約",   coverage: "中", note: "サルーン等の利用比から準富裕層の兆しを把握。" },
+    "箱根フリーパス利用":   { type: "チケット", coverage: "高", note: "利用日・経路・人数からエリア別来訪を推定。" },
+    "フリーパス利用":       { type: "チケット", coverage: "高", note: "対象パス全般の利用ログ。回遊指数の基礎データ。" },
+    "Web/App閲覧":          { type: "行動ログ", coverage: "高", note: "ページ閲覧・記事閲覧・予約導線の遷移を保有。" },
+    "QR取得":               { type: "行動ログ", coverage: "中", note: "駅サイネージ・施設掲示のQR取得ログを取得想定。" },
+    "エリア別来訪":         { type: "集計",   coverage: "高", note: "乗降・フリーパスから推計したエリア来訪指数。" },
+    "曜日別来訪":           { type: "集計",   coverage: "高", note: "平日・週末別の来訪分布。混雑分散の判断材料。" },
+    "宿泊需要":             { type: "外部",   coverage: "中", note: "観光庁・自治体の公開統計を参照（外部データ）。" },
+    "クーポン利用":         { type: "施設・特典", coverage: "中", note: "発行・利用件数を把握想定。利用率を計測。" },
+    "施設利用":             { type: "施設・特典", coverage: "中", note: "提携施設の利用ログ。回遊・送客の効果検証。" },
+    "言語別閲覧":           { type: "行動ログ", coverage: "中", note: "Web/Appの言語別比率。多言語対応の判断材料。" },
+    "体験予約":             { type: "予約",   coverage: "中", note: "提携体験・宿泊予約の遷移と着地を把握想定。" },
+    "予約後メール閲覧":     { type: "行動ログ", coverage: "中", note: "予約後メールの開封・CTRから旅前需要を把握。" },
+    "飲食関心":             { type: "行動ログ", coverage: "中", note: "飲食カテゴリの閲覧・検索関心。送客の予兆。" },
+    "高付加価値需要":       { type: "集計",   coverage: "中", note: "上位客層の関心指数。HVAスコアとして算出。" },
+  };
 
   const ODAKYU_TRANSFER_IDEAS = [
     {
       title: "雨天時 箱根屋内回遊パッケージ",
       target: "箱根湯本 / 強羅",
       text: "雨天予報と来訪集中を検知した際、美術館・温泉・カフェ・荷物預かりを組み合わせた半日ルートをWeb/App・QRで案内する。",
+      refs: ["jr-east-weekday"],
     },
     {
       title: "伊豆方面 高付加価値体験導線",
       target: "熱海 / 伊東 / 伊豆高原",
       text: "宿泊需要・検索関心・ロマンスカー予約傾向をもとに、海鮮・温泉・文化施設・宿泊を組み合わせた上位客層向け導線を提案する。",
+      refs: ["spacia-x-premium", "jr-kyushu-aru"],
     },
     {
       title: "平日分散送客クーポン",
       target: "箱根 / 伊豆",
       text: "週末集中が強いエリアに対し、平日限定の飲食・体験・温浴クーポンを設計し、混雑分散と消費機会の拡大を狙う。",
+      refs: ["jr-east-weekday", "jr-west-pass-benefit"],
     },
   ];
 
@@ -1876,6 +1839,7 @@
       next: "開封率が基準未達の場合は件名・送信タイミングを2案で比較。",
       internalEvidence: ["ロマンスカー予約データ", "温泉/食LPの閲覧ログ", "予約後メール開封"],
       externalEvidence: ["伊豆の宿泊需要 上昇傾向", "温泉・海鮮の検索関心 +15%", "週末イベント情報"],
+      referenceCases: ["jr-central-oshitabi", "spacia-x-premium", "jr-kyushu-aru"],
     },
     {
       id: "of02",
@@ -1890,6 +1854,7 @@
       next: "平日・週末で導線の人気施設を入れ替え、クリック分布を確認。",
       internalEvidence: ["伊東 来訪・回遊データ", "施設利用/クーポン利用", "Web/App閲覧ログ"],
       externalEvidence: ["観光庁 伊豆方面 宿泊需要", "海鮮・温泉の検索関心上昇", "他地域の半日導線事例"],
+      referenceCases: ["tobu-nikko-experience", "jr-west-pass-benefit"],
     },
     {
       id: "of03",
@@ -1904,6 +1869,7 @@
       next: "OTA向け短尺素材の追加可否を宿泊協会と協議。",
       internalEvidence: ["海外向けLPの閲覧ログ", "体験/宿泊予約データ", "回遊データ"],
       externalEvidence: ["訪日 高付加価値志向の公開統計", "文化体験キャンペーン事例", "宿泊需要 公開データ"],
+      referenceCases: ["tobu-nikko-experience", "jr-west-pass-benefit"],
     },
     {
       id: "of04",
@@ -1918,6 +1884,7 @@
       next: "伊東からの半日接続と2泊目以降案内のAB表示を検討。",
       internalEvidence: ["美術/自然テーマの閲覧ログ", "宿泊連携データ", "回遊データ"],
       externalEvidence: ["伊豆 宿泊需要の公開データ", "アート観光の他地域事例", "天候・季節データ"],
+      referenceCases: ["tobu-nikko-experience", "spacia-x-premium"],
     },
     {
       id: "of05",
@@ -1932,6 +1899,7 @@
       next: "台湾・韓国向け記事の検索クエリに合わせ見出しを最適化。",
       internalEvidence: ["海外向け記事の閲覧ログ", "周遊マップ利用データ", "予約データ"],
       externalEvidence: ["訪日 長期滞在の公開統計", "歴史観光の他地域キャンペーン事例", "宿泊需要 公開データ"],
+      referenceCases: ["jr-west-pass-benefit", "tobu-nikko-experience"],
     },
     {
       id: "of06",
@@ -1946,6 +1914,7 @@
       next: "週末ピーク時は混雑時間帯に合わせ訴求順を自動入れ替え。",
       internalEvidence: ["湘南エリアの来訪/回遊データ", "旅前メールの開封・CTR", "Web/App閲覧ログ"],
       externalEvidence: ["天候・週末イベント", "湘南→広域周遊の検索関心", "他地域の広域周遊事例"],
+      referenceCases: ["jr-east-weekday", "jr-central-oshitabi"],
     },
   ];
 
@@ -3931,23 +3900,49 @@
   // REFERRAL OPTIMIZATION (送客最適化)
   // ========================================================
   // ========================================================
-  // EXTERNAL MARKET INSIGHT
+  // CAMPAIGN CASE DB (施策事例DB)
   // ========================================================
-  let _caseFilterCategory = "すべて";
+  let _cdbFilterCategory = "すべて";
+  let _cdbSelectedId = null;
 
-  function renderExternalInsight() {
-    renderExternalKpis();
-    renderExternalMarketInsights();
-    renderExternalSourceStatus();
-    renderCaseFilterTabs(_caseFilterCategory);
-    renderCampaignCaseDb(_caseFilterCategory);
-    renderOdakyuTransferIdeas();
+  function renderCampaignDb() {
+    renderCdbPipeline();
+    renderCdbKpis();
+    renderCdbFilterTabs(_cdbFilterCategory);
+    renderCdbCaseGrid(_cdbFilterCategory);
+    // 初期選択：先頭事例
+    if (!_cdbSelectedId && CAMPAIGN_CASE_STUDIES.length) {
+      _cdbSelectedId = CAMPAIGN_CASE_STUDIES[0].id;
+    }
+    renderCdbCaseDetail(_cdbSelectedId);
+    renderCdbMatch(_cdbSelectedId);
+    renderCdbTransferIdeas();
   }
 
-  function renderExternalKpis() {
-    const root = document.getElementById("external-kpis");
+  function renderCdbPipeline() {
+    const root = document.getElementById("cdb-pipeline");
     if (!root) return;
-    root.innerHTML = EXTERNAL_KPIS.map((kpi) => `
+    const steps = CDB_PIPELINE;
+    root.innerHTML = `
+      <ol class="cdb-pipeline">
+        ${steps.map((s, i) => `
+          <li class="cdb-pipe-step">
+            <div class="cdb-pipe-num">${s.step}</div>
+            <div class="cdb-pipe-body">
+              <div class="cdb-pipe-label">${escapeHtml(s.label)}</div>
+              <div class="cdb-pipe-desc">${escapeHtml(s.desc)}</div>
+            </div>
+            ${i < steps.length - 1 ? `<span class="cdb-pipe-arrow" aria-hidden="true">→</span>` : ""}
+          </li>
+        `).join("")}
+      </ol>
+    `;
+  }
+
+  function renderCdbKpis() {
+    const root = document.getElementById("cdb-kpis");
+    if (!root) return;
+    root.innerHTML = CDB_KPIS.map((kpi) => `
       <article class="kpi-card">
         <div class="kpi-head">
           <div class="kpi-label">${escapeHtml(kpi.label)}</div>
@@ -3967,136 +3962,222 @@
     `).join("");
   }
 
-  function renderExternalMarketInsights() {
-    const root = document.getElementById("external-market-insights");
-    if (!root) return;
-    root.innerHTML = `
-      <div class="external-insight-list">
-        ${EXTERNAL_MARKET_INSIGHTS.map((item) => `
-          <article class="external-insight-item">
-            <div>
-              <span class="external-insight-type">${escapeHtml(item.type)}</span>
-            </div>
-            <div>
-              <h3 class="external-insight-title">${escapeHtml(item.title)}</h3>
-              <div class="external-insight-meta">
-                <span class="tag t-navy">${escapeHtml(item.area)}</span>
-                <span class="tag">${escapeHtml(item.source)}</span>
-                <span class="tag t-blue">${escapeHtml(item.confidence)}</span>
-                <span class="tag t-gold">${escapeHtml(item.metric)}</span>
-              </div>
-              <p class="external-insight-text">${escapeHtml(item.implication)}</p>
-            </div>
-          </article>
-        `).join("")}
-      </div>
-    `;
-  }
-
-  function renderExternalSourceStatus() {
-    const root = document.getElementById("external-source-status");
-    if (!root) return;
-    root.innerHTML = `
-      <div class="source-status-list">
-        ${EXTERNAL_SOURCE_STATUS.map((source) => `
-          <article class="source-status-item">
-            <div>
-              <div class="source-status-name">${escapeHtml(source.name)}</div>
-              <div class="source-status-desc">${escapeHtml(source.desc)}</div>
-            </div>
-            <div class="source-status-date">${escapeHtml(source.updated)}</div>
-          </article>
-        `).join("")}
-      </div>
-    `;
-  }
-
-  function renderCaseFilterTabs(activeCategory) {
-    const root = document.getElementById("case-filter-tabs");
+  function renderCdbFilterTabs(activeCategory) {
+    const root = document.getElementById("cdb-filter-tabs");
     if (!root) return;
     root.innerHTML = CAMPAIGN_CASE_CATEGORIES.map((category) => `
-      <button class="seg-tab ${category === activeCategory ? "active" : ""}" data-case-category="${escapeHtml(category)}">
+      <button class="seg-tab ${category === activeCategory ? "active" : ""}" data-cdb-category="${escapeAttr(category)}">
         ${escapeHtml(category)}
       </button>
     `).join("");
-
-    root.querySelectorAll("[data-case-category]").forEach((button) => {
-      button.addEventListener("click", (e) => {
+    root.querySelectorAll("[data-cdb-category]").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
         e.stopPropagation();
-        const category = button.dataset.caseCategory;
-        _caseFilterCategory = category;
-        renderCaseFilterTabs(category);
-        renderCampaignCaseDb(category);
+        const cat = btn.dataset.cdbCategory;
+        _cdbFilterCategory = cat;
+        renderCdbFilterTabs(cat);
+        renderCdbCaseGrid(cat);
       });
     });
   }
 
-  function renderCampaignCaseDb(activeCategory) {
-    const root = document.getElementById("campaign-case-db");
+  function renderCdbCaseGrid(activeCategory) {
+    const root = document.getElementById("cdb-case-grid");
     if (!root) return;
     const cat = activeCategory || "すべて";
     const cases = cat === "すべて"
       ? CAMPAIGN_CASE_STUDIES
-      : CAMPAIGN_CASE_STUDIES.filter((item) => item.category === cat);
+      : CAMPAIGN_CASE_STUDIES.filter((c) => c.category === cat);
 
     root.innerHTML = `
-      <div class="case-grid">
-        ${cases.map((item) => `
-          <article class="case-card">
-            <div class="case-card-head">
-              <div>
-                <h3 class="case-card-title">${escapeHtml(item.title)}</h3>
-                <div class="case-card-operator">${escapeHtml(item.operator)}</div>
+      <div class="cdb-case-grid">
+        ${cases.map((c) => `
+          <article class="cdb-case-card ${c.id === _cdbSelectedId ? "is-selected" : ""}"
+                   data-case-id="${escapeAttr(c.id)}"
+                   tabindex="0"
+                   role="button"
+                   aria-label="${escapeAttr(c.title + " の施策構造を表示")}">
+            <div class="cdb-thumb cdb-thumb-${escapeAttr(c.thumbnailTone)}">
+              <span class="cdb-thumb-tag">${escapeHtml(c.thumbnailTag)}</span>
+              <span class="cdb-thumb-operator">${escapeHtml(c.operator)}</span>
+            </div>
+            <div class="cdb-case-body">
+              <div class="cdb-case-meta-top">
+                <span class="tag t-navy">${escapeHtml(c.category)}</span>
+                <span class="cdb-case-period">${escapeHtml(c.period)}</span>
               </div>
-              <span class="pri-badge ${item.priority === "高" ? "high" : "medium"}">${escapeHtml(item.priority)}</span>
-            </div>
+              <h3 class="cdb-case-title">${escapeHtml(c.title)}</h3>
+              <div class="cdb-case-operator">${escapeHtml(c.operator)}　/　${escapeHtml(c.areaLabel)}</div>
 
-            <div class="case-card-meta">
-              <span class="tag t-navy">${escapeHtml(item.category)}</span>
-              <span class="tag">${escapeHtml(item.suitableArea)}</span>
-            </div>
+              <dl class="cdb-case-dl">
+                <dt>対象客層</dt><dd>${escapeHtml(c.target)}</dd>
+                <dt>訴求軸</dt><dd>${escapeHtml(c.appeal)}</dd>
+                <dt>参加条件</dt><dd>${escapeHtml(c.condition)}</dd>
+              </dl>
 
-            <div class="case-card-block">
-              <div class="case-card-label">元施策の仕組み</div>
-              <p class="case-card-text">${escapeHtml(item.originalMechanism)}</p>
-            </div>
+              <div class="cdb-case-adapt">
+                <div class="cdb-case-adapt-label">小田急向け転用案</div>
+                <p>${escapeHtml(c.odakyuAdaptation)}</p>
+              </div>
 
-            <div class="case-card-block">
-              <div class="case-card-label">対象</div>
-              <p class="case-card-text">${escapeHtml(item.target)}</p>
+              ${c.sourceUrl ? `
+                <a class="cdb-case-link" href="${escapeAttr(c.sourceUrl)}" target="_blank" rel="noopener noreferrer">
+                  参照元を見る
+                  <svg width="12" height="12"><use href="#i-arrow-right"></use></svg>
+                </a>
+              ` : ""}
             </div>
-
-            <div class="case-card-block">
-              <div class="case-card-label">小田急向け転用案</div>
-              <p class="case-card-text">${escapeHtml(item.odakyuAdaptation)}</p>
-            </div>
-
-            ${item.sourceUrl ? `
-              <a class="case-card-link" href="${escapeAttr(item.sourceUrl)}" target="_blank" rel="noopener noreferrer">
-                参照元を見る
-                <svg width="13" height="13"><use href="#i-arrow-right"></use></svg>
-              </a>
-            ` : ""}
           </article>
         `).join("")}
+      </div>
+    `;
+
+    // クリック/キーボードで選択
+    root.querySelectorAll(".cdb-case-card").forEach((card) => {
+      const select = (e) => {
+        const target = e.target;
+        // リンククリックは選択しない
+        if (target && target.closest && target.closest(".cdb-case-link")) return;
+        _cdbSelectedId = card.dataset.caseId;
+        renderCdbCaseGrid(_cdbFilterCategory);
+        renderCdbCaseDetail(_cdbSelectedId);
+        renderCdbMatch(_cdbSelectedId);
+      };
+      card.addEventListener("click", select);
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(e); }
+      });
+    });
+  }
+
+  function renderCdbCaseDetail(caseId) {
+    const root = document.getElementById("cdb-case-detail");
+    if (!root) return;
+    const c = CAMPAIGN_CASE_STUDIES.find((x) => x.id === caseId);
+    if (!c) {
+      root.innerHTML = `<p class="cdb-detail-empty">左の事例カードをクリックすると施策構造が表示されます。</p>`;
+      return;
+    }
+    root.innerHTML = `
+      <div class="cdb-detail-head">
+        <div class="cdb-thumb cdb-detail-thumb cdb-thumb-${escapeAttr(c.thumbnailTone)}">
+          <span class="cdb-thumb-tag">${escapeHtml(c.thumbnailTag)}</span>
+        </div>
+        <div>
+          <div class="cdb-detail-title">${escapeHtml(c.title)}</div>
+          <div class="cdb-detail-operator">${escapeHtml(c.operator)}　/　${escapeHtml(c.areaLabel)}</div>
+        </div>
+      </div>
+
+      <dl class="cdb-detail-dl">
+        <dt>事業者</dt><dd>${escapeHtml(c.operator)}</dd>
+        <dt>対象エリア</dt><dd>${escapeHtml(c.areaLabel)}</dd>
+        <dt>対象客層</dt><dd>${escapeHtml(c.target)}</dd>
+        <dt>施策タイプ</dt><dd>${escapeHtml(c.category)}</dd>
+        <dt>実施期間</dt><dd>${escapeHtml(c.period)}</dd>
+        <dt>訴求軸</dt><dd>${escapeHtml(c.appeal)}</dd>
+        <dt>参加条件</dt><dd>${escapeHtml(c.condition)}</dd>
+        <dt>参照元URL</dt>
+        <dd>${c.sourceUrl ? `<a class="cdb-detail-link" href="${escapeAttr(c.sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(c.sourceUrl)}</a>` : "—"}</dd>
+      </dl>
+
+      <div class="cdb-detail-block">
+        <div class="cdb-detail-block-label">小田急への転用案</div>
+        <p class="cdb-detail-block-text">${escapeHtml(c.odakyuAdaptation)}</p>
       </div>
     `;
   }
 
-  function renderOdakyuTransferIdeas() {
-    const root = document.getElementById("odakyu-transfer-ideas");
+  function renderCdbMatch(caseId) {
+    const root = document.getElementById("cdb-match");
+    if (!root) return;
+    const c = CAMPAIGN_CASE_STUDIES.find((x) => x.id === caseId);
+    if (!c) {
+      root.innerHTML = `<p class="cdb-detail-empty">事例を選択すると、小田急保有データとの照合結果を表示します。</p>`;
+      return;
+    }
+    const rows = (c.matchData || []).map((dataName) => {
+      const meta = ODAKYU_DATA_DICTIONARY[dataName] || { type: "—", coverage: "—", note: "—" };
+      return `
+        <tr>
+          <td><span class="cdb-match-name">${escapeHtml(dataName)}</span></td>
+          <td><span class="tag t-navy">${escapeHtml(meta.type)}</span></td>
+          <td><span class="cdb-match-cov cov-${escapeAttr(meta.coverage === "高" ? "high" : meta.coverage === "中" ? "med" : "low")}">${escapeHtml(meta.coverage)}</span></td>
+          <td>${escapeHtml(meta.note)}</td>
+        </tr>
+      `;
+    }).join("");
+    root.innerHTML = `
+      <div class="cdb-match-lead">
+        選択中の事例「<strong>${escapeHtml(c.title)}</strong>」の施策構造を、小田急が保有・参照可能なデータと突き合わせています。
+      </div>
+      <div class="cdb-match-table-wrap">
+        <table class="data-table cdb-match-table">
+          <thead>
+            <tr>
+              <th>照合データ</th>
+              <th>データ種別</th>
+              <th>取得粒度</th>
+              <th>備考</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  function renderCdbTransferIdeas() {
+    const root = document.getElementById("cdb-transfer-ideas");
     if (!root) return;
     root.innerHTML = `
       <div class="transfer-list">
-        ${ODAKYU_TRANSFER_IDEAS.map((item) => `
-          <article class="transfer-card">
-            <h3 class="transfer-title">${escapeHtml(item.title)}</h3>
-            <div class="transfer-target">${escapeHtml(item.target)}</div>
-            <p class="transfer-text">${escapeHtml(item.text)}</p>
-          </article>
-        `).join("")}
+        ${ODAKYU_TRANSFER_IDEAS.map((item) => {
+          const refs = (item.refs || []).map((rid) => {
+            const c = CAMPAIGN_CASE_STUDIES.find((x) => x.id === rid);
+            return c ? `<button class="cdb-ref-chip" data-ref-id="${escapeAttr(rid)}">${escapeHtml(c.operator)} ${escapeHtml(c.title)}</button>` : "";
+          }).filter(Boolean).join("");
+          return `
+            <article class="transfer-card">
+              <h3 class="transfer-title">${escapeHtml(item.title)}</h3>
+              <div class="transfer-target">${escapeHtml(item.target)}</div>
+              <p class="transfer-text">${escapeHtml(item.text)}</p>
+              ${refs ? `
+                <div class="cdb-ref-label">参照事例</div>
+                <div class="cdb-ref-list">${refs}</div>
+              ` : ""}
+            </article>
+          `;
+        }).join("")}
       </div>
     `;
+    // 参照事例ボタン → 該当事例を選択
+    root.querySelectorAll("[data-ref-id]").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        _cdbSelectedId = btn.dataset.refId;
+        renderCdbCaseGrid(_cdbFilterCategory);
+        renderCdbCaseDetail(_cdbSelectedId);
+        renderCdbMatch(_cdbSelectedId);
+        const detail = document.getElementById("cdb-case-detail");
+        if (detail) detail.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    });
+  }
+
+  // 送客最適化 → 施策事例DB へジャンプ
+  function jumpToCampaignDb(caseId) {
+    if (caseId) _cdbSelectedId = caseId;
+    const navBtn = document.querySelector('.nav-item[data-view="campaign-db"]');
+    if (navBtn) navBtn.click();
+    // ナビ遷移後に該当事例を選択状態にして表示更新
+    setTimeout(() => {
+      renderCdbCaseGrid(_cdbFilterCategory);
+      renderCdbCaseDetail(_cdbSelectedId);
+      renderCdbMatch(_cdbSelectedId);
+      const card = document.querySelector(`.cdb-case-card[data-case-id="${_cdbSelectedId}"]`);
+      if (card && card.scrollIntoView) card.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 220);
   }
 
   // Minimal HTML escaping helpers for safe innerHTML rendering
@@ -4229,6 +4310,40 @@
       evGrid.appendChild(card2);
     });
     card.appendChild(evGrid);
+
+    // ── 参照事例 ──
+    const refIds = Array.isArray(o.referenceCases) ? o.referenceCases : [];
+    const refCases = refIds
+      .map((id) => CAMPAIGN_CASE_STUDIES.find((c) => c.id === id))
+      .filter(Boolean);
+    if (refCases.length) {
+      const refWrap = el("div", { class: "offer-ref-cases" });
+      refWrap.appendChild(el("div", { class: "offer-section-label" }, "参照事例"));
+      const refList = el("div", { class: "offer-ref-list" });
+      refCases.forEach((c) => {
+        const chip = el("button", {
+          class: "offer-ref-chip",
+          type: "button",
+          title: c.operator + " " + c.title,
+        }, [
+          el("span", { class: "offer-ref-operator" }, c.operator),
+          el("span", { class: "offer-ref-title" }, c.title),
+        ]);
+        chip.addEventListener("click", (e) => {
+          e.stopPropagation();
+          jumpToCampaignDb(c.id);
+        });
+        refList.appendChild(chip);
+      });
+      refWrap.appendChild(refList);
+      const seeBtn = el("button", { class: "offer-ref-see", type: "button" }, "施策事例DBで確認");
+      seeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        jumpToCampaignDb(refCases[0].id);
+      });
+      refWrap.appendChild(seeBtn);
+      card.appendChild(refWrap);
+    }
 
     const actions = el("div", { class: "offer-actions" });
     const holdBtn = el("button", { class: "btn-ghost btn-sm" }, state.status === "held" ? "保留解除" : "保留");
@@ -4560,7 +4675,7 @@
     impact: "効果測定",
     report: "レポート",
     "segment-insight": "上位客層インサイト",
-    "external-insight": "外部市場インサイト",
+    "campaign-db": "施策事例DB",
   };
 
   function bindNav() {
@@ -4700,8 +4815,8 @@
 
     renderSegmentInsight();
 
-    // External Market Insight
-    renderExternalInsight();
+    // Campaign Case DB (施策事例DB)
+    renderCampaignDb();
 
     // Flow
     renderFlowKpis();
