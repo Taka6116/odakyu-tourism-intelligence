@@ -176,6 +176,10 @@
           <svg class="nav-icon"><use href="#i-info"/></svg>
           <span>上位客層インサイト</span>
         </button>
+        <button class="nav-item" data-view="external-insight">
+          <svg class="nav-icon"><use href="#i-search"/></svg>
+          <span>外部市場インサイト</span>
+        </button>
         <button class="nav-item" data-view="referral">
           <svg class="nav-icon"><use href="#i-broadcast"/></svg>
           <span>送客最適化</span>
@@ -310,8 +314,8 @@
           <section class="card market-signals-card">
             <header class="card-header">
               <div>
-                <h2 class="card-title">市場動向</h2>
-                <p class="card-sub">天候・訪日動向・宿泊需要・検索関心・休暇カレンダー等を集計した参考情報（DEMO）</p>
+                <h2 class="card-title">外部市場動向</h2>
+                <p class="card-sub">公開統計・天候・宿泊需要・検索関心・イベント情報を集計した参考情報（DEMO）</p>
               </div>
             </header>
             <div id="market-signals-dash"></div>
@@ -553,8 +557,8 @@
             <section class="card">
               <header class="card-header">
                 <div>
-                  <h2 class="card-title">市場動向</h2>
-                  <p class="card-sub">天候・訪日動向・宿泊需要・検索関心・イベント（DEMO）</p>
+                  <h2 class="card-title">外部市場動向</h2>
+                  <p class="card-sub">公開統計・天候・宿泊需要・検索関心・イベント情報を集計した参考情報（DEMO）</p>
                 </div>
               </header>
               <div id="segment-market-signals"></div>
@@ -591,6 +595,62 @@
               <div id="segment-content"></div>
             </section>
           </div>
+        </section>
+
+        <!-- ====================================================== -->
+        <!-- 3c. EXTERNAL MARKET INSIGHT (外部市場インサイト) -->
+        <!-- ====================================================== -->
+        <section id="external-insight" class="view hidden">
+          <div class="page-intro">
+            <p>公開統計・天候・イベント・他地域の観光施策事例を整理し、小田急沿線・接続観光地へ転用できる施策仮説を確認します。</p>
+          </div>
+
+          <div class="kpi-grid kpi-grid-4" id="external-kpis"></div>
+
+          <div class="row row-7-5">
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">外部市場動向</h2>
+                  <p class="card-sub">天候・宿泊需要・検索関心・イベント情報などの参考データ</p>
+                </div>
+              </header>
+              <div id="external-market-insights"></div>
+            </section>
+
+            <section class="card">
+              <header class="card-header">
+                <div>
+                  <h2 class="card-title">データ取得状況</h2>
+                  <p class="card-sub">公開データ・API・取得対象ページの更新状況</p>
+                </div>
+              </header>
+              <div id="external-source-status"></div>
+            </section>
+          </div>
+
+          <section class="card external-case-section">
+            <header class="card-header">
+              <div>
+                <h2 class="card-title">施策アイデアDB</h2>
+                <p class="card-sub">他社鉄道・他地域の観光キャンペーン、クーポン、体験商品、回遊施策の事例</p>
+              </div>
+              <div class="header-tools">
+                <div class="seg-tabs sm" id="case-filter-tabs"></div>
+              </div>
+            </header>
+            <div id="campaign-case-db"></div>
+          </section>
+
+          <section class="card">
+            <header class="card-header">
+              <div>
+                <h2 class="card-title">小田急向け転用候補</h2>
+                <p class="card-sub">外部事例を箱根・湘南・伊豆送客に転用する案</p>
+              </div>
+            </header>
+            <div id="odakyu-transfer-ideas"></div>
+          </section>
         </section>
 
         <!-- ====================================================== -->
